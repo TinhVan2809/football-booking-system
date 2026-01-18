@@ -1,10 +1,16 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
-import Dashbroad from "../pages/admin/Dashbroad";
-import Home from "../pages/customer/Home";
+
 import Login from "./Login";
 import Register from "./Register";
 import ProtectedRoute from "./ProtectedRoute";
 import { UserProvider } from "../context/UserContext";
+
+// CUSTOMER PAGES/LAYOUTD/COMPOENTS...
+import Home from "../pages/customer/Home";
+
+// ADMIN PAGES/LAYOUTD/COMPOENTS...
+import Dashbroad from "../pages/admin/Dashbroad";
+import Fields from "../pages/admin/Fields";
 
 const AppLayout = () => (
   <UserProvider>
@@ -39,6 +45,10 @@ export const router = createBrowserRouter([
             <Dashbroad />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "/fields",
+        element: <Fields />
       },
     ],
   },

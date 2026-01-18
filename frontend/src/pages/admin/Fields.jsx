@@ -1,9 +1,9 @@
-function fields() {
+function Fields() {
     return (
         <>
-        
+            
         </>
     );
 }
 
-export default fields;
+export default Fields;
