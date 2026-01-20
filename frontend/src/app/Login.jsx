@@ -72,6 +72,7 @@ function Login() {
                     <p className="text-sm">
                         Chưa có tài khoản? <span className="text-blue-600 cursor-pointer" onClick={() => navigate('/register')}>Đăng ký ngay</span>
                     </p>
+                    <a onClick={() => navigate('/')}>Quay lại trang chủ</a>
                 </form>
             </div>
         </>

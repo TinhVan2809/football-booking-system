@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { RiPhoneLine, RiTimer2Line } from "@remixicon/react";
+import { RiPhoneLine, RiTimer2Line, RiArrowRightSLine, RiArrowLeftSLine } from "@remixicon/react";
 
 import "../../styles/Fields.css";
 
@@ -8,7 +8,7 @@ function FieldList() {
     "http://localhost/football-booking-system/backend-php/uploads/fields_img";
   const API_BASE =
     "http://localhost/football-booking-system/backend-php/fields/api.php";
-  const LIMIT = 25;
+  const LIMIT = 24;
   const [fields, setFields] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setloading] = useState(false);
@@ -67,7 +67,7 @@ function FieldList() {
         <main className="w-full mt-10">
           <div className="grid grid-cols-3 gap-y-3 gap-x-2 w-full px-12 justify-center items-center">
             {fields.map((f) => (
-              <div className="field--cart__container h-80 w-full relative rounded-2xl overflow-hidden group cursor-pointer">
+              <div className="field--cart__container h-80 w-full relative rounded-2xl overflow-hidden group cursor-pointer" key={f.field_id}>
                 <img
                   src={
                     f.thumbnail
@@ -103,6 +103,25 @@ function FieldList() {
                 </div>
               </div>
             ))}
+          </div>
+          <div className="w-full flex justify-center items-center gap-4 mt-6">
+            <button
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-gray-200 rounded cursor-pointer disabled:opacity-50"
+            >
+              <RiArrowLeftSLine />
+            </button>
+            <span>
+             {currentPage} / {totalPages}
+            </span>
+            <button
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-gray-200 rounded cursor-pointer disabled:opacity-50"
+            >
+              <RiArrowRightSLine />
+            </button>
           </div>
         </main>
       </section>

@@ -32,9 +32,9 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: (
-          <ProtectedRoute role="customer">
+          // <ProtectedRoute role="customer">
             <Home />
-          </ProtectedRoute>
+          // </ProtectedRoute>
         ),
       },
       {

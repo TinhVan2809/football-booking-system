@@ -3,6 +3,9 @@ import { useNavigate, NavLink } from "react-router-dom";
 import { useContext } from "react";
 
 import UserContext from "../../context/UserContext";
+
+import {RiMapPinTimeLine} from '@remixicon/react'; 
+
 function Header() {
   const navigate = useNavigate();
   const { user, logout } = useContext(UserContext);
@@ -64,7 +67,7 @@ function Header() {
             </div>
           </div>
         ) : (
-          <div>
+          <div className="flex justify-center items-center">
             <button
               className="px-5 py-2 rounded-[20px] cursor-pointer bg-[#221f23] text-white text-sm"
               onClick={() => navigate("/login")}
@@ -80,9 +83,9 @@ function Header() {
             <button className="px-5 py-2 rounded-2xl cursor-pointer border border-gray-200 text-sm duration-200 hover:bg-gray-200" onClick={logout}>Khám phá thêm</button>
           </div>
         ) : (
-          <div className="">
-            <button>Đặt lịch dùng thử</button>
-            <button>Learn more</button>
+          <div className="flex justify-center items-center gap-2">
+            <button className="px-4 py-1.5 rounded-2xl bg-green-700 text-white flex gap-1 items-center cursor-pointer"><RiMapPinTimeLine size={19}/> Đặt lịch dùng thử</button>
+            <button className="px-4 py-1.5 rounded-2xl bg-green-700 text-white cursor-pointer">Learn more</button>
           </div>
         )}
       </header>
