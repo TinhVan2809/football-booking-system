@@ -82,7 +82,7 @@ app.post("/register", async (req, res) => {
       [username],
       (err, rows) => {
         if (rows.length > 0) {
-          return res.status(409).json({ message: "Username already exists" });
+          return res.status(409).json({ message: "Tên tài khoản đã được sử dụng. " });
         }
 
         db.query(
@@ -93,7 +93,7 @@ app.post("/register", async (req, res) => {
               console.error(err);
               return res
                 .status(400)
-                .json({ message: "Username already exists" });
+                .json({ message: "Tên tài khoản đã được sử dụng. " });
             }
             res.json({ message: "Customer created successfully" });
           },

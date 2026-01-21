@@ -11,6 +11,7 @@ import Home from "../pages/customer/Home";
 import FieldDetail from "../pages/customer/FieldDetail";
 import CustomerLayout from "../layouts/customer/CustomerLayout";
 import BranchDetail from "../pages/customer/BranchDetail";
+import Search from "../pages/customer/Search";
 
 // [ADMIN]
 import Dashbroad from "../pages/admin/Dashbroad";
@@ -46,6 +47,7 @@ export const router = createBrowserRouter([
          },
          { path: "detail/:field_id", element: <FieldDetail /> },
          { path: "branchDetail/:branch_id", element: <BranchDetail /> },
+         { path: "search", element: <Search /> },
         ],
       },
       {
