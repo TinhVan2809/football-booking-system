@@ -11,7 +11,7 @@ import "swiper/css/pagination";
 
 //--------------------------Swiper-------------------------------------
 
-import { RiMapPinFill } from '@remixicon/react';
+import { RiMapPinFill, RiMore2Fill } from "@remixicon/react";
 
 function FieldDetail() {
   const { field_id } = useParams();
@@ -106,7 +106,7 @@ function FieldDetail() {
           {/* Phần hiển thị thông tin chung của Sân */}
           <div className="fielddetail__content--info absolute z-100 top-0 w-full h-full p-5 flex items-end">
             <div className="fielddetail__content--card flex flex-col p-4 w-fit rounded-md gap-3">
-              <div className="flex gap-3 items-center">
+              <div className="flex gap-3 items-center flex-wrap">
                 <h1 className="text-3xl font-bold text-white">
                   {commonInfo.field_name}
                 </h1>
@@ -122,23 +122,23 @@ function FieldDetail() {
 
               <p className="text-white">{commonInfo.address}</p>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 flex-wrap">
                 <p
-                className="bg-green-600 text-white w-fit rounded-sm px-4 py-1 cursor-pointer hover:bg-green-900"
-                onClick={() =>
-                  navigate(`/branchDetail/${commonInfo.branch_id}`)
-                }
-              >
-                Xem chi nhánh
-              </p>
-              <p
-                className="bg-red-600 text-white w-fit rounded-sm px-4 py-1 cursor-pointer flex gap-1 items-center hover:bg-red-900"
-                onClick={() =>
-                  navigate(`/branchDetail/${commonInfo.branch_id}`)
-                }
-              >
-                <RiMapPinFill /> xem vị trí
-              </p>
+                  className="bg-green-600 text-white w-fit rounded-sm px-4 py-1 cursor-pointer hover:bg-green-900"
+                  onClick={() =>
+                    navigate(`/branchDetail/${commonInfo.branch_id}`)
+                  }
+                >
+                  Xem chi nhánh
+                </p>
+                <p
+                  className="bg-red-600 text-white w-fit rounded-sm px-4 py-1 cursor-pointer flex gap-1 items-center hover:bg-red-900"
+                  onClick={() =>
+                    navigate(`/branchDetail/${commonInfo.branch_id}`)
+                  }
+                >
+                  <RiMapPinFill /> xem vị trí
+                </p>
               </div>
             </div>
           </div>
@@ -146,43 +146,80 @@ function FieldDetail() {
 
         {/* Phần hiển thị danh sách các loại sân & Bảng giá */}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 justify-center items-center">
           {detail.map((item, index) => (
-            <div
-              key={index}
-              className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow p-6"
-            >
-              <h3 className="text-xl font-bold text-blue-600 mb-2">
-                {item.type_name}
-              </h3>
-              <div className="text-gray-600 mb-4 space-y-1">
-                <p>
-                  <strong>Tối đa:</strong> {item.max_players} người
-                </p>
-                <p>
-                  <strong>Đội hình:</strong> {item.players} vs {item.players}
-                </p>
+            <div key={index} className="relative rounded-3xl shadow-2xl h-fit">
+              <div className="absolute top-0 right-0 bg-white/85 p-2 rounded-[50%] mt-4 mr-4 cursor-pointer hover:opacity-70">
+                <RiMore2Fill />
               </div>
-              <div className="border-t pt-4 mt-2">
-                <p className="text-sm text-gray-500">Giá thuê</p>
+              <img
+                src={item.thumbnail ? `../../../assets/${item.thumbnail}` : '../../../assets/pexels-rick98-10751047.jpg'}
+                className="w-full h-full object-cover rounded-3xl"
+              />
+              <div className="field__card--content absolute bottom-0 p-5 z-10 w-full">
+                <span className="text-white text-2xl font-[550]">
+                  {item.type_name}
+                </span>
                 <p className="text-2xl font-bold text-red-600">
                   {new Intl.NumberFormat("vi-VN", {
                     style: "currency",
                     currency: "VND",
                   }).format(Number(item.price_per_hour))}
-                  <span className="text-sm font-normal text-gray-500">
-                    {" "}
+                  <span className="text-sm font-normal text-gray-200">
                     / giờ
                   </span>
                 </p>
-                <button className="w-full mt-4 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-200">
-                  Đặt sân ngay
-                </button>
+                <span className="text-gray-300 text-sm">{item.description}</span>
+                <div className="field__card--players flex gap-3 mt-5 mb-5 items-center">
+                  <p className="text-white px-2 py-0.5">
+                    Players{" "}
+                    <span>
+                      {item.players} / {item.players}
+                    </span>
+                  </p>
+                  <p className="text-white px-2 py-0.5">
+                    Max players: {item.max_players}
+                  </p>
+                  {item.status === "available" ? (
+                    <p className="text-white px-2 py-0.5 bg-[rgba(17,233,68,0.77)]">
+                      Có sẳn
+                    </p>
+                  ) : item.status === "maintenance" ? (
+                    <p className="text-white px-2 py-0.5 bg-stone-600">
+                      Bảo trì
+                    </p>
+                  ) : (
+                    <p className="text-white px-2 py-0.5 bg-red-500">
+                      Đã được thuê
+                    </p>
+                  )}
+                </div>
+                {item.status === "available" ? (
+                  <button className="w-full bg-white text-shadow-neutral-950 rounded-[20px] py-2 font-medium cursor-pointer hover:bg-gray-200 duration-100">
+                    Đặt sân ngay
+                  </button>
+                ) : item.status === "maintenance" ? (
+                  <button className="w-full text-gray-300 rounded-[20px] py-2 font-medium bg-stone-200/40">
+                    Nhận thông báo khi sân hoàn tất bảo trì
+                  </button>
+                ) : (
+                  <button className="w-full text-gray-300 rounded-[20px] py-2 font-medium bg-stone-200/40 ">
+                    Nhận thông báo khi sân trống
+                  </button>
+                )}
               </div>
             </div>
           ))}
         </div>
       </section>
+
+      {/* Danh sách các dịch vụ của chi nhánh này */}
+      <div className="flex mt-10">
+        <div className="">
+          <p>Các dịch vụ đi kèm của chúng tôi.</p>
+          
+        </div>
+      </div>
     </>
   );
 }

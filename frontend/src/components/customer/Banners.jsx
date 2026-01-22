@@ -9,7 +9,7 @@ import "../../styles/Banners.css";
 
 function Banners() {
   return (
-    <>
+    <> 
       <div className="relative">
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}

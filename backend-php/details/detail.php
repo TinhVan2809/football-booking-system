@@ -23,6 +23,8 @@
                         ft.type_name,
                         ft.players,
                         ft.status,
+                        ft.thumbnail,
+                        ft.description,
 
                         fft.price_per_hour,
                         fft.max_players

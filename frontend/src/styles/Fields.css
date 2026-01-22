@@ -1,0 +1,16 @@
+.field__card--content {
+    backdrop-filter: blur(12px);
+    box-shadow: 0 -10px 60px rgba(0, 0, 0, 0.93);
+    border-radius: 0 0 24px 24px;
+}
+
+.field__card--content .field__card--players p {
+    border-radius: 20px;
+    font-weight: 550;
+    font-size: 15px;
+}
+
+.field__card--content .field__card--players P:nth-child(1),
+.field__card--content .field__card--players p:nth-child(2) {
+    background-color: rgba(226, 222, 222, 0.26);
+}
