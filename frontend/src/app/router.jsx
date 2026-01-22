@@ -6,21 +6,23 @@ import ProtectedRoute from "./ProtectedRoute";
 import { UserProvider } from "../context/UserContext";
 
 //------------------ PAGES/LAYOUTD/COMPOENTS...-----------------------//
-// [USTOMER]
+
+// *[USTOMER]
 import Home from "../pages/customer/Home";
 import FieldDetail from "../pages/customer/FieldDetail";
 import CustomerLayout from "../layouts/customer/CustomerLayout";
 import BranchDetail from "../pages/customer/BranchDetail";
 import Search from "../pages/customer/Search";
 
-// [ADMIN]
+// *[ADMIN]
 import Dashbroad from "../pages/admin/Dashbroad";
 import Fields from "../pages/admin/Fields";
 import Users from "../pages/admin/Users";
 import AdminLayout from "../layouts/admin/AdminLayout";
 import Branches from "../pages/admin/Branches";
+import Services from "../pages/admin/Services";
 
-// [BRANCH OWNER]
+// *[BRANCH OWNER]
 import DashbroadBranch from "../pages/branch_owner/Dashbroad";
 
 //------------------ PAGES/LAYOUTD/COMPOENTS...-----------------------//
@@ -43,7 +45,7 @@ export const router = createBrowserRouter([
          children: [
          {
            index: true,
-           element: <Home />, // Route mặc định cho trang customer
+           element: <Home />, //Route mặc định cho trang customer
          },
          { path: "detail/:field_id", element: <FieldDetail /> },
          { path: "branchDetail/:branch_id", element: <BranchDetail /> },
@@ -73,6 +75,7 @@ export const router = createBrowserRouter([
           { path: "fields", element: <Fields /> },  // route sân bóng
           { path: "users", element: <Users /> }, // route user
           { path: "branches", element: <Branches /> },  // router chủ sân
+          { path: "services/:branch_id", element: <Services /> },
 
         ],
       },

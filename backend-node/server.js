@@ -66,7 +66,7 @@ app.use(cookieParser());
 //   }
 // });
 
-// TẠO TÀI KHOẢN CHO CUSTOMER
+// #TẠO TÀI KHOẢN CHO CUSTOMER
 app.post("/register", async (req, res) => {
   const { username, password, full_name, phone } = req.body;
 
@@ -105,7 +105,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-// LOGIN
+// #LOGIN
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
 
@@ -166,7 +166,7 @@ app.post("/login", (req, res) => {
   );
 });
 
-// MIDDLEWARE AUTH
+// #MIDDLEWARE AUTH
 function auth(req, res, next) {
   const token = req.cookies.token;
 
@@ -180,7 +180,7 @@ function auth(req, res, next) {
   });
 }
 
-// ROUTH [Gọi api để xem json user]
+// #ROUTH [Gọi api để xem json user]
 app.get("/user", auth, (req, res) => {
   res.json({
     message: "Access granted",

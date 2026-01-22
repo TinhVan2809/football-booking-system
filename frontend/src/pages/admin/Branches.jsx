@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Branches() {
   const API_BASE =
@@ -13,6 +13,7 @@ function Branches() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [validationErrors, setValidationErrors] = useState({});
 
+  const navigate = useNavigate()
 
    const [formData, setFormData] = useState({ branch_name: '', address: '', phone: '', open_time: '', close_time: '' });
 
@@ -217,6 +218,7 @@ function Branches() {
                         <div className="flex gap-3">
                           <button onClick={() => handleEdit(branch)} className="text-blue-600 hover:text-blue-900 font-medium">Sửa</button>
                           <button onClick={() => handleDelete(branch.branch_id)} className="text-red-600 hover:text-red-900 font-medium">Xóa</button>
+                          <button className="text-green-400 cursor-pointer hover:text-green-900" onClick={() => navigate(`/admin/services/${branch.branch_id}`)}>Dịch vụ</button>
                         </div>
                       </td>
                     </tr>

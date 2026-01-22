@@ -4,7 +4,7 @@ import Sidebar from "./Sidebar";
 
 function AdminLayout() {
     return (
-        <>
+        <>    
             <HeaderAdmin />
             <Sidebar />
             <main className="ml-60 p-8">
