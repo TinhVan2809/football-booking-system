@@ -258,6 +258,12 @@ function FieldDetail() {
       <div className="flex mt-10">
         <div className="">
           <p>Các dịch vụ đi kèm của chúng tôi.</p>
+          {services.map(s => (
+            <div className="">
+              <p>{s.service_name}</p>
+              <p>{s.price}</p>
+            </div>
+          ))}
         </div>
       </div>
     </>
