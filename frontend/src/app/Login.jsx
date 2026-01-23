@@ -8,16 +8,17 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import {RiPhoneLine, RiEyeLine, RiEyeOffLine} from '@remixicon/react';
+import { RiPhoneLine, RiEyeLine, RiEyeOffLine } from "@remixicon/react";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { setUser } = useContext(UserContext);
+  const [errorUsername, setErrorUserName] = useState(null);
+  const [errorPassword, setErrorPassword] = useState(null);
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
-
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -44,7 +45,14 @@ function Login() {
           navigate("/"); //[HOME] Trang pages/customer/Home.jsx
         }
       } else {
-        alert(data.message || "Đăng nhập thất bại");
+        if (data.message == "User not found") {
+          setErrorUserName(data.message);
+          setErrorPassword(null);
+        } else {
+          setErrorPassword(data.message);
+          setErrorUserName(null);
+        }
+        console.error(data.message || "Lỗi khi đăng nhập!");
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -81,16 +89,45 @@ function Login() {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                 />
+                {errorUsername ? (
+                 
+                    <span className="text-red-500 text-sm">
+                      {errorUsername}
+                    </span>
+               
+                ) : (
+                  ""
+                )}
               </label>
-              <label htmlFor="" className="relative flex items-center">
+              <label htmlFor="" className="relative flex justify-center items-center flex-col">
                 <input
-                  type={showPassword ? 'password' : 'text'}
+                  type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   className="border-b-2 w-full px-1 py-2  outline-0"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                {showPassword ? <RiEyeOffLine size={20} className="absolute right-0 cursor-pointer" onClick={() => setShowPassword(!showPassword)}/> : <RiEyeLine size={20} className="absolute right-0 cursor-pointer" onClick={() => setShowPassword(!showPassword)} />}
+                {showPassword ? (
+                  <RiEyeLine
+                    size={20}
+                    className="absolute right-0 cursor-pointer"
+                    onClick={() => setShowPassword(!showPassword)}
+                  />
+                ) : (
+                  <RiEyeOffLine
+                    size={20}
+                    className="absolute right-0 cursor-pointer"
+                    onClick={() => setShowPassword(!showPassword)}
+                  />
+                )} 
+               {errorPassword ? (
+                    <span className="text-red-500 text-sm">
+                      {errorPassword}
+                    </span>
+
+                ) : (
+                  ""
+                )}
               </label>
               <div className="w-full flex items-center justify-between ">
                 <label htmlFor="" className="flex items-center">
@@ -147,13 +184,15 @@ function Login() {
               </SwiperSlide>
             </Swiper>
             <div className="absolute h-full w-full z-100 top-0 flex flex-col justify-between p-4">
-                <div className="">
-                    <h2 className="text-white text-3xl font-semibold">Login</h2>
-                </div>
-                <div className="flex w-full justify-between items-center">
-                    <Link className="back-to-website px-3 py-1 rounded-[20px] font-bold text-white flex gap-1 items-center"><RiPhoneLine size={19} /> Contact me</Link>
-                    <Link className="text-white">Learn more</Link>
-                </div>
+              <div className="">
+                <h2 className="text-white text-3xl font-semibold">Login</h2>
+              </div>
+              <div className="flex w-full justify-between items-center">
+                <Link className="back-to-website px-3 py-1 rounded-[20px] font-bold text-white flex gap-1 items-center">
+                  <RiPhoneLine size={19} /> Contact me
+                </Link>
+                <Link className="text-white">Learn more</Link>
+              </div>
             </div>
           </div>
         </section>

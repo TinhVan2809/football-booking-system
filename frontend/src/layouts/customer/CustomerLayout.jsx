@@ -5,7 +5,7 @@ function CustomerLayout() {
     return (
         <>
             <Header />
-            <main>
+            <main >
                 <Outlet />
             </main>
         </>

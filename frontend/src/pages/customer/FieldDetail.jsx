@@ -23,7 +23,7 @@ function FieldDetail() {
   //API service.php
   const API_SERVICE = "http://localhost/football-booking-system/backend-php/services/api.php";
 
-  const LIMIT = 25;
+  const LIMIT = 3;
   
   const [detail, setDetail] = useState([]);
   const [error, setError] = useState(null);
