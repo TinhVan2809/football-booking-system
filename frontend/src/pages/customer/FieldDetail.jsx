@@ -47,10 +47,20 @@ function FieldDetail() {
   // Lấy thông tin chung từ phần tử đầu tiên (nếu có) để dùng cho useEffect phía dưới
   const commonInfo = detail && detail.length > 0 ? detail[0] : null;
 
-  //TODO: FETCH chi tiết sân bóng
+  //TODO: FETCH chi tiết sân bóng (các field_types)
+  // Một field bị bảo trì thì các field_type của field đó cũng sẽ đóng theo
+  //? Api vẫn được chạy, commonInfo.field_status sẽ quyết định có render không không.
   useEffect(() => {
     const fetchFieldDetail = async (page = 1) => {
       setloading(true);
+
+      //? Lệng ngăn thực thi api nhưng commonInfo sẽ không thể render => commonInfo => undefine
+
+      //  if(!commonInfo) return;
+      // if(commonInfo?.field_status === "maintenance") {
+      //   return;
+      // }
+      // console.log(commonInfo?.field_status);
 
       try {
         const res = await fetch(
@@ -78,6 +88,17 @@ function FieldDetail() {
   //TODO: FETCH danh sách các dịch vụ có trong chi nhánh (branch_id) này.
   useEffect(() => {
     const fetchServicesBybranch = async (page = 1) => {
+
+      // khi useEffect(() => fetchFieldDetail) mounted => commonInfo?.status đã được xác định
+
+      // Ngưng thực thi api khi field_status === "maintenace"
+      // ?Không dùng điều kiện {commonInfo?.field_status..&&..} để tránh tốn hiệu năng vì api sẽ vẫn thực thi nhưng lại không cần render
+
+      if(!commonInfo) return;
+      if(commonInfo?.field_status === "maintenance") {
+        return;
+      }
+    
       try {
         const res = await fetch(
           `${API_SERVICE}?action=get&branch_id=${commonInfo?.branch_id}&limit=${LIMIT_SERVICES}&page=${page}`,
@@ -97,7 +118,7 @@ function FieldDetail() {
       }
     };
     fetchServicesBybranch();
-  }, [commonInfo?.branch_id]);
+  }, [commonInfo?.branch_id, commonInfo]);
 
   if (error)
     return <div className="text-center mt-10 text-red-500">Lỗi: {error}</div>;
@@ -141,8 +162,8 @@ function FieldDetail() {
               slidesPerView={1}
               loop={true}
               autoplay={{ delay: 4500 }}
-              lazy={true}
-              preloadImages={false}
+              lazy="true"
+              preloadimages="false"
             >
               <SwiperSlide>
                 <img
@@ -216,80 +237,87 @@ function FieldDetail() {
         </div>
 
         {/* Phần hiển thị danh sách các loại sân & Bảng giá */}
+        {/* Kiểm tra sân (field_id) có available không */}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 justify-center items-center">
-          {detail.map((item, index) => (
-            <div key={index} className="relative rounded-3xl shadow-2xl h-fit">
-              <div className="absolute top-0 right-0 bg-white/85 p-2 rounded-[50%] mt-4 mr-4 cursor-pointer hover:opacity-70">
-                <RiMore2Fill />
-              </div>
-              <img
-                rel="preload"
-                as="image"
-                src={
-                  item.thumbnail
-                    ? `../../../assets/${item.thumbnail}`
-                    : "../../../assets/pexels-rick98-10751047.jpg"
-                }
-                className="w-full h-full object-cover rounded-3xl will-change-transform"
-              />
-              <div className="field__card--content absolute bottom-0 p-5 z-10 w-full">
-                <span className="text-white text-2xl font-[550]">
-                  {item.type_name}
-                </span>
-                <p className="text-2xl font-bold text-red-600">
-                  {new Intl.NumberFormat("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  }).format(Number(item.price_per_hour))}
-                  <span className="text-sm font-normal text-gray-200">
-                    / giờ
+        {commonInfo?.field_status === "available" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 justify-center items-center">
+            {detail.map((item, index) => (
+              <div
+                key={index}
+                className="relative rounded-3xl shadow-2xl h-fit"
+              >
+                <div className="absolute top-0 right-0 bg-white/85 p-2 rounded-[50%] mt-4 mr-4 cursor-pointer hover:opacity-70">
+                  <RiMore2Fill />
+                </div>
+                <img
+                  rel="preload"
+                  as="image"
+                  src={
+                    item.thumbnail
+                      ? `../../../assets/${item.thumbnail}`
+                      : "../../../assets/pexels-rick98-10751047.jpg"
+                  }
+                  className="w-full h-full object-cover rounded-3xl will-change-transform"
+                />
+                <div className="field__card--content absolute bottom-0 p-5 z-10 w-full">
+                  <span className="text-white text-2xl font-[550]">
+                    {item.type_name}
                   </span>
-                </p>
-                <span className="text-gray-300 text-sm">
-                  {item.description}
-                </span>
-                <div className="field__card--players flex gap-3 mt-5 mb-5 items-center">
-                  <p className="text-white px-2 py-0.5">
-                    Players{" "}
-                    <span>
-                      {item.players} / {item.players}
+                  <p className="text-2xl font-bold text-red-600">
+                    {new Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(Number(item.price_per_hour))}
+                    <span className="text-sm font-normal text-gray-200">
+                      / giờ
                     </span>
                   </p>
-                  <p className="text-white px-2 py-0.5">
-                    Max players: {item.max_players}
-                  </p>
+                  <span className="text-gray-300 text-sm">
+                    {item.description}
+                  </span>
+                  <div className="field__card--players flex gap-3 mt-5 mb-5 items-center">
+                    <p className="text-white px-2 py-0.5">
+                      Players{" "}
+                      <span>
+                        {item.players} / {item.players}
+                      </span>
+                    </p>
+                    <p className="text-white px-2 py-0.5">
+                      Max players: {item.max_players}
+                    </p>
+                    {item.status === "available" ? (
+                      <p className="text-white px-2 py-0.5 bg-[rgba(17,233,68,0.77)]">
+                        Có sẳn
+                      </p>
+                    ) : item.status === "maintenance" ? (
+                      <p className="text-white px-2 py-0.5 bg-stone-600">
+                        Bảo trì
+                      </p>
+                    ) : (
+                      <p className="text-white px-2 py-0.5 bg-red-500">
+                        Đã được thuê
+                      </p>
+                    )}
+                  </div>
                   {item.status === "available" ? (
-                    <p className="text-white px-2 py-0.5 bg-[rgba(17,233,68,0.77)]">
-                      Có sẳn
-                    </p>
+                    <button className="w-full bg-white text-shadow-neutral-950 rounded-[20px] py-2 font-medium cursor-pointer hover:bg-gray-200 duration-100">
+                      Đặt sân ngay
+                    </button>
                   ) : item.status === "maintenance" ? (
-                    <p className="text-white px-2 py-0.5 bg-stone-600">
-                      Bảo trì
-                    </p>
+                    <button className="w-full text-gray-300 rounded-[20px] py-2 font-medium bg-stone-200/40">
+                      Nhận thông báo khi sân hoàn tất bảo trì
+                    </button>
                   ) : (
-                    <p className="text-white px-2 py-0.5 bg-red-500">
-                      Đã được thuê
-                    </p>
+                    <button className="w-full text-gray-300 rounded-[20px] py-2 font-medium bg-stone-200/40 ">
+                      Nhận thông báo khi sân trống
+                    </button>
                   )}
                 </div>
-                {item.status === "available" ? (
-                  <button className="w-full bg-white text-shadow-neutral-950 rounded-[20px] py-2 font-medium cursor-pointer hover:bg-gray-200 duration-100">
-                    Đặt sân ngay
-                  </button>
-                ) : item.status === "maintenance" ? (
-                  <button className="w-full text-gray-300 rounded-[20px] py-2 font-medium bg-stone-200/40">
-                    Nhận thông báo khi sân hoàn tất bảo trì
-                  </button>
-                ) : (
-                  <button className="w-full text-gray-300 rounded-[20px] py-2 font-medium bg-stone-200/40 ">
-                    Nhận thông báo khi sân trống
-                  </button>
-                )}
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
+
         <div className="w-full flex justify-center items-center gap-4 mt-6">
           <button
             onClick={handlePrevPage}
@@ -314,9 +342,8 @@ function FieldDetail() {
       {/* Danh sách các dịch vụ của chi nhánh này */}
       <div className="flex mt-10">
         <div className="">
-          <p>Các dịch vụ đi kèm của chúng tôi.</p>
           {services.map((s) => (
-            <div className="">
+            <div className="" key={s.service_id}>
               <p>{s.service_name}</p>
               <p>{s.price}</p>
             </div>
