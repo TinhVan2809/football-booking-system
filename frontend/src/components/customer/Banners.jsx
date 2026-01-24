@@ -16,8 +16,8 @@ function Banners() {
           slidesPerView={1}
           loop={true}
           autoplay={{ delay: 3500 }}
-          lazy={true}
-          preloadImages={false}
+          lazy="true"
+          preloadimages="true"
         >
           <SwiperSlide>
             <img

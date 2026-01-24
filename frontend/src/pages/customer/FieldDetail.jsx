@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect , Suspense} from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 //--------------------------Swiper------------------------------------
@@ -17,6 +17,8 @@ import {
   RiArrowLeftSLine,
   RiArrowRightSLine,
 } from "@remixicon/react";
+
+import CardSkeleton from "../../components/customer/CardSkeleton";
 
 function FieldDetail() {
   const { field_id } = useParams();
@@ -40,6 +42,7 @@ function FieldDetail() {
 
   //* Services dịch vụ
   const [services, setServices] = useState([]);
+  const [loadingServices, setLoadingServices] = useState(false);
 
   //* Navigate chuyển trang
   const navigate = useNavigate();
@@ -96,9 +99,11 @@ function FieldDetail() {
 
       if(!commonInfo) return;
       if(commonInfo?.field_status === "maintenance") {
+        setServices([]);
         return;
       }
     
+      setLoadingServices(true);
       try {
         const res = await fetch(
           `${API_SERVICE}?action=get&branch_id=${commonInfo?.branch_id}&limit=${LIMIT_SERVICES}&page=${page}`,
@@ -115,6 +120,8 @@ function FieldDetail() {
       } catch (err) {
         setError(err.message);
         console.error("Error fetching services by branch ", err);
+      } finally {
+        setLoadingServices(false);
       }
     };
     fetchServicesBybranch();
@@ -340,14 +347,27 @@ function FieldDetail() {
       </section>
 
       {/* Danh sách các dịch vụ của chi nhánh này */}
-      <div className="flex mt-10">
-        <div className="">
-          {services.map((s) => (
-            <div className="" key={s.service_id}>
-              <p>{s.service_name}</p>
-              <p>{s.price}</p>
-            </div>
-          ))}
+      <div className="mt-10 mb-10">
+        <h3 className="text-2xl font-bold mb-5 text-stone-800">Dịch vụ tại chi nhánh</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {loadingServices ? (
+            Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="p-4 border rounded-xl shadow-sm bg-gray-50 animate-pulse h-24 flex items-center justify-center">
+                <CardSkeleton />
+              </div>
+            ))
+          ) : services.length > 0 ? (
+            services.map((s) => (
+              <div key={s.service_id} className="p-4 border border-gray-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-shadow">
+                <p className="font-semibold text-stone-800">{s.service_name}</p>
+                <p className="text-green-600 font-medium">
+                  {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(Number(s.price))}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500 col-span-full">Không có dịch vụ đi kèm.</p>
+          )}
         </div>
       </div>
     </>

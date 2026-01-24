@@ -13,6 +13,9 @@ class Detail
         try {
             $db = Database::getInstance();
             $connection = $db->getConnection();
+
+            //? f.status => Đây là trạng thái của một field của một chi nhánh cụ thể, nó bao gồm các loại field_type khác, nếu field này status.maintenance thì các field_type đều maintenance hết
+            //? fft.status => trạng thái của field_type của một field_id tại một branch_id “Loại chơi X của sân Y tại chi nhánh Z”
             $sql = "SELECT
                         f.field_id,
                         f.field_name,
@@ -25,12 +28,12 @@ class Detail
                         ft.field_type_id,
                         ft.type_name,
                         ft.players,
-                        ft.status,
                         ft.thumbnail,
                         ft.description,
 
                         fft.price_per_hour,
-                        fft.max_players
+                        fft.max_players,
+                        fft.status
                     FROM field_field_types fft
                     JOIN fields f ON f.field_id = fft.field_id
                     JOIN branches b ON b.branch_id = f.branch_id
