@@ -218,7 +218,7 @@ function Branches() {
                         <div className="flex gap-3">
                           <button onClick={() => handleEdit(branch)} className="text-blue-600 hover:text-blue-900 font-medium">Sửa</button>
                           <button onClick={() => handleDelete(branch.branch_id)} className="text-red-600 hover:text-red-900 font-medium">Xóa</button>
-                          <button className="text-green-400 cursor-pointer hover:text-green-900" onClick={() => navigate(`admin/services/${branch.branch_id}`)}>Dịch vụ</button>
+                          <button className="text-green-400 cursor-pointer hover:text-green-900" onClick={() => navigate(`/admin/services/${branch.branch_id}`)}>Dịch vụ</button>
                           <button onClick={() => navigate(`/admin/fields-branch/${branch.branch_id}`)}>Fields</button>
                         </div>
                       </td>

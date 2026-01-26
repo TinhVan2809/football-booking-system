@@ -26,6 +26,7 @@ import FieldsBranch from "../pages/admin/FieldsBranch";
 // *[BRANCH OWNER]
 import BranchOwnerLayout from "../layouts/branch_owner/BranchOwnerLayout";
 import DashbroadBranch from "../pages/branch_owner/Dashbroad";
+import { ServiceProvider } from "../context/ServiceContext";
 
 //------------------ PAGES/LAYOUTD/COMPOENTS...-----------------------//
 
@@ -75,7 +76,13 @@ export const router = createBrowserRouter([
           { path: "fields", element: <Fields /> }, // route sân bóng
           { path: "users", element: <Users /> }, // route user
           { path: "branches", element: <Branches /> }, // router chủ sân
-          { path: "services/:branch_id", element: <Services /> },
+          {
+            path: 'services/:branch_id', element: (
+              <ServiceProvider>
+                <Services />
+              </ServiceProvider>
+            ),
+          },
           { path: "fields-branch/:branch_id", element: <FieldsBranch /> },
         ],
       },
@@ -89,7 +96,7 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <DashbroadBranch />,
+            element: <DashbroadBranch />, //Route mặc định cho trang chủ chi nhánh
           },
         ],
       },

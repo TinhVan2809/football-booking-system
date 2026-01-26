@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import ServiceContext from "../../context/ServiceContext";
+import ServiceContext from "../../context/ServiceContext"; 
 import { useContext, useEffect, useState } from "react";
 
 function Services() {
@@ -16,7 +16,11 @@ function Services() {
   // API Base cho các thao tác Thêm/Sửa/Xóa (CUD)
   const API_BASE = "http://localhost/football-booking-system/backend-php/services/api.php";
 
+  // Fetch danh sách 25 dịch vụ của branch_id
   useEffect(() => {
+    if(!branch_id) {
+        return;
+    }
     fetchServicesByBranch({
       page,
       limit: 10,
