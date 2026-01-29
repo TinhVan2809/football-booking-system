@@ -48,12 +48,7 @@ function Header() {
           >
             Liên hệ
           </NavLink>
-          <NavLink 
-            to="/blogs" 
-            className={({ isActive }) => `font-[450] hover:cursor-pointer px-3 py-1 rounded-[20px] duration-300 hover:bg-green-700 hover:text-white ${isActive ? "bg-green-700 text-white" : ""}`}
-          >
-            Blogs
-          </NavLink>
+    
         </nav>
 
         {user ? (

@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
+// import { Swiper, SwiperSlide } from "swiper/react";
+// import { Navigation, Pagination, Autoplay } from "swiper/modules";
+// import "swiper/css";
+// import "swiper/css/navigation";
+// import "swiper/css/pagination";
+
+// api  lấy danh sách bảng giá
 import { getPricingByFieldFieldType } from "../../api/pricing.api";
+
 function Booking() {
   const { field_field_type_id } = useParams();
 
@@ -87,43 +95,48 @@ function Booking() {
   };
 
   return (
-    <div className="container mx-auto p-4 md:p-8 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
-        Bảng giá & Khung giờ
-        <span>{fieldInfo?.field_name}</span>
-        <span>Loại {fieldInfo?.type_name}</span>
-      </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {pricing.map((day) => (
-          <div
-            key={day.day_of_week}
-            className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-          >
-            <h3 className="text-xl font-bold text-gray-800 border-b-2 border-gray-100 pb-3 mb-4">
-              {day.day_name}
-            </h3>
-            <div className="space-y-4">
-              {day.rules.map((rule) => (
-                <div
-                  key={rule.pricing_rule_id}
-                  className="flex justify-between items-center bg-gray-50 p-3 rounded-md"
-                >
-                  <span className="text-gray-600 font-medium">
-                    {formatTime(rule.start_time)} - {formatTime(rule.end_time)}
-                  </span>
-                  <div className="text-right">
-                    <strong className="text-lg text-green-600">
-                      {formatCurrency(rule.price_per_hour)}
-                    </strong>
-                    {getRuleTypeBadge(rule.rule_type)}
-                  </div>
-                </div>
-              ))}
-            </div>
+    <>
+      <div className="container mx-auto md:p-8">
+        <div className="bg-black/70 w-fit p-4 rounded-2xl flex flex-col gap-3 justify-center items-center">
+          <h1 className="text-white">Bảng giá & Khung giờ</h1>
+          <div className="bg-green-600 px-3 py-1 rounded-2xl text-white">
+            <span>{fieldInfo?.field_name}</span>
+            <span>Loại {fieldInfo?.type_name}</span>
           </div>
-        ))}
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {pricing.map((day) => (
+            <div
+              key={day.day_of_week}
+              className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+            >
+              <h3 className="text-xl font-bold text-gray-800 border-b-2 border-gray-100 pb-3 mb-4">
+                {day.day_name}
+              </h3>
+              <div className="space-y-4">
+                {day.rules.map((rule) => (
+                  <div
+                    key={rule.pricing_rule_id}
+                    className="flex justify-between items-center bg-gray-50 p-3 rounded-md"
+                  >
+                    <span className="text-gray-600 font-medium">
+                      {formatTime(rule.start_time)} -{" "}
+                      {formatTime(rule.end_time)}
+                    </span>
+                    <div className="text-right">
+                      <strong className="text-lg text-green-600">
+                        {formatCurrency(rule.price_per_hour)}
+                      </strong>
+                      {getRuleTypeBadge(rule.rule_type)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
