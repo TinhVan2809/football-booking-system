@@ -99,9 +99,9 @@ function Booking() {
       <div className="container mx-auto md:p-8">
         <div className="bg-black/70 w-fit p-4 rounded-2xl flex flex-col gap-3 justify-center items-center">
           <h1 className="text-white">Bảng giá & Khung giờ</h1>
-          <div className="bg-green-600 px-3 py-1 rounded-2xl text-white">
-            <span>{fieldInfo?.field_name}</span>
-            <span>Loại {fieldInfo?.type_name}</span>
+          <div className="rounded-2xl text-white flex gap-2">
+            <span className="bg-green-600 rounded-2xl px-3 py-1">{fieldInfo?.field_name}</span>
+            <span className="bg-red-700 rounded-2xl px-3 py-1">Loại {fieldInfo?.type_name}</span>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
