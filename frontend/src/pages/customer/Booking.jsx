@@ -1,11 +1,7 @@
+// Trang booking chính
+
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-
-// import { Swiper, SwiperSlide } from "swiper/react";
-// import { Navigation, Pagination, Autoplay } from "swiper/modules";
-// import "swiper/css";
-// import "swiper/css/navigation";
-// import "swiper/css/pagination";
 
 // api  lấy danh sách bảng giá
 import { getPricingByFieldFieldType } from "../../api/pricing.api";
@@ -18,6 +14,10 @@ function Booking() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // State lưu trữ branch data c
+  const [branch, setBranch] = useState([]);
+
+  //todo: Lấy danh sách bảng giá
   useEffect(() => {
     if (!field_field_type_id) return;
 
@@ -50,6 +50,27 @@ function Booking() {
       }
     };
     fetchPricing();
+  }, [field_field_type_id]);
+
+  // todo: Lấy dữ liệu chi nhánh của field_field_type_id này
+  useEffect(() => {
+    const fetchBranhDataByFftId = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost/football-booking-system/backend-php/branches/api.php?action=get-branch-fftId&field_field_type_id=${field_field_type_id}`,
+        );
+        const data = await res.json();
+
+        if (data.success) {
+          setBranch(data.data);
+        }
+      } catch (err) {
+        setError(err.message);
+        console.error("Error fetching branch data by fft Id ", err);
+      } 
+    };
+
+    fetchBranhDataByFftId();
   }, [field_field_type_id]);
 
   if (loading)
@@ -100,8 +121,12 @@ function Booking() {
         <div className="bg-black/70 w-fit p-4 rounded-2xl flex flex-col gap-3 justify-center items-center">
           <h1 className="text-white">Bảng giá & Khung giờ</h1>
           <div className="rounded-2xl text-white flex gap-2">
-            <span className="bg-green-600 rounded-2xl px-3 py-1">{fieldInfo?.field_name}</span>
-            <span className="bg-red-700 rounded-2xl px-3 py-1">Loại {fieldInfo?.type_name}</span>
+            <span className="bg-green-600 rounded-2xl px-3 py-1">
+              {fieldInfo?.field_name}
+            </span>
+            <span className="bg-red-700 rounded-2xl px-3 py-1">
+              Loại {fieldInfo?.type_name}
+            </span>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

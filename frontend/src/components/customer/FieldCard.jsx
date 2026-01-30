@@ -1,3 +1,5 @@
+// component file card , Kết quả cho tìm kiếm 
+
 import { useNavigate } from "react-router-dom";
 function FieldCard({ field }) {
     const navigate = useNavigate();
