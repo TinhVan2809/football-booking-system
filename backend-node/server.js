@@ -160,6 +160,7 @@ app.post("/login", (req, res) => {
       res.cookie("token", token, cookieOptions).json({
         message: "Login success",
         user: {
+          user_id: user.user_id,
           role: user.role,
           username: user.username,
           full_name: user.full_name,

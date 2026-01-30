@@ -14,6 +14,7 @@ import CustomerLayout from "../layouts/customer/CustomerLayout";
 import BranchDetail from "../pages/customer/BranchDetail";
 import Search from "../pages/customer/Search";
 import Booking from "../pages/customer/Booking";
+import Profile from "../pages/customer/Profile";
 
 // *[ADMIN]
 import Dashbroad from "../pages/admin/Dashbroad";
@@ -54,7 +55,8 @@ export const router = createBrowserRouter([
           { path: "branchDetail/:branch_id", element: <BranchDetail /> },
           { path: "search", element: <Search /> },
           { path: "booking/:field_field_type_id", element: <Booking /> },
-        ],
+          { path: "profile/:user_id", element: <Profile /> },
+        ], 
       },
       {
         path: "/login",

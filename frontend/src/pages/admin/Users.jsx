@@ -8,6 +8,7 @@ function Users() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
 
+    // lấy danh sách tất cả users bao gồm admin và chi nhánh
     useEffect(() => {
         const fetchUsersData = async (page = 1) => {
             try{

@@ -13,6 +13,8 @@ function BranchDetail() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
+
+  // TODO: lấy danh sách sân bóng của chi nhánh này
   useEffect(() => {
     setLoading(true);
     const fetchFieldByBranch = async(page = 1) => {
@@ -39,7 +41,7 @@ function BranchDetail() {
 
   return (
     <>
-      <h1>hello world</h1>
+      
     </>
   );
 }
