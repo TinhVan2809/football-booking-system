@@ -244,9 +244,9 @@ function FieldDetail() {
 
         {commonInfo?.field_status === "available" && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 justify-center items-center">
-            {detail.map((item, index) => (
+            {detail.map((item) => (
               <div
-                key={index}
+                key={item.field_type_id }
                 className="relative rounded-3xl shadow-2xl h-fit"
               >
                 <div className="absolute z-100 top-0 right-0 bg-white/85 p-2 rounded-[50%] mt-4 mr-4 cursor-pointer hover:opacity-70">

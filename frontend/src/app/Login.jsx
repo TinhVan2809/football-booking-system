@@ -37,9 +37,9 @@ function Login() {
         localStorage.setItem("user", JSON.stringify(data.user));
         setUser(data.user); // Cập nhật user vào context
 
-        if (data.user.role === "admin") {
+        if (data.user.role === "admin" || data.user.role === "staff") {
           navigate("/admin"); //[DASHBROAD] Trang pages/admin/Dashbroad.jsx
-        } else if (data.user.role === "branch_owner") {
+        } else if (data.user.role === "branch_owner" || data.user.role === "branch_staff") {
           navigate("/branch_owner"); //[DASHBROAD] Trang pages/branch_owner/Dashbroad.jsx
         } else {
           navigate("/"); //[HOME] Trang pages/customer/Home.jsx

@@ -41,43 +41,4 @@ class Field
         }
     }
 
-    // //Lấy danh sách sân theo chi nhánh
-    // public function getFieldsByBranch(int $branch_id)
-    // {
-    //     if (empty($branch_id)) {
-    //         return false;
-    //     }
-    //     try {
-    //         $db = Database::getInstance();
-    //         $connection = $db->getConnection();
-
-    //         $sql = "SELECT field_id, filed_name, thumbnail, branch_id FROM fields WHERE branch_id = :branch_id";
-    //         $stmt = $connection->prepare($sql);
-    //         $stmt->bindValue(':branch_id', $branch_id, PDO::PARAM_INT);
-
-    //         $stmt->execute();
-    //         return $stmt->fetchAll(PDO::FETCH_OBJ);
-    //     } catch (PDOException $e) {
-    //         error_log("Error getting filed by branch " . $e->getMessage());
-    //         return [];
-    //     }
-    // }
-
-    // public function countFieldsByBranch(int $branch_id) { 
-    //     try{
-    //         $db = Database::getInstance();
-    //         $connection = $db->getConnection();
-
-    //         $sql = "SELECT COUNT(field_id) FROM fields WHERE branch_id = :branch_id";
-    //         $stmt = $connection->prepare($sql);
-    //         $stmt->bindValue(":branch_id", $branch_id, PDO::PARAM_INT);
-    //         $stmt->execute();
-    //         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    //         return isset($row['total']) ? (int)$row['total'] : 0;
-    //     } catch(PDOException $e) {
-    //         error_log("Error counting fields by branch " . $e->getMessage());
-    //         return false;
-    //     }
-    // }
 }

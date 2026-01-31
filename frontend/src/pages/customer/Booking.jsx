@@ -15,7 +15,7 @@ function Booking() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // State lưu trữ branch data c
+  // State lưu trữ branch data
   const [branch, setBranch] = useState([]);
 
   //todo: Lấy danh sách bảng giá
