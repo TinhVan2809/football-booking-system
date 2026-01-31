@@ -2,6 +2,9 @@ import { createBrowserRouter, Outlet } from "react-router-dom";
 
 import Login from "./Login";
 import Register from "./Register";
+import ForgotPassword from "./ForgotPassword";
+import ResetPassword from "./ResetPassword";
+
 import ProtectedRoute from "./ProtectedRoute";
 import { UserProvider } from "../context/UserContext";
 
@@ -65,6 +68,14 @@ export const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register />,
+      },
+      {
+        path: "/forgot-password", 
+        element: <ForgotPassword />
+      },
+      {
+        path: "/reset-password/:id/:token", 
+        element: <ResetPassword />
       },
       {
         path: "/admin", // Route cha cho khu vực admin

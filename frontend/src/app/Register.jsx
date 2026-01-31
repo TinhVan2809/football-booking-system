@@ -18,12 +18,13 @@ function Register() {
     confirmPassword: "",
     full_name: "",
     phone: "",
+    email: "",
     role: "customer", // Mặc định là khách hàng
   });
   const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
-  const [errConfirm, setErrConfirm] = useState('');
+  const [error, setError] = useState("");
+  const [errConfirm, setErrConfirm] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -166,45 +167,58 @@ function Register() {
               </label>
             </div>
 
-           <div className="">
-             <label className="">
-              <input
-                type="text"
-                name="username"
-                className="bg-[#3c364c] px-3 py-2.5 rounded-md text-white font-light outline-0 focus:border-violet-500 focus:border-2 border-transparent border-2 w-full duration-200"
-                onChange={handleChange}
-                required
-                placeholder="Email hoặc Username"
-              />
-            </label>
-             <span className="text-red-400 text-sm">{error}</span>
-           </div>
-
-            <div className="flex gap-3">
+            <div className="">
               <label className="">
                 <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  className="bg-[#3c364c] px-3 py-2.5 rounded-md text-white font-light outline-0 focus:border-violet-500 focus:border-2 border-transparent border-2 duration-200"
+                  type="text"
+                  name="username"
+                  className="bg-[#3c364c] px-3 py-2.5 rounded-md text-white font-light outline-0 focus:border-violet-500 focus:border-2 border-transparent border-2 w-full duration-200"
                   onChange={handleChange}
                   required
-                  placeholder="Password"
+                  placeholder="Email hoặc Username"
                 />
               </label>
+              <span className="text-red-400 text-sm">{error}</span>
+            </div>
 
-              <div className="flex flex-col">
-                <label htmlFor="">
+            <div className="flex flex-col gap-3">
+              <div className="w-full flex justify-between">
+                <label className="">
+                  <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    className="bg-[#3c364c] px-3 py-2.5 rounded-md text-white font-light outline-0 focus:border-violet-500 focus:border-2 border-transparent border-2 duration-200"
+                    onChange={handleChange}
+                    required
+                    placeholder="Password"
+                  />
+                </label>
+
+                <div className="flex flex-col">
+                  <label htmlFor="">
+                    <input
+                      type="password"
+                      id="confimPassword"
+                      className="bg-[#3c364c] px-3 py-2.5 rounded-md text-white font-light outline-0 focus:border-violet-500 focus:border-2 border-transparent border-2 duration-200"
+                      required
+                      placeholder="Xác nhận mật khẩu"
+                    />
+                  </label>
+                  <span className="text-red-400 text-sm">{errConfirm}</span>
+                </div>
+              </div>
+
+              <label className="">
                 <input
-                  type="password"
-                  id="confimPassword"
-                  className="bg-[#3c364c] px-3 py-2.5 rounded-md text-white font-light outline-0 focus:border-violet-500 focus:border-2 border-transparent border-2 duration-200"
+                  type="text"
+                  name="email"
+                  className="bg-[#3c364c] px-3 py-2.5 rounded-md text-white font-light outline-0 focus:border-violet-500 focus:border-2 border-transparent border-2 duration-200 w-full"
+                  onChange={handleChange}
                   required
-                  placeholder="Xác nhận mật khẩu"
+                  placeholder="Email (Tùy chọn)"
                 />
               </label>
-              <span className="text-red-400 text-sm">{errConfirm}</span>
-              </div>
             </div>
 
             <div className="w-full flex justify-center items-center">

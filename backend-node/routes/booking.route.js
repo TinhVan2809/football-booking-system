@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../db");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer"); // Import nodemailer
+const path = require("path"); // Import path để xử lý đường dẫn file
 
 // Middleware xác thực đơn giản (hoặc import auth middleware từ server.js nếu đã tách file)
 const verifyToken = (req, res, next) => {
@@ -40,12 +41,12 @@ router.post("/create", verifyToken, async (req, res) => {
   }
 
   try {
-    // 1. Kiểm tra xem khung giờ đó đã có ai đặt chưa (trạng thái != cancelled)
+    // 1. Kiểm tra xem khung giờ đó đã có ai đặt chưa (trạng thái != cancelled, completed)
     const checkQuery = `
       SELECT booking_id FROM bookings 
       WHERE field_field_type_id = ? 
       AND booking_date = ? 
-      AND booking_status != 'cancelled'
+      AND booking_status IN ('pending', 'confirmed') -- Đang xác nhận và đã xác nhận
       AND (
         (start_time < ? AND end_time > ?) OR -- Booking mới nằm trong booking cũ
         (start_time >= ? AND start_time < ?) OR -- Bắt đầu nằm trong khoảng cũ
@@ -67,8 +68,8 @@ router.post("/create", verifyToken, async (req, res) => {
       ],
       (err, results) => {
         if (err) {
-            console.error(err);
-            return res.status(500).json({ message: "Lỗi kiểm tra lịch trùng" });
+          console.error(err);
+          return res.status(500).json({ message: "Lỗi kiểm tra lịch trùng" });
         }
         if (results.length > 0) {
           return res
@@ -79,7 +80,10 @@ router.post("/create", verifyToken, async (req, res) => {
         // Tính toán final_price (Giá sân + Giá dịch vụ)
         let serviceTotal = 0;
         if (booking_services && Array.isArray(booking_services)) {
-          serviceTotal = booking_services.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+          serviceTotal = booking_services.reduce(
+            (sum, item) => sum + item.price * item.quantity,
+            0,
+          );
         }
         const final_price = Number(total_price) + serviceTotal;
 
@@ -105,24 +109,28 @@ router.post("/create", verifyToken, async (req, res) => {
           ],
           (err, result) => {
             if (err) {
-                console.error(err);
-                return res.status(500).json({ message: "Lỗi tạo booking" });
+              console.error(err);
+              return res.status(500).json({ message: "Lỗi tạo booking" });
             }
             const newBookingId = result.insertId;
 
             // 2.1 Insert Booking Services (Nếu có)
-            if (booking_services && Array.isArray(booking_services) && booking_services.length > 0) {
-              const serviceValues = booking_services.map(s => [
+            if (
+              booking_services &&
+              Array.isArray(booking_services) &&
+              booking_services.length > 0
+            ) {
+              const serviceValues = booking_services.map((s) => [
                 newBookingId,
                 s.branch_service_id, // ID từ bảng branch_services
                 s.quantity,
                 s.price * s.quantity, // total_price của service đó
-                s.price
+                s.price,
               ]);
-              
+
               const insertServicesQuery = `INSERT INTO booking_services (booking_id, branch_service_id, quantity, total_price, unit_price) VALUES ?`;
               db.query(insertServicesQuery, [serviceValues], (err) => {
-                 if(err) console.error("Lỗi insert services:", err);
+                if (err) console.error("Lỗi insert services:", err);
               });
             }
 
@@ -149,36 +157,54 @@ router.post("/create", verifyToken, async (req, res) => {
                 WHERE fft.field_field_type_id = ?
             `;
 
-            db.query(detailQuery, [field_field_type_id], async (err, detailRows) => {
+            db.query(
+              detailQuery,
+              [field_field_type_id],
+              async (err, detailRows) => {
                 if (!err && detailRows.length > 0) {
-                    const info = detailRows[0];
-                    
-                    // Cấu hình transporter
-                    const transporter = nodemailer.createTransport({
-                        service: "gmail",
-                        auth: {
-                            user: process.env.EMAIL_USER,
-                            pass: process.env.EMAIL_PASS,
-                        },
-                    });
+                  const info = detailRows[0];
 
-                    // Tạo danh sách dịch vụ HTML
-                    let servicesHtml = "";
-                    if (booking_services && booking_services.length > 0) {
-                        servicesHtml = `<h3>Dịch vụ đi kèm:</h3><ul>` + 
-                        booking_services.map(s => `<li>${s.service_name}: ${s.quantity} x ${new Intl.NumberFormat('vi-VN').format(s.price)} đ</li>`).join('') + 
-                        `</ul>`;
-                    }
+                  // Lấy email mới nhất từ database để đảm bảo chính xác
+                  db.query("SELECT email FROM users WHERE user_id = ?", [user_id], (err, userRows) => {
+                    if (err || userRows.length === 0 || !userRows[0].email) return;
+                    const userEmail = userRows[0].email;
 
-                    // Nội dung email
-                    const mailOptions = {
-                        from: `"Football Booking System" <${process.env.EMAIL_USER}>`,
-                        to: req.user.username,
-                        subject: `Xác nhận đặt sân thành công #${newBookingId}`,
-                        html: `
+                  // Cấu hình transporter
+                  const transporter = nodemailer.createTransport({
+                    service: "gmail",
+                    auth: {
+                      user: process.env.EMAIL_USER,
+                      pass: process.env.EMAIL_PASS,
+                    },
+                  });
+
+                  // Tạo danh sách dịch vụ HTML
+                  let servicesHtml = "";
+                  if (booking_services && booking_services.length > 0) {
+                    servicesHtml =
+                      `<h3>Dịch vụ đi kèm:</h3><ul>` +
+                      booking_services
+                        .map(
+                          (s) =>
+                            `<li>${s.service_name}: ${s.quantity} x ${new Intl.NumberFormat("vi-VN").format(s.price)} đ</li>`,
+                        )
+                        .join("") +
+                      `</ul>`;
+                  }
+
+                  // Nội dung email
+                  const mailOptions = {
+                    from: `"Hasebooking" <${process.env.EMAIL_USER}>`,
+                    to: userEmail,
+                    subject: `Xác nhận đặt sân thành công #${newBookingId}`,
+                    html: `
                             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
-                                <h2 style="color: #166534; text-align: center;">Đặt Sân Thành Công!</h2>
-                                <p>Xin chào <strong>${req.user.full_name || 'Quý khách'}</strong>,</p>
+                                <div style="display:flex; justify-content:center; align-items:center; width:100%">
+                                  <img src="cid:hasebooking_logo" style="width: 50px; height: auto" alt="Logo" />
+                                  <h2 style="color: #166534; text-align: center;">Đặt Sân Thành Công!</h2>
+                                </div>
+                                <img src="cid:field_bg" style="width: 100%; height: auto; display: block; margin: 0 auto;" alt="Logo" />
+                                <p>Xin chào <strong>${req.user.full_name || "Quý khách"}</strong>,</p>
                                 <p>Cảm ơn bạn đã sử dụng dịch vụ. Dưới đây là thông tin đặt sân của bạn:</p>
                                 
                                 <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
@@ -187,7 +213,7 @@ router.post("/create", verifyToken, async (req, res) => {
                                     <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Chi nhánh:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">${info.branch_name}</td></tr>
                                     <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Địa chỉ:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">${info.address}</td></tr>
                                     <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Thời gian:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">${start_time} - ${end_time}, ngày ${booking_date}</td></tr>
-                                    <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Tổng tiền:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd; color: #d32f2f; font-weight: bold;">${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(final_price)}</td></tr>
+                                    <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Tổng tiền:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd; color: #d32f2f; font-weight: bold;">${new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(final_price)}</td></tr>
                                 </table>
 
                                 ${servicesHtml}
@@ -195,12 +221,34 @@ router.post("/create", verifyToken, async (req, res) => {
                                 <p style="margin-top: 20px; text-align: center; color: #757575;">Vui lòng đến đúng giờ. Chúc bạn có trận đấu vui vẻ!</p>
                             </div>
                         `,
-                    };
+                    attachments: [
+                      {
+                        filename: "HASEBOOKING-Photoroom.png",
+                        path: path.join(
+                          __dirname,
+                          "../../frontend/assets/HASEBOOKING-Photoroom.png",
+                        ), // Đường dẫn tuyệt đối tới file ảnh
+                        cid: "hasebooking_logo", // Content-ID để tham chiếu trong thẻ img src="cid:..."
+                      },
+                      {
+                        filename: "pexels-anaussieinvietnam-33370012.jpg",
+                        path: path.join(
+                          __dirname,
+                          "../../frontend/assets/pexels-anaussieinvietnam-33370012.jpg",
+                        ), // Đường dẫn tuyệt đối tới file ảnh
+                        cid: "field_bg", // Content-ID để tham chiếu trong thẻ img src="cid:..."
+                      },
+                    ],
+                  };
 
-                    // Gửi mail (Không await để tránh block response)
-                    transporter.sendMail(mailOptions).catch(err => console.error("Lỗi gửi mail:", err));
+                  // Gửi mail (Không await để tránh block response)
+                  transporter
+                    .sendMail(mailOptions)
+                    .catch((err) => console.error("Lỗi gửi mail:", err));
+                  });
                 }
-            });
+              },
+            );
 
             // 5. Gửi Socket IO thông báo realtime
             // Gửi cho tất cả client để cập nhật lại giao diện (nếu đang xem cùng sân)
@@ -217,9 +265,9 @@ router.post("/create", verifyToken, async (req, res) => {
               message: "Đặt sân thành công!",
               booking_id: newBookingId,
             });
-          }
+          },
         );
-      }
+      },
     );
   } catch (error) {
     console.error(error);

@@ -4,6 +4,7 @@ const http = require("http"); // Import http
 const { Server } = require("socket.io"); // Import Socket.io
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 const db = require("./db");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -85,7 +86,7 @@ app.use(cookieParser());
 
 // #TẠO TÀI KHOẢN CHO CUSTOMER
 app.post("/register", async (req, res) => {
-  const { username, password, full_name, phone } = req.body;
+  const { username, password, full_name, phone, email } = req.body;
 
   if (!username || !password) {
     return res.status(400).json({ message: "Missing fields" });
@@ -103,8 +104,8 @@ app.post("/register", async (req, res) => {
         }
 
         db.query(
-          "INSERT INTO users (username, password, full_name, phone) VALUES (?, ?, ?, ?)",
-          [username, hashedPassword, full_name, phone],
+          "INSERT INTO users (username, password, full_name, phone, email) VALUES (?, ?, ?, ?, ?)",
+          [username, hashedPassword, full_name, phone, email],
           (err) => {
             if (err && err.code === 'ER_DUP_ENTRY') {
               console.error(err);
@@ -156,6 +157,7 @@ app.post("/login", (req, res) => {
           full_name: user.full_name,
           phone: user.phone,
           role: user.role,
+          email: user.email,
         },
         process.env.JWT_SECRET,
         {
@@ -183,6 +185,86 @@ app.post("/login", (req, res) => {
       });
     },
   );
+});
+
+// #FORGOT PASSWORD (Gửi email reset)
+app.post("/forgot-password", (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ message: "Vui lòng nhập email" });
+
+  db.query("SELECT * FROM users WHERE email = ?", [email], (err, users) => {
+    if (err) return res.status(500).json({ message: "Lỗi server" });
+    if (users.length === 0) return res.status(404).json({ message: "Email không tồn tại trong hệ thống" });
+
+    const user = users[0];
+    
+    // Tạo token reset password (hết hạn sau 15 phút)
+    // Dùng secret + password hash cũ để tạo secret key động -> Nếu user đổi pass thì token cũ vô hiệu
+    const secret = process.env.JWT_SECRET + user.password;
+    const token = jwt.sign({ user_id: user.user_id, email: user.email }, secret, { expiresIn: "15m" });
+
+    // Link reset (Trỏ về Frontend React)
+    const resetLink = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password/${user.user_id}/${token}`;
+
+    // Gửi email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: `"Hasebooking Support" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: "Yêu cầu đặt lại mật khẩu",
+      html: `
+        <h3>Xin chào ${user.full_name},</h3>
+        <p>Bạn vừa yêu cầu đặt lại mật khẩu. Vui lòng nhấn vào link bên dưới để tiếp tục:</p>
+        <a href="${resetLink}" style="padding: 10px 20px; background-color: #166534; color: white; text-decoration: none; border-radius: 5px;">Đặt lại mật khẩu</a>
+        <p>Link này chỉ có hiệu lực trong 15 phút.</p>
+        <p>Nếu bạn không yêu cầu, vui lòng bỏ qua email này.</p>
+      `
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Gửi email thất bại" });
+      }
+      res.json({ message: "Email đặt lại mật khẩu đã được gửi!" });
+    });
+  });
+});
+
+// #RESET PASSWORD (Cập nhật mật khẩu mới)
+app.post("/reset-password/:id/:token", (req, res) => {
+  const { id, token } = req.params;
+  const { password } = req.body;
+
+  db.query("SELECT * FROM users WHERE user_id = ?", [id], async (err, users) => {
+    if (err || users.length === 0) return res.status(404).json({ message: "User không tồn tại" });
+    
+    const user = users[0];
+    const secret = process.env.JWT_SECRET + user.password;
+
+    try {
+      // Verify token
+      jwt.verify(token, secret);
+
+      // Hash mật khẩu mới
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      db.query("UPDATE users SET password = ? WHERE user_id = ?", [hashedPassword, id], (err) => {
+        if (err) return res.status(500).json({ message: "Lỗi cập nhật mật khẩu" });
+        res.json({ message: "Mật khẩu đã được thay đổi thành công!" });
+      });
+
+    } catch (error) {
+      res.status(400).json({ message: "Link không hợp lệ hoặc đã hết hạn" });
+    }
+  });
 });
 
 // #MIDDLEWARE AUTH

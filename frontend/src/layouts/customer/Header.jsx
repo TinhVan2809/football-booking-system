@@ -60,7 +60,7 @@ function Header() {
               </sup>
             </div>
             <div className="flex justify-center items-center gap-1 cursor-pointer" onClick={() => navigate(`/profile/${user.user_id}`)}>
-              <RiUser3Line /> <span className="font-[450]">{user.username}</span>
+              <RiUser3Line /> <span className="font-[450] text-sm text-gray-400">{user.username}</span> 
             </div>
           </div>
         ) : (

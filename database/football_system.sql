@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th1 31, 2026 lúc 06:54 PM
+-- Thời gian đã tạo: Th1 31, 2026 lúc 10:02 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.0.30
 
@@ -47,8 +47,24 @@ CREATE TABLE `bookings` (
 --
 
 INSERT INTO `bookings` (`booking_id`, `field_field_type_id`, `booking_date`, `start_time`, `end_time`, `user_id`, `duration_minutes`, `price_per_hour`, `total_price`, `final_price`, `booking_status`, `created_at`) VALUES
-(7, 1, '2026-01-20', '18:00:00', '19:30:00', 20, 90, 300000.00, 450000.00, 450000.00, 'confirmed', '2026-01-17 21:23:41'),
-(8, 2, '2026-01-21', '20:00:00', '21:00:00', 20, 60, 500000.00, 500000.00, 500000.00, 'pending', '2026-01-17 21:23:51');
+(7, 1, '2026-01-20', '18:00:00', '19:30:00', 20, 90, 300000.00, 450000.00, 450000.00, 'completed', '2026-01-17 21:23:41'),
+(8, 2, '2026-01-21', '20:00:00', '21:00:00', 20, 60, 500000.00, 500000.00, 500000.00, 'completed', '2026-01-17 21:23:51'),
+(9, 1, '2026-02-03', '06:00:00', '16:00:00', 20, 600, 180000.00, 1800000.00, 1800000.00, 'completed', '2026-02-01 01:41:10'),
+(10, 1, '2026-02-01', '08:00:00', '10:00:00', 20, 120, 180000.00, 360000.00, 360000.00, 'completed', '2026-02-01 01:53:44'),
+(11, 1, '2026-02-04', '06:00:00', '16:00:00', 22, 600, 180000.00, 1800000.00, 1800000.00, 'completed', '2026-02-01 02:18:09'),
+(12, 1, '2026-02-06', '06:00:00', '22:00:00', 22, 960, 320000.00, 5120000.00, 5220000.00, 'completed', '2026-02-01 02:29:28'),
+(13, 1, '2026-02-01', '16:00:00', '22:00:00', 22, 360, 250000.00, 1500000.00, 1500000.00, 'completed', '2026-02-01 02:57:43'),
+(14, 1, '2026-02-02', '06:00:00', '16:00:00', 22, 600, 180000.00, 1800000.00, 1800000.00, 'completed', '2026-02-01 03:09:26'),
+(15, 1, '2026-02-01', '06:00:00', '16:00:00', 22, 600, 180000.00, 1800000.00, 1800000.00, 'completed', '2026-02-01 03:11:51'),
+(16, 1, '2026-02-03', '06:00:00', '16:00:00', 22, 600, 180000.00, 1800000.00, 1800000.00, 'completed', '2026-02-01 03:14:37'),
+(17, 1, '2026-02-02', '16:00:00', '22:00:00', 22, 360, 250000.00, 1500000.00, 1500000.00, 'completed', '2026-02-01 03:21:29'),
+(18, 1, '2026-02-03', '16:00:00', '22:00:00', 22, 360, 250000.00, 1500000.00, 1500000.00, 'completed', '2026-02-01 03:23:38'),
+(19, 1, '2026-02-06', '18:00:00', '21:00:00', 22, 180, 500000.00, 1500000.00, 1500000.00, 'completed', '2026-02-01 03:27:35'),
+(20, 1, '2026-02-04', '06:00:00', '16:00:00', 22, 600, 180000.00, 1800000.00, 1800000.00, 'completed', '2026-02-01 03:28:55'),
+(21, 1, '2026-02-04', '16:00:00', '22:00:00', 22, 360, 270000.00, 1620000.00, 1620000.00, 'completed', '2026-02-01 03:29:34'),
+(22, 1, '2026-02-01', '16:00:00', '22:00:00', 22, 360, 250000.00, 1500000.00, 1500000.00, 'completed', '2026-02-01 03:30:50'),
+(23, 1, '2026-02-01', '06:00:00', '16:00:00', 23, 600, 180000.00, 1800000.00, 1800000.00, 'pending', '2026-02-01 03:46:01'),
+(24, 1, '2026-02-05', '16:00:00', '22:00:00', 23, 360, 300000.00, 1800000.00, 1800000.00, 'pending', '2026-02-01 03:53:37');
 
 -- --------------------------------------------------------
 
@@ -64,6 +80,13 @@ CREATE TABLE `booking_services` (
   `total_price` decimal(10,2) DEFAULT NULL COMMENT 'Tổng tiền của dịch vụ này',
   `unit_price` decimal(10,2) DEFAULT NULL COMMENT 'Giá tại thời điểm đặt, không ảnh hưởng khi thay đổi bảng giá'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='các dịch vụ cụ thể mà một lượt đặt sân đã sử dụng. 1 - N';
+
+--
+-- Đang đổ dữ liệu cho bảng `booking_services`
+--
+
+INSERT INTO `booking_services` (`booking_service_id`, `booking_id`, `branch_service_id`, `quantity`, `total_price`, `unit_price`) VALUES
+(1, 12, 2, 2, 100000.00, 50000.00);
 
 -- --------------------------------------------------------
 
@@ -266,6 +289,28 @@ CREATE TABLE `notifications` (
   `create_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `notifications`
+--
+
+INSERT INTO `notifications` (`notification_id`, `user_id`, `content`, `create_at`) VALUES
+(1, 20, 'Bạn đã đặt sân thành công (ID: 9) vào ngày 2026-02-03 lúc 06:00:00', '2026-01-31 18:41:10'),
+(2, 20, 'Bạn đã đặt sân thành công (ID: 10) vào ngày 2026-02-01 lúc 08:00', '2026-01-31 18:53:44'),
+(3, 22, 'Bạn đã đặt sân thành công (ID: 11) vào ngày 2026-02-04 lúc 06:00', '2026-01-31 19:18:09'),
+(4, 22, 'Bạn đã đặt sân thành công (ID: 12) vào ngày 2026-02-06 lúc 06:00', '2026-01-31 19:29:28'),
+(5, 22, 'Bạn đã đặt sân thành công (ID: 13) vào ngày 2026-02-01 lúc 16:00', '2026-01-31 19:57:43'),
+(6, 22, 'Bạn đã đặt sân thành công (ID: 14) vào ngày 2026-02-02 lúc 06:00', '2026-01-31 20:09:26'),
+(7, 22, 'Bạn đã đặt sân thành công (ID: 15) vào ngày 2026-02-01 lúc 06:00', '2026-01-31 20:11:51'),
+(8, 22, 'Bạn đã đặt sân thành công (ID: 16) vào ngày 2026-02-03 lúc 06:00', '2026-01-31 20:14:37'),
+(9, 22, 'Bạn đã đặt sân thành công (ID: 17) vào ngày 2026-02-02 lúc 16:00', '2026-01-31 20:21:29'),
+(10, 22, 'Bạn đã đặt sân thành công (ID: 18) vào ngày 2026-02-03 lúc 16:00', '2026-01-31 20:23:38'),
+(11, 22, 'Bạn đã đặt sân thành công (ID: 19) vào ngày 2026-02-06 lúc 18:00', '2026-01-31 20:27:35'),
+(12, 22, 'Bạn đã đặt sân thành công (ID: 20) vào ngày 2026-02-04 lúc 06:00', '2026-01-31 20:28:55'),
+(13, 22, 'Bạn đã đặt sân thành công (ID: 21) vào ngày 2026-02-04 lúc 16:00', '2026-01-31 20:29:34'),
+(14, 22, 'Bạn đã đặt sân thành công (ID: 22) vào ngày 2026-02-01 lúc 16:00', '2026-01-31 20:30:50'),
+(15, 23, 'Bạn đã đặt sân thành công (ID: 23) vào ngày 2026-02-01 lúc 06:00', '2026-01-31 20:46:01'),
+(16, 23, 'Bạn đã đặt sân thành công (ID: 24) vào ngày 2026-02-05 lúc 16:00', '2026-01-31 20:53:37');
+
 -- --------------------------------------------------------
 
 --
@@ -278,7 +323,7 @@ CREATE TABLE `payments` (
   `amount` decimal(10,2) DEFAULT NULL COMMENT 'SỐ TIỀN ĐÃ TRẢ TRONG MỘT LẦN THANH TOÁN (Tổng 700 nhưng có thể trả trước 500)\r\n',
   `payment_method` enum('cash','transfer','momo') DEFAULT NULL COMMENT 'phương thức thanh toán. tiền mặt, chuyển khoản banking, momo ',
   `payment_status` enum('unpaid','partial','paid') DEFAULT NULL COMMENT 'chưa thanh toán, thanh toán một phần, đã thanh toán hết',
-  `payment_time` datetime DEFAULT NULL,
+  `payment_time` timestamp NOT NULL DEFAULT current_timestamp(),
   `note` varchar(255) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL COMMENT 'Ai là người thu tiền, branch_owner_id '
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='1 booking có N payments. Cũng có thể xem là tiền cọc trước';
@@ -288,9 +333,25 @@ CREATE TABLE `payments` (
 --
 
 INSERT INTO `payments` (`payment_id`, `booking_id`, `amount`, `payment_method`, `payment_status`, `payment_time`, `note`, `user_id`) VALUES
-(4, 7, 300000.00, 'momo', 'partial', '2026-01-18 10:00:00', 'Khách đặt cọc trước', 15),
-(5, 8, 150000.00, 'cash', 'paid', '2026-01-20 19:40:00', 'Thanh toán phần còn lại sau khi đá xong', 15),
-(6, 8, 150000.00, 'cash', 'paid', '2026-01-20 19:40:00', 'Thanh toán phần còn lại sau khi đá xong', 15);
+(4, 7, 300000.00, 'momo', 'partial', '2026-01-18 03:00:00', 'Khách đặt cọc trước', 15),
+(5, 8, 150000.00, 'cash', 'paid', '2026-01-20 12:40:00', 'Thanh toán phần còn lại sau khi đá xong', 15),
+(6, 8, 150000.00, 'cash', 'paid', '2026-01-20 12:40:00', 'Thanh toán phần còn lại sau khi đá xong', 15),
+(7, 9, 1800000.00, 'cash', 'paid', '2026-01-31 18:44:46', 'Đã thanh toán hết', 20),
+(8, 10, 360000.00, 'cash', 'paid', '2026-01-31 18:53:44', 'Đã thanh toán hết', 20),
+(9, 11, 1800000.00, 'cash', 'paid', '2026-01-31 19:18:09', 'Đã thanh toán hết', 22),
+(10, 12, 5220000.00, 'cash', 'paid', '2026-01-31 19:29:28', 'Đã thanh toán hết', 22),
+(11, 13, 1500000.00, 'cash', 'paid', '2026-01-31 19:57:43', 'Đã thanh toán hết', 22),
+(12, 14, 1800000.00, 'cash', 'paid', '2026-01-31 20:09:26', 'Chờ thanh toán', 22),
+(13, 15, 1800000.00, 'cash', 'paid', '2026-01-31 20:11:51', 'Chờ thanh toán', 22),
+(14, 16, 1800000.00, 'cash', 'paid', '2026-01-31 20:14:37', 'Chờ thanh toán', 22),
+(15, 17, 1500000.00, 'cash', 'paid', '2026-01-31 20:21:29', 'Chờ thanh toán', 22),
+(16, 18, 1500000.00, 'cash', 'paid', '2026-01-31 20:23:38', 'Chờ thanh toán', 22),
+(17, 19, 1500000.00, 'cash', 'paid', '2026-01-31 20:27:35', 'Chờ thanh toán', 22),
+(18, 20, 1800000.00, 'cash', 'paid', '2026-01-31 20:28:55', 'Chờ thanh toán', 22),
+(19, 21, 1620000.00, 'cash', 'paid', '2026-01-31 20:29:34', 'Chờ thanh toán', 22),
+(20, 22, 1500000.00, 'cash', 'paid', '2026-01-31 20:30:50', 'Chờ thanh toán', 22),
+(21, 23, 1800000.00, 'cash', 'unpaid', '2026-01-31 20:46:01', 'Chờ thanh toán', 23),
+(22, 24, 1800000.00, 'cash', 'unpaid', '2026-01-31 20:53:37', 'Chờ thanh toán', 23);
 
 -- --------------------------------------------------------
 
@@ -350,6 +411,7 @@ CREATE TABLE `users` (
   `full_name` varchar(100) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
   `avata` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
   `role` enum('admin','staff','branch_owner','branch_staff','customer') NOT NULL DEFAULT 'customer' COMMENT 'admin, nhân viên, chủ chi nhánh, nhân viên chi nhánh, khách hàng',
   `status` tinyint(4) DEFAULT 1 COMMENT '1 là đang hoạt động, 0 là gì block',
   `created_at` datetime DEFAULT current_timestamp(),
@@ -360,14 +422,16 @@ CREATE TABLE `users` (
 -- Đang đổ dữ liệu cho bảng `users`
 --
 
-INSERT INTO `users` (`user_id`, `username`, `password`, `full_name`, `phone`, `avata`, `role`, `status`, `created_at`, `branch_id`) VALUES
-(15, 'admin1', '$2b$10$ZLJd3EiPZ1pjINpmSFVILOXxo4R6MuguMDlVNL89vj6NgBQc5y8Zy', 'Lữ Văn Tính', '0818177533', NULL, 'admin', 1, '2026-01-18 19:37:52', NULL),
-(16, 'Tính Văn', '$2b$10$0kmys1ZlRkPp2rHHWGKy6.O3e1ERQoYzAiKX3B27Fvd1AeE69bkBW', 'Lữ Văn Tính', '0818177533', NULL, 'customer', 1, '2026-01-18 20:15:18', NULL),
-(17, 'tinh@gmail.com', '$2b$10$YmL9GOMpJRRKH/wU8Ipbwe92790N.0fG3cBoLtsZfTcaWYTv0aY6S', 'Lữ Văn Tính', '0818177533', NULL, 'branch_owner', 1, '2026-01-19 10:50:23', NULL),
-(18, 'Hasekimagru', '$2b$10$0VOpSkDgZUI.EFMafg/DRODntwxtVg2DAw2UVJyqhDew6hUhOQsie', 'tinh van', '0818177533', NULL, 'customer', 1, '2026-01-20 12:08:09', NULL),
-(19, 'Admin', '$2b$10$BDppk9El5d5ejJb1D.RP3.IHaebU2MFs5fo3SOsFuP0OQ/UqSRjH2', 'tinh van', '0818177533', NULL, 'customer', 1, '2026-01-20 15:02:06', NULL),
-(20, 'tinhvan', '$2b$10$ZeK2WulmDmzvHYLndT9za.VxX2P8UAcU6Ph/TQ69nBVAO5jzW3lPK', 'hase', '0813502953', NULL, 'customer', 1, '2026-01-20 15:25:35', NULL),
-(21, 'vantinh', '$2b$10$GPPR8TtQVDGCN/YtOXR5GOi0diZCY4YrIYakDozf54n/gZkiTngf2', 'tinh van', '0818177533', NULL, 'customer', 1, '2026-01-21 11:21:26', NULL);
+INSERT INTO `users` (`user_id`, `username`, `password`, `full_name`, `phone`, `avata`, `email`, `role`, `status`, `created_at`, `branch_id`) VALUES
+(15, 'admin1', '$2b$10$ZLJd3EiPZ1pjINpmSFVILOXxo4R6MuguMDlVNL89vj6NgBQc5y8Zy', 'Lữ Văn Tính', '0818177533', NULL, NULL, 'admin', 1, '2026-01-18 19:37:52', NULL),
+(16, 'Tính Văn', '$2b$10$0kmys1ZlRkPp2rHHWGKy6.O3e1ERQoYzAiKX3B27Fvd1AeE69bkBW', 'Lữ Văn Tính', '0818177533', NULL, NULL, 'customer', 1, '2026-01-18 20:15:18', NULL),
+(17, 'tinh@gmail.com', '$2b$10$YmL9GOMpJRRKH/wU8Ipbwe92790N.0fG3cBoLtsZfTcaWYTv0aY6S', 'Lữ Văn Tính', '0818177533', NULL, NULL, 'branch_owner', 1, '2026-01-19 10:50:23', NULL),
+(18, 'Hasekimagru', '$2b$10$0VOpSkDgZUI.EFMafg/DRODntwxtVg2DAw2UVJyqhDew6hUhOQsie', 'tinh van', '0818177533', NULL, NULL, 'customer', 1, '2026-01-20 12:08:09', NULL),
+(19, 'Admin', '$2b$10$BDppk9El5d5ejJb1D.RP3.IHaebU2MFs5fo3SOsFuP0OQ/UqSRjH2', 'tinh van', '0818177533', NULL, NULL, 'customer', 1, '2026-01-20 15:02:06', NULL),
+(20, 'tinhvan', '$2b$10$ZeK2WulmDmzvHYLndT9za.VxX2P8UAcU6Ph/TQ69nBVAO5jzW3lPK', 'hase', '0813502953', NULL, NULL, 'customer', 1, '2026-01-20 15:25:35', NULL),
+(21, 'vantinh', '$2b$10$GPPR8TtQVDGCN/YtOXR5GOi0diZCY4YrIYakDozf54n/gZkiTngf2', 'tinh van', '0818177533', NULL, NULL, 'customer', 1, '2026-01-21 11:21:26', NULL),
+(22, 'tinhlu703@gmail.com', '$2b$10$Wx0kw3NrKUzxhg1Mpy4IieJqCnyffjVBdfQ2RE8ePhIPsos6iLO82', 'Lữ Văn Tính', '0818177533', NULL, NULL, 'customer', 1, '2026-02-01 02:16:24', NULL),
+(23, 'tinhvanlu', '$2b$10$X70e60AfY6mlBtFE3tqAQ.s5rVGrVeP1CejUQ5y5i8EE8YcT0QXum', 'tinhvanlu', '0818177533', NULL, 'tinhlu263@gmail.com', 'customer', 1, '2026-02-01 03:45:28', NULL);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -487,13 +551,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT cho bảng `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT cho bảng `booking_services`
 --
 ALTER TABLE `booking_services`
-  MODIFY `booking_service_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `booking_service_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT cho bảng `branches`
@@ -541,13 +605,13 @@ ALTER TABLE `field_types`
 -- AUTO_INCREMENT cho bảng `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT cho bảng `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT cho bảng `reviews`
@@ -565,7 +629,7 @@ ALTER TABLE `services`
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- Các ràng buộc cho các bảng đã đổ

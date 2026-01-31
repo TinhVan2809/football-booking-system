@@ -134,7 +134,7 @@ function Login() {
                   <input type="checkbox" className="w-5.5 cursor-pointer" />
                   <span>Remenber me</span>
                 </label>
-                <Link className="hover:underline">Forgot Password?</Link>
+                <Link to="/forgot-password" className="hover:underline">Forgot Password?</Link>
               </div>
               <div className="w-full flex  items-end gap-3">
                 <button
