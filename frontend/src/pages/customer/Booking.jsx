@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { getPricingByFieldFieldType } from "../../api/pricing.api";
 
 function Booking() {
+  const API_BASE_BRANCH = "http://localhost/football-booking-system/backend-php/branches/api.php";
   const { field_field_type_id } = useParams();
 
   const [pricing, setPricing] = useState([]);
@@ -57,7 +58,7 @@ function Booking() {
     const fetchBranhDataByFftId = async () => {
       try {
         const res = await fetch(
-          `http://localhost/football-booking-system/backend-php/branches/api.php?action=get-branch-fftId&field_field_type_id=${field_field_type_id}`,
+          `${API_BASE_BRANCH}?action=get-branch-fftId&field_field_type_id=${field_field_type_id}`,
         );
         const data = await res.json();
 

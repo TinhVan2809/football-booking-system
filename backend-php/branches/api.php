@@ -220,6 +220,18 @@ try {
 
                 break;
 
+                // lấy dữ liệu branch theo fft id
+                case "get-branch-fftId":
+                    $field_field_type_id = filter_input(INPUT_POST, 'field_field_type_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'field_field_type_id', FILTER_VALIDATE_INT);
+
+                    $data = $branches->getBranchByFieldFieldTypeId($field_field_type_id);
+
+                    sendJson([
+                        'success' =>true,
+                        'data' => $data,
+                    ]);
+                break;
+
         default:
             http_response_code(400);
             echo json_encode(['success' => false, 'message' => 'Invalid action']);

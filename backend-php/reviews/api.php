@@ -1,6 +1,7 @@
 <?php
 
-require_once './profile.php';
+   
+require_once 'review.php';
 
 
 
@@ -58,19 +59,19 @@ $action = $_REQUEST['action'] ?? null;
         exit();
     }
 
-    $profile = new Profile();
+    $reviews = new Review();
 
 switch ($action) {
 
         case "get" :
             $page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT, ['options' => ['default' => 1, 'min_range' => 1]]) ?: 1;
             $limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT, ['options' => ['default' => 20, 'min_range' => 1]]) ?: 20;
-            $user_id = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
+            $branch_id = filter_input(INPUT_POST, 'branch_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'branch_id', FILTER_VALIDATE_INT);
 
             $offset = ($page - 1) * $limit;
-            $totalItems =$profile->coutBookingByUser($user_id);
+            $totalItems =$reviews->countReviewsByBranch($branch_id);
             $totalPages = ceil($totalItems / $limit);
-            $data =$profile->getBookingsByUser($user_id, $limit, $offset);
+            $data =$reviews->getReviewsByBranch($branch_id, $limit, $offset);
 
             sendJson([
                 'success' => true,
@@ -93,3 +94,6 @@ switch ($action) {
                 http_response_code(500);
                 echo json_encode(['success' => false, 'message' => 'An unexpected error occurred']);
             }
+
+
+?>

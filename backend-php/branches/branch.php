@@ -4,7 +4,7 @@ require_once '../connection.php';
 
 class Branch
 {
-    public function getBranchById(int $branch_id, int $limit =10, $offset = 0)
+    public function getBranchById(int $branch_id, int $limit = 10, $offset = 0)
     {
         if (empty($branch_id)) {
             return false;
@@ -12,7 +12,7 @@ class Branch
         try {
             $db = Database::getInstance();
             $connection = $db->getConnection();
-            
+
             // 1. Fetch fields with pagination
             $sql = "SELECT f.field_id, f.field_name, f.status, f.thumbnail
                     FROM fields f
@@ -32,7 +32,7 @@ class Branch
             // 2. Fetch field types for these fields
             $fieldIds = array_column($fields, 'field_id');
             $placeholders = implode(',', array_fill(0, count($fieldIds), '?'));
-            
+
             $sqlTypes = "SELECT 
                             fft.field_id,
                             ft.field_type_id,
@@ -42,7 +42,7 @@ class Branch
                         FROM field_field_types fft
                         JOIN field_types ft ON ft.field_type_id = fft.field_type_id
                         WHERE fft.field_id IN ($placeholders)";
-            
+
             $stmtTypes = $connection->prepare($sqlTypes);
             $stmtTypes->execute($fieldIds);
             $types = $stmtTypes->fetchAll(PDO::FETCH_ASSOC);
@@ -79,18 +79,19 @@ class Branch
         }
     }
 
-    public function getBranches(int $limit = 20, $offset = 0) {
-        try{
+    public function getBranches(int $limit = 20, $offset = 0)
+    {
+        try {
             $db = Database::getInstance();
             $connection = $db->getConnection();
-             $sql = "SELECT branch_id, branch_name, address, phone, open_time, close_time FROM branches LIMIT :limit OFFSET :offset";
-             $stmt = $connection->prepare($sql);
-             $stmt->bindValue(":limit", $limit, PDO::PARAM_INT);
-             $stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
-             $stmt->execute();
+            $sql = "SELECT branch_id, branch_name, address, phone, open_time, close_time FROM branches LIMIT :limit OFFSET :offset";
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(":limit", $limit, PDO::PARAM_INT);
+            $stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
+            $stmt->execute();
 
-             return $stmt->fetchAll(PDO::FETCH_OBJ);
-        } catch(PDOException $e) {
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
             error_log("Erro getting branches " . $e->getMessage());
             return [];
         }
@@ -133,8 +134,9 @@ class Branch
         }
     }
 
-    public function addBranch($branch_name, $address, $phone, $open_time, $close_time)  {
-        try{
+    public function addBranch($branch_name, $address, $phone, $open_time, $close_time)
+    {
+        try {
             $db = Database::getInstance();
             $connection = $db->getConnection();
             $sql = "INSERT INTO branches (branch_name, address, phone, open_time, close_time)
@@ -147,16 +149,14 @@ class Branch
             $stmt->bindValue(":close_time", trim($close_time), PDO::PARAM_STR);
             $stmt->execute();
             return $connection->lastInsertId();
-
-
-        } catch(PdoException $e) {
+        } catch (PdoException $e) {
             error_log("Error adding branch " . $e->getMessage());
             return false;
-
         }
     }
 
-    public function updateBranch($branch_id, $branch_name, $address, $phone, $open_time, $close_time) {
+    public function updateBranch($branch_id, $branch_name, $address, $phone, $open_time, $close_time)
+    {
         try {
             $db = Database::getInstance();
             $connection = $db->getConnection();
@@ -178,6 +178,27 @@ class Branch
         } catch (PDOException $e) {
             error_log("Error updating branch " . $e->getMessage());
             return false;
+        }
+    }
+
+    // Lấy dữ liệu chi nhánh theo field_field_type_id 
+    public function getBranchByFieldFieldTypeId(int $field_field_type_id)
+    {
+        try {
+            $db = Database::getInstance();
+            $connection = $db->getConnection();
+            $sql = "SELECT fft.field_field_type_id, f.field_id, b.branch_id, b.branch_name, b.address, b.open_time, b.close_time 
+                    FROM field_field_types fft 
+                    JOIN fields f ON fft.field_id = f.field_id 
+                    JOIN branches b ON f.branch_id = b.branch_id 
+                    WHERE fft.field_field_type_id = :field_field_type_id";
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(":field_field_type_id", $field_field_type_id, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (Exception $e) {
+            error_log("Error getting branch by ffft" . $e->getMessage());
+            return [];
         }
     }
 }
