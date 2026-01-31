@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th1 27, 2026 lúc 07:56 PM
+-- Thời gian đã tạo: Th1 31, 2026 lúc 06:54 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.0.30
 
@@ -47,8 +47,8 @@ CREATE TABLE `bookings` (
 --
 
 INSERT INTO `bookings` (`booking_id`, `field_field_type_id`, `booking_date`, `start_time`, `end_time`, `user_id`, `duration_minutes`, `price_per_hour`, `total_price`, `final_price`, `booking_status`, `created_at`) VALUES
-(7, 1, '2026-01-20', '18:00:00', '19:30:00', 15, 90, 300000.00, 450000.00, 450000.00, 'confirmed', '2026-01-17 21:23:41'),
-(8, 2, '2026-01-21', '20:00:00', '21:00:00', 15, 60, 500000.00, 500000.00, 500000.00, 'pending', '2026-01-17 21:23:51');
+(7, 1, '2026-01-20', '18:00:00', '19:30:00', 20, 90, 300000.00, 450000.00, 450000.00, 'confirmed', '2026-01-17 21:23:41'),
+(8, 2, '2026-01-21', '20:00:00', '21:00:00', 20, 60, 500000.00, 500000.00, 500000.00, 'pending', '2026-01-17 21:23:51');
 
 -- --------------------------------------------------------
 
@@ -219,6 +219,7 @@ INSERT INTO `field_pricing_rules` (`pricing_rule_id`, `field_field_type_id`, `da
 (3, 1, 4, '06:00:00', '16:00:00', 180000.00, 'off_peak', 'active', '2026-01-27 14:58:38'),
 (4, 1, 5, '06:00:00', '16:00:00', 180000.00, 'off_peak', 'active', '2026-01-27 14:58:38'),
 (5, 1, 6, '06:00:00', '16:00:00', 200000.00, 'off_peak', 'active', '2026-01-27 14:58:38'),
+(6, 1, 7, '18:00:00', '21:00:00', 500000.00, 'peak', 'active', '2026-01-29 15:09:16'),
 (16, 1, 2, '16:00:00', '22:00:00', 250000.00, 'peak', 'active', '2026-01-27 14:59:04'),
 (17, 1, 3, '16:00:00', '22:00:00', 250000.00, 'peak', 'active', '2026-01-27 14:59:04'),
 (18, 1, 4, '16:00:00', '22:00:00', 250000.00, 'peak', 'active', '2026-01-27 14:59:04'),
@@ -306,6 +307,13 @@ CREATE TABLE `reviews` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `reviews`
+--
+
+INSERT INTO `reviews` (`review_id`, `rating`, `user_id`, `branch_id`, `comment`, `created_at`) VALUES
+(1, 5, 20, 3, 'OK', '2026-01-31 07:28:21');
+
 -- --------------------------------------------------------
 
 --
@@ -342,7 +350,7 @@ CREATE TABLE `users` (
   `full_name` varchar(100) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
   `avata` varchar(255) DEFAULT NULL,
-  `role` enum('admin','staff','branch_owner','customer') NOT NULL DEFAULT 'customer' COMMENT 'admin, nhân viên, chủ chi nhánh, khách hàng',
+  `role` enum('admin','staff','branch_owner','branch_staff','customer') NOT NULL DEFAULT 'customer' COMMENT 'admin, nhân viên, chủ chi nhánh, nhân viên chi nhánh, khách hàng',
   `status` tinyint(4) DEFAULT 1 COMMENT '1 là đang hoạt động, 0 là gì block',
   `created_at` datetime DEFAULT current_timestamp(),
   `branch_id` int(11) DEFAULT NULL COMMENT 'User này là chủ/nhân viên của chi nhánh nào. Nếu không có hoặc role != branch_owner => null'
@@ -545,7 +553,7 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT cho bảng `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `review_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `review_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT cho bảng `services`

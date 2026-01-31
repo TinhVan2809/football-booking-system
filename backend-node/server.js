@@ -1,13 +1,20 @@
 require("dotenv").config();
 const express = require("express");
+const http = require("http"); // Import http
+const { Server } = require("socket.io"); // Import Socket.io
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const db = require("./db");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const app = express();
+const server = http.createServer(app); // Tạo server http từ express app
 app.use(express.json());
 
+// Kiểm tra biến môi trường quan trọng
+if (!process.env.JWT_SECRET) {
+  console.warn("CẢNH BÁO: JWT_SECRET chưa được cấu hình trong file .env");
+}
 
 
 // Configure CORS using environment variables (FRONTEND_URL, ADMIN_URL)
@@ -21,24 +28,32 @@ const allowedOrigins = [
   "http://127.0.0.1:3000",
   "http://localhost:5174",
   "http://localhost:5175",
+  "http://localhost",      
+  "http://127.0.0.1",   
 ].filter(Boolean);
 
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true);
+    } else {
+      console.log("Blocked by CORS:", origin); // Log origin bị chặn để debug
+      return callback(new Error(`Not allowed by CORS: ${origin}`));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
 app.use(
-  cors({
-    origin: function (origin, callback) {
-      // allow non-browser tools or same-origin requests with no origin
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) !== -1) {
-        return callback(null, true);
-      } else {
-        return callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  }),
+  cors(corsOptions),
 );
+
+// Cấu hình Socket.io
+const io = new Server(server, { cors: corsOptions });
+
 app.use(cookieParser());
 
 // TẠO TÀI KHOẢN CHO ADMIN
@@ -152,7 +167,7 @@ app.post("/login", (req, res) => {
       const cookieOptions = {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.COOKIE_SAMESITE || "strict", // set 'none' for cross-site (must have secure=true)
+        sameSite: process.env.COOKIE_SAMESITE || "lax", // 'lax' dễ chịu hơn cho dev localhost khác port
         domain: process.env.COOKIE_DOMAIN || undefined,
         maxAge: 24 * 60 * 60 * 1000, // 1 day
       };
@@ -211,7 +226,22 @@ app.use("/api/search", searchRoutes);
 const fieldPricingRuleRoutes = require("./routes/fieldPricingRule.route");
 app.use("/api/pricing", fieldPricingRuleRoutes);
 
+// # Route Booking (Kèm socket io)
+const bookingRoutes = require("./routes/booking.route");
+// Truyền io vào request để sử dụng trong controller
+app.use("/api/bookings", (req, res, next) => {
+  req.io = io;
+  next();
+}, bookingRoutes);
 
-app.listen(process.env.PORT, () =>
-  console.log(`Server running on port ${process.env.PORT}`),
-);
+
+// Socket connection event
+io.on("connection", (socket) => {
+  console.log("A user connected: " + socket.id);
+});
+
+const PORT = process.env.PORT || 8081; // Fallback port 8081 nếu env lỗi
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+  console.log("Network Info:", server.address());
+});
