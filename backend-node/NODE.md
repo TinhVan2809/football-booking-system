@@ -1,46 +1,24 @@
 ### Khởi động server
 ```
 cd backend-node
-npm install
 node server.js
 ```
 
 ### Cấu hình .env 
+1. **Truy cập https://myaccount.google.com/**
+2. **Tab bảo mật và đăng nhập => bật xác minh 2 bước**
+3. **Quay lại, chọn tạo mật khẩu và ứng dụng**
+4. **Nhập tên ứng dụng (bất kỳ, dễ nhớ)**
+5. **Copy mật khẩu (16 ký tự)**
 
-
-
-### Thực hiện chức năng Login, Register, Logout, Booking realtime
-### Sau khi đăng nhập => Lưu vào jwt
-
-## Xử lý CORS
 ```
-const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  process.env.ADMIN_URL,
-  "http://localhost:5173",
-  "http://localhost:3000",
-  "http://127.0.0.1:5173",
-  "http://127.0.0.1:3000",
-  "http://localhost:5174",
-  "http://localhost:5175",
-  
-  // Thêm domain name ở đây
-].filter(Boolean);
+PORT=8081
+JWT_SECRET=e923...7b1
+DB_HOST=localhost
+DB_USER=root
+DB_PASS=
+DB_NAME=football_system
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // allow non-browser tools or same-origin requests with no origin
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) !== -1) {
-        return callback(null, true);
-      } else {
-        return callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  }),
-);
+EMAIL_USER=dia_chi_email_cua_ban 
+EMAIL_PASS=mat_khau_16_ky_tu 
 ```

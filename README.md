@@ -35,16 +35,19 @@ Hệ thống đặt sân bóng đá trực tuyến hiện đại, kết nối kh
 
 ## Hướng dẫn cài đặt nhanh
 
-1. **Database**: Import file `database/football_system.sql` vào [MYSQL](mysql.md). 
-2. **Backend Node**:
+1. **Database**: Import file `database/football_system.sql` vào [MYSQL](./database/MYSQL.md). 
+2. **Backend** [NodeJS](./backend-node/NODE.md): 
    ```bash
    cd backend-node
    npm install
    # Tạo file .env từ example và cấu hình DB/Email
    node server.js
    ```
-Chi tiết xem [NodeJs](node.md)
-3. **Frontend**:
+3. **Backend** [PhP](./backend-php/PHP.md) Đường dẫn thư mục:
+    ```
+    C:\xampp\htdocs\football-booking-system>
+    ```
+4. **Frontend** :
    ```bash
    cd frontend
    npm install
