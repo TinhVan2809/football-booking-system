@@ -55,4 +55,4 @@ Hệ thống đặt sân bóng đá trực tuyến hiện đại, kết nối kh
    ```
 ## 
 
-Dự án này được phân phối dưới giấy phép **MIT**. Xem file LICENSE để biết thêm chi tiết.
+Dự án này được phân phối dưới giấy phép [MIT](./LICENSE).

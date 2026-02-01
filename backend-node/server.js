@@ -308,7 +308,7 @@ app.use("/api/search", searchRoutes);
 const fieldPricingRuleRoutes = require("./routes/fieldPricingRule.route");
 app.use("/api/pricing", fieldPricingRuleRoutes);
 
-// # Route Booking (Kèm socket io)
+//# Route Booking (Kèm socket io)
 const bookingRoutes = require("./routes/booking.route");
 // Truyền io vào request để sử dụng trong controller
 app.use("/api/bookings", (req, res, next) => {
