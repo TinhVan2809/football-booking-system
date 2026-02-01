@@ -1,3 +1,10 @@
+### Khởi động server
+```
+cd backend-node
+node server.js
+```
+
+
 ### Thực hiện chức năng Login, Register, Logout, Booking realtime
 ### Sau khi đăng nhập => Lưu vào jwt
 

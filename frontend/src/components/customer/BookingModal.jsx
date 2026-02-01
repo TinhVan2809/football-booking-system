@@ -11,7 +11,7 @@ function BookingModal({ isOpen, onClose, rule, fieldInfo, onConfirm, services = 
   // Reset giờ khi mở modal hoặc đổi rule
   useEffect(() => {
     if (isOpen && rule) {
-      setStartTime(rule.start_time.slice(0, 5));
+      setStartTime(rule.start_time.slice(0, 5)); //eslint-disable-line
       setEndTime(rule.end_time.slice(0, 5));
       setErrors({});
       setServiceQuantities({});

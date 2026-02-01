@@ -32,7 +32,8 @@ function ResetPassword() {
         setError(data.message);
       }
     } catch (err) {
-      setError("Lỗi kết nối server");
+      setError(err.message);
+      console.error("Error connect to server ", err);
     }
   };
 
