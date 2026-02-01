@@ -1,0 +1,42 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # --- 1. BACKEND NODE.JS ---
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install Backend Dependencies
+      working-directory: ./backend-node
+      run: npm install
+
+    - name: Run Backend Tests
+      working-directory: ./backend-node
+      run: npm test --if-present
+
+    # --- 2. FRONTEND REACT ---
+    - name: Install Frontend Dependencies
+      working-directory: ./frontend
+      run: npm install
+
+    - name: Build Frontend (Check build errors)
+      working-directory: ./frontend
+      run: npm run build --if-present
+
+    - name: Run Frontend Tests
+      working-directory: ./frontend
+      run: npm test --if-present

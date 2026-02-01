@@ -1,8 +1,12 @@
 ### Khởi động server
 ```
 cd backend-node
+npm install
 node server.js
 ```
+
+### Cấu hình .env 
+
 
 
 ### Thực hiện chức năng Login, Register, Logout, Booking realtime
