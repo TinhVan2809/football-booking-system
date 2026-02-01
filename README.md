@@ -9,11 +9,13 @@
 ### sau đó run
 ```
 cd backend-node
+npm install
 node server.js
 ```
 
 ```
 cd frontend
+npm install
 npm run dev
 ```
 
