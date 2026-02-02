@@ -8,7 +8,7 @@ function BranchOwnerLayout() {
             <main>
                 <Outlet />
             </main>
-            <Footer />
+            {/* <Footer /> */}
 
         </>
     );

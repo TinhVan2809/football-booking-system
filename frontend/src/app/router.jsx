@@ -33,6 +33,7 @@ import FieldsBranch from "../pages/admin/FieldsBranch";
 import BranchOwnerLayout from "../layouts/branch_owner/BranchOwnerLayout";
 import DashbroadBranch from "../pages/branch_owner/Dashbroad";
 import { ServiceProvider } from "../context/ServiceContext";
+import BookingListBranch from "../pages/branch_owner/BookingListBranch";
 
 //------------------ PAGES/LAYOUTD/COMPOENTS...-----------------------//
 
@@ -113,6 +114,10 @@ export const router = createBrowserRouter([
           {
             index: true,
             element: <DashbroadBranch />, //Route mặc định cho trang chủ chi nhánh
+          },
+          {
+            path: "bookings/:branch_id",
+            element: <BookingListBranch />,
           },
         ],
       },

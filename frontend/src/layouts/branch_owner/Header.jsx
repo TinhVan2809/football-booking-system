@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { RiAddLargeLine } from "@remixicon/react";
 
 import { useContext } from "react";
@@ -6,7 +6,9 @@ import UserContext from "../../context/UserContext";
 
 function Header() {
 
-    const {logout} = useContext(UserContext);
+    const {user, logout} = useContext(UserContext);
+    const navigate = useNavigate();
+    console.log("user.branch_id:", user?.branch_id);
   return (
     <>
       <header className="sticky top-0 shadow-2xl z-300 rounded-md flex justify-between items-center w-full bg-white">
@@ -16,7 +18,8 @@ function Header() {
         <nav className="flex justify-center items-center gap-5">
           <div className="flex justify-center items-center gap-7">
             <NavLink
-            to='/branch_owner'
+              to="/branch_owner"
+              end
               className={({ isActive }) =>
                 `font-bold text-[#20ad84] text-sm px-4 py-0.5 rounded-2xl cursor-pointer hover:bg-[#28ad84] hover:text-white ${isActive ? "bg-[#20ad84] text-white" : ""}`
               }
@@ -24,7 +27,7 @@ function Header() {
               Dashbroad
             </NavLink>
             <NavLink
-            to='/bookings'
+              to={`/branch_owner/bookings/${user.branch_id}`}
               className={({ isActive }) =>
                 `font-bold text-[#20ad84] text-sm px-4 py-0.5 rounded-2xl cursor-pointer hover:bg-[#28ad84] hover:text-white ${isActive ? "bg-[#20ad84] text-white" : ""}`
               }

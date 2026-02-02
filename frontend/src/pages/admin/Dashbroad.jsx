@@ -39,8 +39,6 @@ function Dashbroad() {
         setStatisticFieldFieldTypes(fieldFieldTypesData.data);
       }
 
-
-    
     } catch (err) {
         setError(err.message);
         console.error("Error fetching statisic data ", err);
@@ -53,6 +51,10 @@ function Dashbroad() {
 
   return (
     <>
+    <div className="">
+      {error && <p>{error}</p>}
+    </div>
+
       <div className="p-8">
         <h1 className="text-2xl font-bold mb-6">Dashboard Overview</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

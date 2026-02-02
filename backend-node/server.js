@@ -17,7 +17,6 @@ if (!process.env.JWT_SECRET) {
   console.warn("CẢNH BÁO: JWT_SECRET chưa được cấu hình trong file .env");
 }
 
-
 // Configure CORS using environment variables (FRONTEND_URL, ADMIN_URL)
 // Fall back to common localhost origins for development
 const allowedOrigins = [
@@ -29,8 +28,8 @@ const allowedOrigins = [
   "http://127.0.0.1:3000",
   "http://localhost:5174",
   "http://localhost:5175",
-  "http://localhost",      
-  "http://127.0.0.1",   
+  "http://localhost",
+  "http://127.0.0.1",
 ].filter(Boolean);
 
 const corsOptions = {
@@ -48,9 +47,7 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-app.use(
-  cors(corsOptions),
-);
+app.use(cors(corsOptions));
 
 // Cấu hình Socket.io
 const io = new Server(server, { cors: corsOptions });
@@ -100,14 +97,16 @@ app.post("/register", async (req, res) => {
       [username],
       (err, rows) => {
         if (rows.length > 0) {
-          return res.status(409).json({ message: "Tên tài khoản đã được sử dụng. " });
+          return res
+            .status(409)
+            .json({ message: "Tên tài khoản đã được sử dụng. " });
         }
 
         db.query(
           "INSERT INTO users (username, password, full_name, phone, email) VALUES (?, ?, ?, ?, ?)",
           [username, hashedPassword, full_name, phone, email],
           (err) => {
-            if (err && err.code === 'ER_DUP_ENTRY') {
+            if (err && err.code === "ER_DUP_ENTRY") {
               console.error(err);
               return res
                 .status(400)
@@ -142,12 +141,9 @@ app.post("/login", (req, res) => {
       // check password
       const isMatch = bcrypt.compareSync(password, user.password);
       if (!isMatch)
-        return res
-          .status(400)
-          .json({
-            message:
-              "Mật khẩu không chính xác.",
-          });
+        return res.status(400).json({
+          message: "Mật khẩu không chính xác.",
+        });
 
       //created token
       const token = jwt.sign(
@@ -158,6 +154,7 @@ app.post("/login", (req, res) => {
           phone: user.phone,
           role: user.role,
           email: user.email,
+          branch_id: user.branch_id,
         },
         process.env.JWT_SECRET,
         {
@@ -181,6 +178,7 @@ app.post("/login", (req, res) => {
           role: user.role,
           username: user.username,
           full_name: user.full_name,
+          branch_id: user.branch_id,
         },
       });
     },
@@ -194,17 +192,24 @@ app.post("/forgot-password", (req, res) => {
 
   db.query("SELECT * FROM users WHERE email = ?", [email], (err, users) => {
     if (err) return res.status(500).json({ message: "Lỗi server" });
-    if (users.length === 0) return res.status(404).json({ message: "Email không tồn tại trong hệ thống" });
+    if (users.length === 0)
+      return res
+        .status(404)
+        .json({ message: "Email không tồn tại trong hệ thống" });
 
     const user = users[0];
-    
+
     // Tạo token reset password (hết hạn sau 15 phút)
     // Dùng secret + password hash cũ để tạo secret key động -> Nếu user đổi pass thì token cũ vô hiệu
     const secret = process.env.JWT_SECRET + user.password;
-    const token = jwt.sign({ user_id: user.user_id, email: user.email }, secret, { expiresIn: "15m" });
+    const token = jwt.sign(
+      { user_id: user.user_id, email: user.email },
+      secret,
+      { expiresIn: "15m" },
+    );
 
     // Link reset (Trỏ về Frontend React)
-    const resetLink = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password/${user.user_id}/${token}`;
+    const resetLink = `${process.env.FRONTEND_URL || "http://localhost:5173"}/reset-password/${user.user_id}/${token}`;
 
     // Gửi email
     const transporter = nodemailer.createTransport({
@@ -225,7 +230,7 @@ app.post("/forgot-password", (req, res) => {
         <a href="${resetLink}" style="padding: 10px 20px; background-color: #166534; color: white; text-decoration: none; border-radius: 5px;">Đặt lại mật khẩu</a>
         <p>Link này chỉ có hiệu lực trong 15 phút.</p>
         <p>Nếu bạn không yêu cầu, vui lòng bỏ qua email này.</p>
-      `
+      `,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -243,28 +248,37 @@ app.post("/reset-password/:id/:token", (req, res) => {
   const { id, token } = req.params;
   const { password } = req.body;
 
-  db.query("SELECT * FROM users WHERE user_id = ?", [id], async (err, users) => {
-    if (err || users.length === 0) return res.status(404).json({ message: "User không tồn tại" });
-    
-    const user = users[0];
-    const secret = process.env.JWT_SECRET + user.password;
+  db.query(
+    "SELECT * FROM users WHERE user_id = ?",
+    [id],
+    async (err, users) => {
+      if (err || users.length === 0)
+        return res.status(404).json({ message: "User không tồn tại" });
 
-    try {
-      // Verify token
-      jwt.verify(token, secret);
+      const user = users[0];
+      const secret = process.env.JWT_SECRET + user.password;
 
-      // Hash mật khẩu mới
-      const hashedPassword = await bcrypt.hash(password, 10);
+      try {
+        // Verify token
+        jwt.verify(token, secret);
 
-      db.query("UPDATE users SET password = ? WHERE user_id = ?", [hashedPassword, id], (err) => {
-        if (err) return res.status(500).json({ message: "Lỗi cập nhật mật khẩu" });
-        res.json({ message: "Mật khẩu đã được thay đổi thành công!" });
-      });
+        // Hash mật khẩu mới
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-    } catch (error) {
-      res.status(400).json({ message: "Link không hợp lệ hoặc đã hết hạn" });
-    }
-  });
+        db.query(
+          "UPDATE users SET password = ? WHERE user_id = ?",
+          [hashedPassword, id],
+          (err) => {
+            if (err)
+              return res.status(500).json({ message: "Lỗi cập nhật mật khẩu" });
+            res.json({ message: "Mật khẩu đã được thay đổi thành công!" });
+          },
+        );
+      } catch (error) {
+        res.status(400).json({ message: "Link không hợp lệ hoặc đã hết hạn" });
+      }
+    },
+  );
 });
 
 // #MIDDLEWARE AUTH
@@ -299,23 +313,83 @@ app.post("/logout", (req, res) => {
     .json({ message: "Logout successful" });
 });
 
-//# Route dùng để tìm kiếm 
+//# Route dùng để tìm kiếm
 const searchRoutes = require("./routes/search.route");
 app.use("/api/search", searchRoutes);
 
-
-//# Route cho bảng giá 
+//# Route cho bảng giá
 const fieldPricingRuleRoutes = require("./routes/fieldPricingRule.route");
 app.use("/api/pricing", fieldPricingRuleRoutes);
 
 //# Route Booking (Kèm socket io)
 const bookingRoutes = require("./routes/booking.route");
 // Truyền io vào request để sử dụng trong controller
-app.use("/api/bookings", (req, res, next) => {
-  req.io = io;
-  next();
-}, bookingRoutes);
+app.use(
+  "/api/bookings",
+  (req, res, next) => {
+    req.io = io;
+    next();
+  },
+  bookingRoutes,
+);
 
+// #Lấy danh sách booking của một chi nhánh
+app.get("/api/bookings/branch/:branch_id", auth, (req, res) => {
+  const { branch_id } = req.params;
+  // Có thể thêm filter ngày nếu muốn
+  const sql = `
+    SELECT b.booking_id, b.final_price, b.created_at, b.duration_minutes, b.booking_status, u.full_name, f.field_name, ft.thumbnail, ft.type_name, ft.players
+    FROM bookings b
+    JOIN field_field_types fft ON b.field_field_type_id = fft.field_field_type_id
+    JOIN fields f ON fft.field_id = f.field_id
+    JOIN field_types ft ON fft.field_type_id = ft.field_type_id
+    JOIN users u ON b.user_id = u.user_id
+    WHERE f.branch_id = ?
+    ORDER BY b.created_at DESC
+  `;
+  db.query(sql, [branch_id], (err, rows) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Lỗi truy vấn booking" });
+    }
+    res.json({ success: true, bookings: rows });
+  });
+});
+
+//# Xem chi tiết booking theo booking_id
+app.get("/api/booking/branch/:booking_id", auth, (req, res) => {
+  const { booking_id } = req.params;
+  const bookingSql = `
+    SELECT b.*, u.user_id, u.full_name, u.phone, f.field_name, ft.type_name, ft.players
+    FROM bookings b
+    JOIN field_field_types fft ON b.field_field_type_id = fft.field_field_type_id
+    JOIN fields f ON fft.field_id = f.field_id
+    JOIN field_types ft ON fft.field_type_id = ft.field_type_id
+    JOIN users u ON b.user_id = u.user_id
+    WHERE b.booking_id = ?
+  `;
+  const servicesSql = `
+    SELECT bs.*, s.service_name
+    FROM booking_services bs
+    JOIN branch_services brs ON bs.branch_service_id = brs.branch_service_id
+    JOIN services s ON brs.service_id = s.service_id
+    WHERE bs.booking_id = ?
+  `;
+
+  db.query(bookingSql, [booking_id], (err, bookingRows) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Lỗi xem chi tiết lịch đặt sân" });
+    }
+    db.query(servicesSql, [booking_id], (err2, serviceRows) => {
+      if (err2) {
+        console.error(err2);
+        return res.status(500).json({ message: "Lỗi lấy dịch vụ đi kèm" });
+      }
+      res.json({ success: true, bookings: bookingRows, services: serviceRows });
+    });
+  });
+});
 
 // Socket connection event
 io.on("connection", (socket) => {
