@@ -80,6 +80,16 @@ try {
 
             break;
 
+        case 'statistic-ffts':
+            $data = $statistic->statisticFieldFieldTypes();
+
+            sendJson([
+                 'success' => true,
+                'data' => $data
+            ]);
+
+            break;
+
         default:
             http_response_code(400);
             echo json_encode(['success' => false, 'message' => 'Invalid action']);

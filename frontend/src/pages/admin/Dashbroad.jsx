@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 function Dashbroad() {
   const API_BASE_STATISIC =
     "http://localhost/football-booking-system/backend-php/statistics/api.php";
-  const [statisicUsers, setStatisicUsers] = useState(0);
-  const [statisicBranches, setStatisicBranches] = useState(0);
+  const [statisticUsers, setStatisticUsers] = useState(0);
+  const [statisticBranches, setStatisticBranches] = useState(0);
+  const [statisticFieldFieldTypes, setStatisticFieldFieldTypes] = useState(0);
 
   const [error, setError] = useState(null);
   
@@ -13,9 +14,10 @@ function Dashbroad() {
   const fetchStatisicData = async () => {
   
     try {
-      const [usersRes, branchesRes] = await Promise.all([
+      const [usersRes, branchesRes, fieldFieldTypesRes] = await Promise.all([
         fetch(`${API_BASE_STATISIC}?action=statistic-users`),
         fetch(`${API_BASE_STATISIC}?action=statistic-branches`),
+        fetch(`${API_BASE_STATISIC}?action=statistic-ffts`),
       ]);
 
       if (!usersRes.ok || !branchesRes.ok) {
@@ -24,13 +26,20 @@ function Dashbroad() {
 
       const usersData = await usersRes.json();
       if (usersData.success) {
-        setStatisicUsers(usersData.data);
+        setStatisticUsers(usersData.data);
       }
 
       const branchesData = await branchesRes.json();
       if (branchesData.success) {
-        setStatisicBranches(branchesData.data);
+        setStatisticBranches(branchesData.data);
       }
+
+      const fieldFieldTypesData  = await fieldFieldTypesRes.json();
+      if(fieldFieldTypesData.success) {
+        setStatisticFieldFieldTypes(fieldFieldTypesData.data);
+      }
+
+
     
     } catch (err) {
         setError(err.message);
@@ -49,11 +58,15 @@ function Dashbroad() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
             <h2 className="text-gray-500 text-sm font-medium uppercase">Total Users</h2>
-            <span className="text-3xl font-bold text-gray-800">{statisicUsers}</span>
+            <span className="text-3xl font-bold text-gray-800">{statisticUsers}</span>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
             <h2 className="text-gray-500 text-sm font-medium uppercase">Total Branches</h2>
-            <span className="text-3xl font-bold text-gray-800">{statisicBranches}</span>
+            <span className="text-3xl font-bold text-gray-800">{statisticBranches}</span>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+            <h2 className="text-gray-500 text-sm font-medium uppercase">Total Field types</h2>
+            <span className="text-3xl font-bold text-gray-800">{statisticFieldFieldTypes}</span>
           </div>
         </div>
       </div>
