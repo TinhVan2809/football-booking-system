@@ -34,6 +34,7 @@ import BranchOwnerLayout from "../layouts/branch_owner/BranchOwnerLayout";
 import DashbroadBranch from "../pages/branch_owner/Dashbroad";
 import { ServiceProvider } from "../context/ServiceContext";
 import BookingListBranch from "../pages/branch_owner/BookingListBranch";
+import BranchNotifications from "../pages/branch_owner/BranchNotifications";
 
 //------------------ PAGES/LAYOUTD/COMPOENTS...-----------------------//
 
@@ -118,6 +119,10 @@ export const router = createBrowserRouter([
           {
             path: "bookings/:branch_id",
             element: <BookingListBranch />,
+          },
+          {
+            path: "branch_notifications/:branch_id",
+            element: <BranchNotifications />
           },
         ],
       },

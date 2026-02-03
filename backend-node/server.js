@@ -394,6 +394,19 @@ app.get("/api/booking/branch/:booking_id", auth, (req, res) => {
 // Socket connection event
 io.on("connection", (socket) => {
   console.log("A user connected: " + socket.id);
+
+  // Join branch-specific room for realtime notifications
+  socket.on("join_branch", (payload) => {
+    const branchId = Number(payload?.branch_id ?? payload);
+    if (!branchId) return;
+    const room = `branch_${branchId}`;
+    socket.join(room);
+    console.log(`Socket ${socket.id} joined ${room}`);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected: " + socket.id);
+  });
 });
 
 const PORT = process.env.PORT || 8081; // Fallback port 8081 nếu env lỗi

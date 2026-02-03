@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 
 import { RiCircleFill, RiTimer2Line, RiGroupLine } from "@remixicon/react";
 
-// Component xem chi tiết đơn đặt lịch
+// Component xem chi tiết lịch đặt sân
 import BookingCardDetail from "../../components/branch_owner/BookingCardDetail";
 
 function BookingListBranch() {
@@ -12,7 +12,7 @@ function BookingListBranch() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // State lưu trạng thái xem chi tiết đơn đặt lịch
+  // State lưu trạng thái modal xem chi tiết 
   const [bookingCardModal, setBookingCardModal] = useState(false);
 
   // State lưu booking_id
@@ -21,8 +21,8 @@ function BookingListBranch() {
   const img =
     "http://localhost/football-booking-system/backend-php/uploads/fields_img";
 
-  // Hàm fetch danh sách booking
-  const fetchBookings = async () => {
+  // todo: Hàm fetch danh sách booking
+  const fetchBookings = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch(
@@ -37,33 +37,35 @@ function BookingListBranch() {
       console.error("error fetching bookings ", err);
     }
     setLoading(false);
-  };
+  }, [branch_id]);
 
   useEffect(() => {
+    if (!branch_id) return;
+
     fetchBookings();
-    // Kết nối socket
-    const socket = io("http://localhost:8081");
-    socket.on("new_booking", (data) => {
-      // Nếu booking thuộc chi nhánh này thì reload
-      if (
-        data.field_field_type_id &&
-        bookings.some((b) => b.field_field_type_id == data.field_field_type_id)
-      ) {
+    const socket = io("http://localhost:8081", { withCredentials: true });
+
+    socket.on("connect", () => {
+      socket.emit("join_branch", { branch_id });
+    });
+
+    socket.on("branch_new_booking", (data) => {
+      if (!data?.branch_id || String(data.branch_id) === String(branch_id)) {
         fetchBookings();
       }
     });
-    return () => socket.disconnect();
-    // eslint-disable-next-line
-  }, [branch_id]);
 
-  if (loading) return <div>Đang tải...</div>;
+    return () => socket.disconnect();
+  }, [branch_id, fetchBookings]);
+
+  if (loading) return <div>Äang táº£i...</div>;
 
   const getStatusBooking = (statusBooking) => {
     switch (statusBooking) {
       case "pending":
         return (
           <p className="text-white bg-[#272727] rounded-2xl text-sm px-2 py-0.5">
-            Chờ xác nhận
+            Chưa xác nhận
           </p>
         );
 
@@ -96,7 +98,7 @@ function BookingListBranch() {
   const onBookingDetail = (selectedBokingId) => {
     setSelectedBookingId(selectedBokingId);
     setBookingCardModal(true);
-  }
+  };
 
   return (
     <>
@@ -168,7 +170,10 @@ function BookingListBranch() {
 
       {bookingCardModal && (
         <>
-          <BookingCardDetail booking_id={selectedBokingId} onClose={() => setBookingCardModal(false)} />
+          <BookingCardDetail
+            booking_id={selectedBokingId}
+            onClose={() => setBookingCardModal(false)}
+          />
         </>
       )}
     </>

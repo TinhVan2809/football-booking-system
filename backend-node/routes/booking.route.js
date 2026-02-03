@@ -149,7 +149,7 @@ router.post("/create", verifyToken, async (req, res) => {
             // --- 5. GỬI EMAIL XÁC NHẬN ---
             // Lấy thông tin chi tiết sân và chi nhánh để gửi mail
             const detailQuery = `
-                SELECT f.field_name, ft.type_name, b.branch_name, b.address
+                SELECT f.field_name, ft.type_name, b.branch_id, b.branch_name, b.address
                 FROM field_field_types fft
                 JOIN fields f ON fft.field_id = f.field_id
                 JOIN field_types ft ON fft.field_type_id = ft.field_type_id
@@ -163,6 +163,34 @@ router.post("/create", verifyToken, async (req, res) => {
               async (err, detailRows) => {
                 if (!err && detailRows.length > 0) {
                   const info = detailRows[0];
+
+                  // Emit realtime notification to the branch owner room
+                  if (info.branch_id) {
+                    const branchNotiContent = `Co khach dat ${info.field_name} - ${info.type_name} ngay ${booking_date} luc ${start_time}`;
+
+                    const insertBranchNotiQuery =
+                      "INSERT INTO branch_notifications (branch_id, booking_id, content) VALUES (?, ?, ?)";
+                    db.query(insertBranchNotiQuery, [
+                      info.branch_id,
+                      newBookingId,
+                      branchNotiContent,
+                    ]);
+
+                    req.io.to(`branch_${info.branch_id}`).emit("branch_new_booking", {
+                      booking_id: newBookingId,
+                      branch_id: info.branch_id,
+                      field_field_type_id,
+                      field_name: info.field_name,
+                      type_name: info.type_name,
+                      booking_date,
+                      start_time,
+                      end_time,
+                      final_price,
+                      customer_name: req.user?.full_name || req.user?.username,
+                      message: branchNotiContent,
+                      created_at: new Date().toISOString(),
+                    });
+                  }
 
                   // Lấy email mới nhất từ database để đảm bảo chính xác
                   db.query("SELECT email FROM users WHERE user_id = ?", [user_id], (err, userRows) => {
@@ -273,6 +301,132 @@ router.post("/create", verifyToken, async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Server Error" });
   }
+});
+
+// Lấy lịch sử thông báo cho chi nhánh
+router.get("/branch/:branch_id/notifications", verifyToken, (req, res) => {
+  const { branch_id } = req.params;
+  if (!branch_id) return res.status(400).json({ message: "Missing branch_id" });
+
+  if (
+    req.user?.role !== "admin" &&
+    String(req.user?.branch_id) !== String(branch_id)
+  ) {
+    return res.status(403).json({ message: "Forbidden" });
+  }
+
+  const parsedLimit = Number.parseInt(req.query.limit, 10);
+  const limit = Number.isFinite(parsedLimit) ? Math.min(parsedLimit, 100) : 20;
+  const parsedPage = Number.parseInt(req.query.page, 10);
+  const page = Number.isFinite(parsedPage) && parsedPage > 0 ? parsedPage : 1;
+  const offset = (page - 1) * limit;
+  const status = req.query.status === "unread" ? "unread" : "all";
+
+  const baseWhere = status === "unread" ? "WHERE branch_id = ? AND is_read = 0" : "WHERE branch_id = ?";
+
+  const totalSql = `SELECT COUNT(*) AS total FROM branch_notifications ${baseWhere}`;
+  const unreadSql =
+    "SELECT COUNT(*) AS unread_count FROM branch_notifications WHERE branch_id = ? AND is_read = 0";
+  const dataSql = `
+    SELECT branch_notification_id, booking_id, content, created_at, is_read
+    FROM branch_notifications
+    ${baseWhere}
+    ORDER BY created_at DESC
+    LIMIT ? OFFSET ?
+  `;
+
+  db.query(totalSql, [branch_id], (err, totalRows) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Loi lay thong bao" });
+    }
+    const total = totalRows?.[0]?.total || 0;
+
+    db.query(unreadSql, [branch_id], (err2, unreadRows) => {
+      if (err2) {
+        console.error(err2);
+        return res.status(500).json({ message: "Loi lay thong bao" });
+      }
+      const unreadCount = unreadRows?.[0]?.unread_count || 0;
+
+      db.query(dataSql, [branch_id, limit, offset], (err3, rows) => {
+        if (err3) {
+          console.error(err3);
+          return res.status(500).json({ message: "Loi lay thong bao" });
+        }
+        res.json({
+          success: true,
+          notifications: rows,
+          total,
+          unread_count: unreadCount,
+          page,
+          limit,
+        });
+      });
+    });
+  });
+});
+
+// Đánh dấu đã đọc/chưa đọc
+router.patch("/branch/:branch_id/notifications/read", verifyToken, (req, res) => {
+  const { branch_id } = req.params;
+  if (!branch_id) return res.status(400).json({ message: "Missing branch_id" });
+
+  if (
+    req.user?.role !== "admin" &&
+    String(req.user?.branch_id) !== String(branch_id)
+  ) {
+    return res.status(403).json({ message: "Forbidden" });
+  }
+
+  const ids = Array.isArray(req.body?.ids)
+    ? req.body.ids.map((id) => Number(id)).filter((id) => Number.isFinite(id))
+    : [];
+  const isRead = Number(req.body?.is_read) === 0 ? 0 : 1;
+  const markAll = Boolean(req.body?.all);
+
+  if (!markAll && ids.length === 0) {
+    return res.status(400).json({ message: "Missing ids" });
+  }
+
+  const updateSql = markAll
+    ? "UPDATE branch_notifications SET is_read = ? WHERE branch_id = ?"
+    : "UPDATE branch_notifications SET is_read = ? WHERE branch_id = ? AND branch_notification_id IN (?)";
+
+  const params = markAll ? [isRead, branch_id] : [isRead, branch_id, ids];
+
+  db.query(updateSql, params, (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Loi cap nhat thong bao" });
+    }
+    res.json({ success: true, affected: result?.affectedRows || 0 });
+  });
+});
+
+// Xóa lịch sử thông báo theo chi nhánh
+router.delete("/branch/:branch_id/notifications", verifyToken, (req, res) => {
+  const { branch_id } = req.params;
+  if (!branch_id) return res.status(400).json({ message: "Missing branch_id" });
+
+  if (
+    req.user?.role !== "admin" &&
+    String(req.user?.branch_id) !== String(branch_id)
+  ) {
+    return res.status(403).json({ message: "Forbidden" });
+  }
+
+  db.query(
+    "DELETE FROM branch_notifications WHERE branch_id = ?",
+    [branch_id],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Loi xoa thong bao" });
+      }
+      res.json({ success: true, affected: result?.affectedRows || 0 });
+    },
+  );
 });
 
 module.exports = router;

@@ -314,6 +314,21 @@ INSERT INTO `notifications` (`notification_id`, `user_id`, `content`, `create_at
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `branch_notifications`
+--
+
+CREATE TABLE `branch_notifications` (
+  `branch_notification_id` int(11) NOT NULL,
+  `branch_id` int(11) NOT NULL,
+  `booking_id` int(11) DEFAULT NULL,
+  `content` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `is_read` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Thong bao cho chu chi nhanh';
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `payments`
 --
 
@@ -513,6 +528,15 @@ ALTER TABLE `notifications`
   ADD KEY `user_id` (`user_id`);
 
 --
+-- Chỉ mục cho bảng `branch_notifications`
+--
+ALTER TABLE `branch_notifications`
+  ADD PRIMARY KEY (`branch_notification_id`),
+  ADD KEY `branch_id` (`branch_id`),
+  ADD KEY `booking_id` (`booking_id`),
+  ADD KEY `idx_branch_created_at` (`branch_id`,`created_at`);
+
+--
 -- Chỉ mục cho bảng `payments`
 --
 ALTER TABLE `payments`
@@ -608,6 +632,12 @@ ALTER TABLE `notifications`
   MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
+-- AUTO_INCREMENT cho bảng `branch_notifications`
+--
+ALTER TABLE `branch_notifications`
+  MODIFY `branch_notification_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT cho bảng `payments`
 --
 ALTER TABLE `payments`
@@ -686,6 +716,13 @@ ALTER TABLE `field_pricing_rules`
 --
 ALTER TABLE `notifications`
   ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Các ràng buộc cho bảng `branch_notifications`
+--
+ALTER TABLE `branch_notifications`
+  ADD CONSTRAINT `branch_notifications_ibfk_1` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`),
+  ADD CONSTRAINT `branch_notifications_ibfk_2` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`);
 
 --
 -- Các ràng buộc cho bảng `payments`
