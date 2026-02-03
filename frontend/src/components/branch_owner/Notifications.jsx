@@ -1,3 +1,4 @@
+//component modal thông báo realtime
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import io from "socket.io-client";

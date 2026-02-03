@@ -391,7 +391,7 @@ app.get("/api/booking/branch/:booking_id", auth, (req, res) => {
   });
 });
 
-// Socket connection event
+// #Socket connection event
 io.on("connection", (socket) => {
   console.log("A user connected: " + socket.id);
 
