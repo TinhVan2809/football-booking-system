@@ -1,16 +1,27 @@
 import { Outlet } from "react-router-dom";
+import { useState } from "react";
 import HeaderAdmin from "./Header";
 import Sidebar from "./Sidebar";
 
 function AdminLayout() {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    const handleToggleSidebar = () => {
+        setIsSidebarOpen((prev) => !prev);
+    };
+
+    const handleCloseSidebar = () => {
+        setIsSidebarOpen(false);
+    };
+
     return (
-        <>    
-            <HeaderAdmin />
-            <Sidebar />
-            <main className="ml-60 p-8">
+        <div className="min-h-screen bg-slate-50">
+            <HeaderAdmin onToggleSidebar={handleToggleSidebar} />
+            <Sidebar isOpen={isSidebarOpen} onClose={handleCloseSidebar} />
+            <main className="pt-16 lg:ml-60 lg:px-8 pb-8">
                 <Outlet />
             </main>
-        </>
+        </div>
     );
 }
 

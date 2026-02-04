@@ -23,12 +23,15 @@ function BranchNotifications() {
   };
 
   useEffect(() => {
+    
     if (!branch_id) return;
-
+  
     const controller = new AbortController();
     const url = `${API_BASE_URL}/api/bookings/branch/${branch_id}/notifications?limit=${limit}&page=${page}`;
 
-    setLoading(true);
+      //! Calling setState synchronously within an effect
+      //? Có thể dùng try catch 
+    setLoading(true); //eslint-disable-line
     setError("");
 
     fetch(url, { credentials: "include", signal: controller.signal })
@@ -156,10 +159,10 @@ function BranchNotifications() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-bold text-gray-800">
-              Thong bao dat san
+              Thống báo đặt sân
             </h2>
             <p className="text-sm text-gray-500">
-              Chua doc: {unreadCount}
+              Chưa đọc: {unreadCount}
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -167,13 +170,13 @@ function BranchNotifications() {
               className="text-sm px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200"
               onClick={handleMarkAllRead}
             >
-              Danh dau da doc
+              Đánh dấu đã đọc 
             </button>
             <button
               className="text-sm px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100"
               onClick={handleClearHistory}
             >
-              Xoa lich su
+              Xóa lịch sử
             </button>
           </div>
         </div>
@@ -187,7 +190,7 @@ function BranchNotifications() {
         )}
 
         {!loading && !error && notifications.length === 0 && (
-          <p className="text-sm text-gray-500">Chua co thong bao nao.</p>
+          <p className="text-sm text-gray-500">Chưa có thông báo nào.</p>
         )}
 
         <div className="space-y-3">
@@ -235,7 +238,7 @@ function BranchNotifications() {
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page <= 1}
             >
-              Truoc
+              Trước
             </button>
             <span className="text-sm text-gray-600">
               Trang {page} / {totalPages}

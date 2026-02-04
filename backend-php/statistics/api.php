@@ -60,35 +60,67 @@ try {
     $statistic = new Statistic();
 
     switch ($action) {
-        case 'statistic-users': 
+        //-----endpoint api admin statistic--------//
+        // users
+        case 'statistic-users':
             $data = $statistic->statisticUser();
 
             sendJson([
-                 'success' => true,
+                'success' => true,
                 'data' => $data
             ]);
 
             break;
 
-        case 'statistic-branches': 
+        // branches 
+        case 'statistic-branches':
             $data = $statistic->statisticBranches();
 
             sendJson([
-                 'success' => true,
+                'success' => true,
                 'data' => $data
             ]);
 
             break;
 
+        // field field types
         case 'statistic-ffts':
             $data = $statistic->statisticFieldFieldTypes();
 
             sendJson([
-                 'success' => true,
+                'success' => true,
                 'data' => $data
             ]);
 
             break;
+
+        //------endpoint branched api statistic------//
+        // fields
+        case 'statistic-fields':
+            $branch_id = filter_input(INPUT_POST, 'branch_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'branch_id', FILTER_VALIDATE_INT);
+
+            $data = $statistic->statisticFieldsByBranch($branch_id);
+
+            sendJson([
+                'success' => true,
+                'data' => $data
+            ]);
+
+            break;
+            
+        // bookings
+        case 'statistic-bookings':
+            $branch_id = filter_input(INPUT_POST, 'branch_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'branch_id', FILTER_VALIDATE_INT);
+
+            $data = $statistic->statisticBookingsByBranch($branch_id);
+
+            sendJson([
+                'success' => true,
+                'data' => $data
+            ]);
+
+            break;
+
 
         default:
             http_response_code(400);

@@ -1,3 +1,5 @@
+//[Danh sách bookings của chi nhánh]
+
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import io from "socket.io-client";
@@ -23,6 +25,7 @@ function BookingListBranch() {
 
   // todo: Hàm fetch danh sách booking
   const fetchBookings = useCallback(async () => {
+  
     setLoading(true);
     try {
       const res = await fetch(
@@ -42,7 +45,13 @@ function BookingListBranch() {
   useEffect(() => {
     if (!branch_id) return;
 
-    fetchBookings();
+    //! Calling setState synchronously within an effect
+    fetchBookings(); //eslint-disable-line 
+  }, [branch_id, fetchBookings]);
+
+  useEffect(() => {
+    if (!branch_id) return;
+
     const socket = io("http://localhost:8081", { withCredentials: true });
 
     socket.on("connect", () => {
@@ -58,7 +67,7 @@ function BookingListBranch() {
     return () => socket.disconnect();
   }, [branch_id, fetchBookings]);
 
-  if (loading) return <div>Äang táº£i...</div>;
+  if (loading) return <div>Đang tải...</div>;
 
   const getStatusBooking = (statusBooking) => {
     switch (statusBooking) {
@@ -103,6 +112,7 @@ function BookingListBranch() {
   return (
     <>
       <div className="grid grid-cols-2 lg:grid-cols-5 md:grid-cols-3 p-5 gap-y-2">
+        {/* Định dạng ngày tháng và giá tiền */}
         {bookings.map((b) => {
           const date = new Date(b.created_at);
           const day = date.getDate().toString().padStart(2, "0");
@@ -168,6 +178,7 @@ function BookingListBranch() {
         })}
       </div>
 
+  {/* Component xem chi tiết booking   */}
       {bookingCardModal && (
         <>
           <BookingCardDetail

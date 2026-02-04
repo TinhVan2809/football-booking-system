@@ -228,7 +228,7 @@ router.post("/create", verifyToken, async (req, res) => {
                     html: `
                             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
                                 <div style="display:flex; justify-content:center; align-items:center; width:100%">
-                                  <img src="cid:hasebooking_logo" style="width: 53.5px; height: auto" alt="Logo" />
+                                  <img src="cid:hasebooking_logo" style="width: 55px; height: auto" alt="Logo" />
                                   <h2 style="color: #166534; text-align: center;">Đặt Sân Thành Công!</h2>
                                 </div>
                                 <img src="cid:field_bg" style="width: 100%; height: auto; display: block; margin: 0 auto;" alt="Logo" />
@@ -373,7 +373,7 @@ router.patch("/branch/:branch_id/notifications/read", verifyToken, (req, res) =>
   if (!branch_id) return res.status(400).json({ message: "Missing branch_id" });
 
   if (
-    req.user?.role !== "admin" &&
+    req.user?.role !== "branch_owner" &&
     String(req.user?.branch_id) !== String(branch_id)
   ) {
     return res.status(403).json({ message: "Forbidden" });

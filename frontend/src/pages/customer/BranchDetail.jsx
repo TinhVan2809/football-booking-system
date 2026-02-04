@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useState } from "react";
+import {useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 function BranchDetail() {
@@ -15,17 +15,18 @@ function BranchDetail() {
 
   //state lưu danh sách reviews
   const [reviews, setReviews] = useState([]);
-
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-
+  
   //state phân trang cho danh sách sân bóng
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-
+  
   //state phân trang cho reviews
   const [currentReviewPage, setCurrentReviewPage] = useState(1);
   const [totalReviewPages, setTotalReviewPages] = useState(0);
+  
+  //state lưu trạng thái error, loading
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   // TODO: lấy danh sách sân bóng của chi nhánh này
   const fetchFieldByBranch = useCallback(
