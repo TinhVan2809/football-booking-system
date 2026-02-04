@@ -3,12 +3,23 @@ import { useContext } from "react";
 import UserContext from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
-function Sidebar() {
+function Sidebar({ isOpen, onClose }) {
     const { user, logout } = useContext(UserContext);
     const navigate = useNavigate();
     return (
         <>
-            <div className="sidebar-container fixed left-0 top-0 h-screen w-60 bg-white shadow-md flex flex-col items-center pt-24 pb-5 gap-11">
+            {isOpen && (
+                <div
+                    className="fixed inset-0 bg-black/30 z-40 lg:hidden"
+                    onClick={onClose}
+                    aria-hidden="true"
+                />
+            )}
+            <div
+                className={`sidebar-container fixed left-0 top-16 h-[calc(100vh-4rem)] w-60 bg-white shadow-md flex flex-col items-center pt-6 pb-5 gap-8 overflow-y-auto z-50 transform transition-transform duration-200 ease-out ${
+                    isOpen ? "translate-x-0" : "-translate-x-full"
+                } lg:translate-x-0`}
+            >
                 <div className="flex justify-center items-center gap-2 px-4">
                     <img src="../../../assets/491510680_18002017331672055_5308144228321480053_n.jpg" className="w-10 rounded-[50%] object-cover" alt="Avatar"/>
                     <span className="text-gray-500 text-sm">{user?.full_name}</span>

@@ -373,7 +373,7 @@ router.patch("/branch/:branch_id/notifications/read", verifyToken, (req, res) =>
   if (!branch_id) return res.status(400).json({ message: "Missing branch_id" });
 
   if (
-    req.user?.role !== "admin" &&
+    req.user?.role !== "branch_owner" &&
     String(req.user?.branch_id) !== String(branch_id)
   ) {
     return res.status(403).json({ message: "Forbidden" });
