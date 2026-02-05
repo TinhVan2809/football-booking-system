@@ -39,11 +39,15 @@ function FieldsBranch() {
     fetchFieldByBranch(currentPage);
   }, [currentPage, branch_id]);
 
+
+
+  
+
     return (
         <>
             {/* Hiển thị dan sách field của branch này */}
 
-            {/* <div className="">
+            <div className="">
                 <div className="">
                     {fieldByBranch.map(f => (
                         <div className="">
@@ -51,7 +55,7 @@ function FieldsBranch() {
                         </div>
                     ))}
                 </div>
-            </div> */}
+            </div>
         </>
     );
 }

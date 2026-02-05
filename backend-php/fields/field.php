@@ -3,6 +3,7 @@ require_once '../connection.php';
 
 class Field
 {
+    // Lấy danh sách sân bóng 
     public function getFields(int $limit = 25, $offset = 0)
     {
         try {

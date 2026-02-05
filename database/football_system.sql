@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th1 31, 2026 lúc 10:02 PM
+-- Thời gian đã tạo: Th2 05, 2026 lúc 07:20 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.0.30
 
@@ -39,7 +39,7 @@ CREATE TABLE `bookings` (
   `total_price` decimal(10,2) NOT NULL COMMENT 'total_price = price_per_hour × (duration_minutes / 60).\r\n\r\n[Giá sân gốc (chưa dịch vụ, chưa giảm]',
   `final_price` decimal(10,2) DEFAULT NULL COMMENT 'tổng tiền cuối cùng. total_price + booking_services.\r\n(Giá cuối khách phải trả)',
   `booking_status` enum('pending','confirmed','completed','cancelled') DEFAULT 'pending',
-  `created_at` datetime DEFAULT current_timestamp() COMMENT 'ngày đặt ngay tại thời điểm submit form'
+  `created_at` datetime DEFAULT current_timestamp() COMMENT 'ngày đặt ngay tại thời điểm submit form. Dùng để xắp sếp'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -64,7 +64,16 @@ INSERT INTO `bookings` (`booking_id`, `field_field_type_id`, `booking_date`, `st
 (21, 1, '2026-02-04', '16:00:00', '22:00:00', 22, 360, 270000.00, 1620000.00, 1620000.00, 'completed', '2026-02-01 03:29:34'),
 (22, 1, '2026-02-01', '16:00:00', '22:00:00', 22, 360, 250000.00, 1500000.00, 1500000.00, 'completed', '2026-02-01 03:30:50'),
 (23, 1, '2026-02-01', '06:00:00', '16:00:00', 23, 600, 180000.00, 1800000.00, 1800000.00, 'pending', '2026-02-01 03:46:01'),
-(24, 1, '2026-02-05', '16:00:00', '22:00:00', 23, 360, 300000.00, 1800000.00, 1800000.00, 'pending', '2026-02-01 03:53:37');
+(24, 1, '2026-02-05', '16:00:00', '22:00:00', 23, 360, 300000.00, 1800000.00, 1800000.00, 'confirmed', '2026-02-01 03:53:37'),
+(25, 1, '2026-02-02', '06:00:00', '16:00:00', 20, 600, 180000.00, 1800000.00, 2400000.00, 'pending', '2026-02-01 18:43:16'),
+(26, 1, '2026-02-05', '06:00:00', '16:00:00', 20, 600, 200000.00, 2000000.00, 2500000.00, 'pending', '2026-02-03 01:46:04'),
+(27, 1, '2026-02-01', '06:00:00', '16:00:00', 23, 600, 180000.00, 1800000.00, 1800000.00, 'cancelled', '2026-02-01 03:46:01'),
+(28, 1, '2026-02-06', '06:00:00', '16:00:00', 17, 600, 200000.00, 2000000.00, 2000000.00, 'completed', '2026-02-03 21:11:30'),
+(29, 1, '2026-02-04', '06:00:00', '15:03:00', 20, 543, 180000.00, 1629000.00, 1629000.00, 'pending', '2026-02-03 21:29:28'),
+(30, 1, '2026-02-06', '16:00:00', '22:00:00', 17, 360, 300000.00, 1800000.00, 1800000.00, 'completed', '2026-02-03 21:34:55'),
+(31, 1, '2026-02-08', '06:00:00', '22:00:00', 17, 960, 350000.00, 5600000.00, 5600000.00, 'completed', '2026-02-03 21:36:32'),
+(32, 1, '2026-02-04', '16:00:00', '22:00:00', 17, 360, 250000.00, 1500000.00, 1500000.00, 'pending', '2026-02-03 21:37:02'),
+(33, 1, '2026-02-07', '18:00:00', '21:00:00', 24, 180, 500000.00, 1500000.00, 1500000.00, 'pending', '2026-02-04 16:03:40');
 
 -- --------------------------------------------------------
 
@@ -86,7 +95,9 @@ CREATE TABLE `booking_services` (
 --
 
 INSERT INTO `booking_services` (`booking_service_id`, `booking_id`, `branch_service_id`, `quantity`, `total_price`, `unit_price`) VALUES
-(1, 12, 2, 2, 100000.00, 50000.00);
+(1, 12, 2, 2, 100000.00, 50000.00),
+(2, 25, 2, 12, 600000.00, 50000.00),
+(3, 26, 2, 10, 500000.00, 50000.00);
 
 -- --------------------------------------------------------
 
@@ -114,6 +125,28 @@ INSERT INTO `branches` (`branch_id`, `branch_name`, `address`, `phone`, `open_ti
 (2, 'Sân bóng Phú Thứ', 'KDC Phú An, P. Phú Thứ, Q. Cái Răng, TP. Cần Thơ', '02923 888 222', '05:30:00', '23:00:00', 1, '2026-01-18 17:40:28'),
 (3, 'Sân bóng Hưng Phú', 'Đường Nguyễn Văn Linh, P. Hưng Phú, Q. Cái Răng, TP. Cần Thơ', '02923 888 333', '06:00:00', '22:30:00', 1, '2026-01-18 17:40:28'),
 (4, 'Sân bóng Trần Hoàng Na', 'Đường Trần Hoàng Na, P. Hưng Thạnh, Q. Cái Răng, TP. Cần Thơ', '02923 888 444', '06:00:00', '21:30:00', 1, '2026-01-18 17:40:28');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `branch_notifications`
+--
+
+CREATE TABLE `branch_notifications` (
+  `branch_notification_id` int(11) NOT NULL,
+  `branch_id` int(11) NOT NULL,
+  `booking_id` int(11) DEFAULT NULL,
+  `content` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `is_read` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Thong bao cho chu chi nhanh';
+
+--
+-- Đang đổ dữ liệu cho bảng `branch_notifications`
+--
+
+INSERT INTO `branch_notifications` (`branch_notification_id`, `branch_id`, `booking_id`, `content`, `created_at`, `is_read`) VALUES
+(5, 3, 33, 'Co khach dat Sân 1A - Sân 5 người ngay 2026-02-07 luc 18:00', '2026-02-04 09:03:40', 0);
 
 -- --------------------------------------------------------
 
@@ -287,7 +320,7 @@ CREATE TABLE `notifications` (
   `user_id` int(11) DEFAULT NULL,
   `content` text DEFAULT NULL,
   `create_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Bảng thông báo khách hàng';
 
 --
 -- Đang đổ dữ liệu cho bảng `notifications`
@@ -309,22 +342,15 @@ INSERT INTO `notifications` (`notification_id`, `user_id`, `content`, `create_at
 (13, 22, 'Bạn đã đặt sân thành công (ID: 21) vào ngày 2026-02-04 lúc 16:00', '2026-01-31 20:29:34'),
 (14, 22, 'Bạn đã đặt sân thành công (ID: 22) vào ngày 2026-02-01 lúc 16:00', '2026-01-31 20:30:50'),
 (15, 23, 'Bạn đã đặt sân thành công (ID: 23) vào ngày 2026-02-01 lúc 06:00', '2026-01-31 20:46:01'),
-(16, 23, 'Bạn đã đặt sân thành công (ID: 24) vào ngày 2026-02-05 lúc 16:00', '2026-01-31 20:53:37');
-
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `branch_notifications`
---
-
-CREATE TABLE `branch_notifications` (
-  `branch_notification_id` int(11) NOT NULL,
-  `branch_id` int(11) NOT NULL,
-  `booking_id` int(11) DEFAULT NULL,
-  `content` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `is_read` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Thong bao cho chu chi nhanh';
+(16, 23, 'Bạn đã đặt sân thành công (ID: 24) vào ngày 2026-02-05 lúc 16:00', '2026-01-31 20:53:37'),
+(17, 20, 'Bạn đã đặt sân thành công (ID: 25) vào ngày 2026-02-02 lúc 06:00', '2026-02-01 11:43:16'),
+(18, 20, 'Bạn đã đặt sân thành công (ID: 26) vào ngày 2026-02-05 lúc 06:00', '2026-02-02 18:46:04'),
+(19, 17, 'Bạn đã đặt sân thành công (ID: 28) vào ngày 2026-02-06 lúc 06:00', '2026-02-03 14:11:30'),
+(20, 20, 'Bạn đã đặt sân thành công (ID: 29) vào ngày 2026-02-04 lúc 06:00', '2026-02-03 14:29:28'),
+(21, 17, 'Bạn đã đặt sân thành công (ID: 30) vào ngày 2026-02-06 lúc 16:00', '2026-02-03 14:34:55'),
+(22, 17, 'Bạn đã đặt sân thành công (ID: 31) vào ngày 2026-02-08 lúc 06:00', '2026-02-03 14:36:32'),
+(23, 17, 'Bạn đã đặt sân thành công (ID: 32) vào ngày 2026-02-04 lúc 16:00', '2026-02-03 14:37:02'),
+(24, 24, 'Bạn đã đặt sân thành công (ID: 33) vào ngày 2026-02-07 lúc 18:00', '2026-02-04 09:03:40');
 
 -- --------------------------------------------------------
 
@@ -366,7 +392,15 @@ INSERT INTO `payments` (`payment_id`, `booking_id`, `amount`, `payment_method`, 
 (19, 21, 1620000.00, 'cash', 'paid', '2026-01-31 20:29:34', 'Chờ thanh toán', 22),
 (20, 22, 1500000.00, 'cash', 'paid', '2026-01-31 20:30:50', 'Chờ thanh toán', 22),
 (21, 23, 1800000.00, 'cash', 'unpaid', '2026-01-31 20:46:01', 'Chờ thanh toán', 23),
-(22, 24, 1800000.00, 'cash', 'unpaid', '2026-01-31 20:53:37', 'Chờ thanh toán', 23);
+(22, 24, 1800000.00, 'cash', 'unpaid', '2026-01-31 20:53:37', 'Chờ thanh toán', 23),
+(23, 25, 2400000.00, 'cash', 'unpaid', '2026-02-01 11:43:16', 'Chờ thanh toán', 20),
+(24, 26, 2500000.00, 'cash', 'unpaid', '2026-02-02 18:46:04', 'Chờ thanh toán', 20),
+(25, 28, 2000000.00, 'cash', 'unpaid', '2026-02-03 14:11:30', 'Chờ thanh toán', 17),
+(26, 29, 1629000.00, 'cash', 'unpaid', '2026-02-03 14:29:28', 'Chờ thanh toán', 20),
+(27, 30, 1800000.00, 'cash', 'unpaid', '2026-02-03 14:34:55', 'Chờ thanh toán', 17),
+(28, 31, 5600000.00, 'cash', 'unpaid', '2026-02-03 14:36:32', 'Chờ thanh toán', 17),
+(29, 32, 1500000.00, 'cash', 'unpaid', '2026-02-03 14:37:02', 'Chờ thanh toán', 17),
+(30, 33, 1500000.00, 'cash', 'unpaid', '2026-02-04 09:03:40', 'Chờ thanh toán', 24);
 
 -- --------------------------------------------------------
 
@@ -438,15 +472,16 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `password`, `full_name`, `phone`, `avata`, `email`, `role`, `status`, `created_at`, `branch_id`) VALUES
-(15, 'admin1', '$2b$10$ZLJd3EiPZ1pjINpmSFVILOXxo4R6MuguMDlVNL89vj6NgBQc5y8Zy', 'Lữ Văn Tính', '0818177533', NULL, NULL, 'admin', 1, '2026-01-18 19:37:52', NULL),
-(16, 'Tính Văn', '$2b$10$0kmys1ZlRkPp2rHHWGKy6.O3e1ERQoYzAiKX3B27Fvd1AeE69bkBW', 'Lữ Văn Tính', '0818177533', NULL, NULL, 'customer', 1, '2026-01-18 20:15:18', NULL),
-(17, 'tinh@gmail.com', '$2b$10$YmL9GOMpJRRKH/wU8Ipbwe92790N.0fG3cBoLtsZfTcaWYTv0aY6S', 'Lữ Văn Tính', '0818177533', NULL, NULL, 'branch_owner', 1, '2026-01-19 10:50:23', NULL),
-(18, 'Hasekimagru', '$2b$10$0VOpSkDgZUI.EFMafg/DRODntwxtVg2DAw2UVJyqhDew6hUhOQsie', 'tinh van', '0818177533', NULL, NULL, 'customer', 1, '2026-01-20 12:08:09', NULL),
-(19, 'Admin', '$2b$10$BDppk9El5d5ejJb1D.RP3.IHaebU2MFs5fo3SOsFuP0OQ/UqSRjH2', 'tinh van', '0818177533', NULL, NULL, 'customer', 1, '2026-01-20 15:02:06', NULL),
-(20, 'tinhvan', '$2b$10$ZeK2WulmDmzvHYLndT9za.VxX2P8UAcU6Ph/TQ69nBVAO5jzW3lPK', 'hase', '0813502953', NULL, NULL, 'customer', 1, '2026-01-20 15:25:35', NULL),
-(21, 'vantinh', '$2b$10$GPPR8TtQVDGCN/YtOXR5GOi0diZCY4YrIYakDozf54n/gZkiTngf2', 'tinh van', '0818177533', NULL, NULL, 'customer', 1, '2026-01-21 11:21:26', NULL),
-(22, 'tinhlu703@gmail.com', '$2b$10$Wx0kw3NrKUzxhg1Mpy4IieJqCnyffjVBdfQ2RE8ePhIPsos6iLO82', 'Lữ Văn Tính', '0818177533', NULL, NULL, 'customer', 1, '2026-02-01 02:16:24', NULL),
-(23, 'tinhvanlu', '$2b$10$X70e60AfY6mlBtFE3tqAQ.s5rVGrVeP1CejUQ5y5i8EE8YcT0QXum', 'tinhvanlu', '0818177533', NULL, 'tinhlu263@gmail.com', 'customer', 1, '2026-02-01 03:45:28', NULL);
+(15, 'admin1', '$2b$10$ZLJd3EiPZ1pjINpmSFVILOXxo4R6MuguMDlVNL89vj6NgBQc5y8Zy', 'Lữ Văn Tính', '0818177533', NULL, 'tinhlu703@gmail.com', 'admin', 1, '2026-01-18 19:37:52', NULL),
+(16, 'Tính Văn', '$2b$10$0kmys1ZlRkPp2rHHWGKy6.O3e1ERQoYzAiKX3B27Fvd1AeE69bkBW', 'Lữ Văn Tính', '0818177533', NULL, 'tinhlu703@gmail.com', 'customer', 1, '2026-01-18 20:15:18', NULL),
+(17, 'tinh@gmail.com', '$2b$10$YmL9GOMpJRRKH/wU8Ipbwe92790N.0fG3cBoLtsZfTcaWYTv0aY6S', 'Lữ Văn Tính', '0818177533', NULL, 'tinhlu703@gmail.com', 'branch_owner', 1, '2026-01-19 10:50:23', 3),
+(18, 'Hasekimagru', '$2b$10$0VOpSkDgZUI.EFMafg/DRODntwxtVg2DAw2UVJyqhDew6hUhOQsie', 'tinh van', '0818177533', NULL, 'tinhlu703@gmail.com', 'customer', 1, '2026-01-20 12:08:09', NULL),
+(19, 'Admin', '$2b$10$BDppk9El5d5ejJb1D.RP3.IHaebU2MFs5fo3SOsFuP0OQ/UqSRjH2', 'tinh van', '0818177533', NULL, 'tinhlu703@gmail.com', 'customer', 1, '2026-01-20 15:02:06', NULL),
+(20, 'tinhvan', '$2b$10$ZeK2WulmDmzvHYLndT9za.VxX2P8UAcU6Ph/TQ69nBVAO5jzW3lPK', 'Tính Văn ', '0813502953', NULL, 'tinhlu703@gmail.com', 'customer', 1, '2026-01-20 15:25:35', NULL),
+(21, 'vantinh', '$2b$10$GPPR8TtQVDGCN/YtOXR5GOi0diZCY4YrIYakDozf54n/gZkiTngf2', 'tinh van', '0818177533', NULL, 'tinhlu703@gmail.com', 'customer', 1, '2026-01-21 11:21:26', NULL),
+(22, 'tinhlu703@gmail.com', '$2b$10$Wx0kw3NrKUzxhg1Mpy4IieJqCnyffjVBdfQ2RE8ePhIPsos6iLO82', 'Lữ Văn Tính', '0818177533', NULL, 'tinhlu703@gmail.com', 'customer', 1, '2026-02-01 02:16:24', NULL),
+(23, 'tinhvanlu', '$2b$10$X70e60AfY6mlBtFE3tqAQ.s5rVGrVeP1CejUQ5y5i8EE8YcT0QXum', 'tinhvanlu', '0818177533', NULL, 'tinhlu263@gmail.com', 'customer', 1, '2026-02-01 03:45:28', NULL),
+(24, 'huygia', '$2b$10$t5gb0FIolLObFHXG37Q0K.0mpmDodrfaz3Bqpxus1oZH89Vbu2UGm', 'huy huy', '0818177533', NULL, 'huymoba27@gmail.com', 'customer', 1, '2026-02-04 16:02:16', NULL);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -474,6 +509,15 @@ ALTER TABLE `booking_services`
 --
 ALTER TABLE `branches`
   ADD PRIMARY KEY (`branch_id`);
+
+--
+-- Chỉ mục cho bảng `branch_notifications`
+--
+ALTER TABLE `branch_notifications`
+  ADD PRIMARY KEY (`branch_notification_id`),
+  ADD KEY `branch_id` (`branch_id`),
+  ADD KEY `booking_id` (`booking_id`),
+  ADD KEY `idx_branch_created_at` (`branch_id`,`created_at`);
 
 --
 -- Chỉ mục cho bảng `branch_services`
@@ -528,15 +572,6 @@ ALTER TABLE `notifications`
   ADD KEY `user_id` (`user_id`);
 
 --
--- Chỉ mục cho bảng `branch_notifications`
---
-ALTER TABLE `branch_notifications`
-  ADD PRIMARY KEY (`branch_notification_id`),
-  ADD KEY `branch_id` (`branch_id`),
-  ADD KEY `booking_id` (`booking_id`),
-  ADD KEY `idx_branch_created_at` (`branch_id`,`created_at`);
-
---
 -- Chỉ mục cho bảng `payments`
 --
 ALTER TABLE `payments`
@@ -575,19 +610,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT cho bảng `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT cho bảng `booking_services`
 --
 ALTER TABLE `booking_services`
-  MODIFY `booking_service_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `booking_service_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT cho bảng `branches`
 --
 ALTER TABLE `branches`
   MODIFY `branch_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT cho bảng `branch_notifications`
+--
+ALTER TABLE `branch_notifications`
+  MODIFY `branch_notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT cho bảng `branch_services`
@@ -629,19 +670,13 @@ ALTER TABLE `field_types`
 -- AUTO_INCREMENT cho bảng `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
-
---
--- AUTO_INCREMENT cho bảng `branch_notifications`
---
-ALTER TABLE `branch_notifications`
-  MODIFY `branch_notification_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT cho bảng `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT cho bảng `reviews`
@@ -659,7 +694,7 @@ ALTER TABLE `services`
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
@@ -677,6 +712,13 @@ ALTER TABLE `bookings`
 ALTER TABLE `booking_services`
   ADD CONSTRAINT `booking_services_ibfk_1` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`),
   ADD CONSTRAINT `booking_services_ibfk_2` FOREIGN KEY (`branch_service_id`) REFERENCES `branch_services` (`branch_service_id`);
+
+--
+-- Các ràng buộc cho bảng `branch_notifications`
+--
+ALTER TABLE `branch_notifications`
+  ADD CONSTRAINT `branch_notifications_ibfk_1` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`),
+  ADD CONSTRAINT `branch_notifications_ibfk_2` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`);
 
 --
 -- Các ràng buộc cho bảng `branch_services`
@@ -716,13 +758,6 @@ ALTER TABLE `field_pricing_rules`
 --
 ALTER TABLE `notifications`
   ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
-
---
--- Các ràng buộc cho bảng `branch_notifications`
---
-ALTER TABLE `branch_notifications`
-  ADD CONSTRAINT `branch_notifications_ibfk_1` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`),
-  ADD CONSTRAINT `branch_notifications_ibfk_2` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`);
 
 --
 -- Các ràng buộc cho bảng `payments`

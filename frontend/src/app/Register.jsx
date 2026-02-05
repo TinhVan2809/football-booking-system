@@ -175,7 +175,7 @@ function Register() {
                   className="bg-[#3c364c] px-3 py-2.5 rounded-md text-white font-light outline-0 focus:border-violet-500 focus:border-2 border-transparent border-2 w-full duration-200"
                   onChange={handleChange}
                   required
-                  placeholder="Email hoặc Username"
+                  placeholder="Username"
                 />
               </label>
               <span className="text-red-400 text-sm">{error}</span>
