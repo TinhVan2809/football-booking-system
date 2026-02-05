@@ -35,10 +35,13 @@ class Branch
 
             $sqlTypes = "SELECT 
                             fft.field_id,
+                            fft.field_field_type_id,
                             ft.field_type_id,
                             ft.type_name,
                             ft.players,
-                            fft.price_per_hour
+                            fft.price_per_hour,
+                            fft.max_players,
+                            fft.status
                         FROM field_field_types fft
                         JOIN field_types ft ON ft.field_type_id = fft.field_type_id
                         WHERE fft.field_id IN ($placeholders)";
@@ -58,10 +61,13 @@ class Branch
                 $fId = $type['field_id'];
                 if (isset($fieldMap[$fId])) {
                     $fieldMap[$fId]['field_types'][] = [
+                        'field_field_type_id' => $type['field_field_type_id'],
                         'field_type_id' => $type['field_type_id'],
                         'type_name' => $type['type_name'],
                         'players' => $type['players'],
-                        'price_per_hour' => $type['price_per_hour']
+                        'price_per_hour' => $type['price_per_hour'],
+                        'max_players' => $type['max_players'],
+                        'status' => $type['status'],
                     ];
                 }
             }
