@@ -1,4 +1,4 @@
-//[Route lấy bảng giá]
+//[Route lấy bảng giá, của một field_field_type_id]
 
 const express = require("express");
 const router = express.Router();

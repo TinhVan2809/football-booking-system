@@ -85,6 +85,8 @@ class Branch
         }
     }
 
+
+    // Lấy hết toàn bộ branches
     public function getBranches(int $limit = 20, $offset = 0)
     {
         try {
@@ -140,6 +142,7 @@ class Branch
         }
     }
 
+    // Thêm branches
     public function addBranch($branch_name, $address, $phone, $open_time, $close_time)
     {
         try {
@@ -161,6 +164,7 @@ class Branch
         }
     }
 
+    // update branches
     public function updateBranch($branch_id, $branch_name, $address, $phone, $open_time, $close_time)
     {
         try {

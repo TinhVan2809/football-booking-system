@@ -29,6 +29,7 @@ function FieldsBranch() {
   const [refreshFieldsKey, setRefreshFieldsKey] = useState(0);
   const [refreshTypesKey, setRefreshTypesKey] = useState(0);
 
+  // state lưu fields
   const [fieldForm, setFieldForm] = useState({
     field_name: "",
     status: "available",
@@ -37,6 +38,7 @@ function FieldsBranch() {
   });
   const [fieldFormErrors, setFieldFormErrors] = useState({});
 
+  // state lưu field_types
   const [typeForm, setTypeForm] = useState({
     type_name: "",
     players: "",
@@ -126,6 +128,8 @@ function FieldsBranch() {
     fetchFieldTypes();
   }, [API_FIELDS, refreshTypesKey]);
 
+  
+  // Phân trang cho dánh sách fields
   const handlePrevPage = () => {
     if (currentPage > 1) setCurrentPage((p) => p - 1);
   };
@@ -144,6 +148,8 @@ function FieldsBranch() {
     setTypeForm((prev) => ({ ...prev, [name]: value }));
   };
 
+
+// TODO: Hàm thêm sân bóng mới
   const handleAddField = async (e) => {
     e.preventDefault();
     setFieldFormErrors({});
@@ -182,6 +188,7 @@ function FieldsBranch() {
     }
   };
 
+  //TODO: Hàm thêm loại sân mới
   const handleAddFieldType = async (e) => {
     e.preventDefault();
     setTypeFormErrors({});
@@ -221,6 +228,7 @@ function FieldsBranch() {
     }
   };
 
+  // TODO: Hàm update Assign Form
   const updateAssignForm = (fieldId, partial) => {
     setAssignForms((prev) => ({
       ...prev,
@@ -231,6 +239,7 @@ function FieldsBranch() {
     }));
   };
 
+  // TODO: Hàm chọn loại sân cho một sân bóng
   const handleSelectFieldType = (field, fieldTypeId) => {
     const existing = field?.field_types?.find(
       (t) => String(t.field_type_id) === String(fieldTypeId),
@@ -244,6 +253,7 @@ function FieldsBranch() {
     });
   };
 
+//TODO: Hàm lưu loại sân cho sân bóng
   const handleAssignSubmit = async (fieldId) => {
     const assignForm = assignForms[fieldId] || defaultAssignForm;
     setAssignErrorsByField((prev) => ({ ...prev, [fieldId]: {} }));
@@ -276,6 +286,7 @@ function FieldsBranch() {
     }
   };
 
+    // TODO: Hàm upsert giá, player, status tự động
   const handleSeedDefaultPricingRules = async (fieldFieldTypeId) => {
     if (!fieldFieldTypeId) {
       alert("Thiếu field_field_type_id.");

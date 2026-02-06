@@ -1,5 +1,5 @@
 ### Cấu trúc php.ini 
-Bạn có thể để mặc định hoặc điển mật khẩu (Nếu có)
+Bạn có thể để mặc định hoặc điền mật khẩu (Nếu có)
 ```
 servername = localhost
 dbname = football_system 

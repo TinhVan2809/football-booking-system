@@ -19,6 +19,7 @@ DB_USER=root
 DB_PASS=
 DB_NAME=football_system
 
+# Email này sẽ gửi thông báo đến các email khác
 EMAIL_USER=dia_chi_email_cua_ban 
 EMAIL_PASS=mat_khau_16_ky_tu 
 ```

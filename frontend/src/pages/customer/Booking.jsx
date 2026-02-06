@@ -11,8 +11,9 @@ import { getPricingByFieldFieldType } from "../../api/pricing.api";
 
 function Booking() {
   const API_BASE_BRANCH = "http://localhost/football-booking-system/backend-php/branches/api.php";
-  const API_BOOKING_NODE = "http://localhost:8081/api/bookings/create"; // Đồng bộ port 8081
   const API_SERVICE = "http://localhost/football-booking-system/backend-php/services/api.php";
+
+  const API_BOOKING_NODE = "http://localhost:8081/api/bookings/create"; // Đồng bộ port 8081 backend nodejs
 
   const { field_field_type_id } = useParams();
 

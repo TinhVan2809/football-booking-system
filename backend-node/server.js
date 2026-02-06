@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const app = express();
 const http = require("http"); // Import http
 const { Server } = require("socket.io"); // Import Socket.io
 const bcrypt = require("bcryptjs");
@@ -8,7 +9,6 @@ const nodemailer = require("nodemailer");
 const db = require("./db");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const app = express();
 const server = http.createServer(app); // Tạo server http từ express app
 app.use(express.json());
 
@@ -54,33 +54,6 @@ const io = new Server(server, { cors: corsOptions });
 
 app.use(cookieParser());
 
-// TẠO TÀI KHOẢN CHO ADMIN
-// app.post("/admin/register", auth, async (req, res) => {
-//   const { username, password, full_name, phone } = req.body;
-
-//   if (!username || !password) {
-//     return res.status(400).json({ message: "Missing fields" });
-//   }
-
-//   try {
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     db.query(
-//       "INSERT INTO users (username, password, full_name, phone, role) VALUES (?, ?, ?, ?, 'admin')",
-//       [username, hashedPassword, full_name, phone],
-//       (err) => {
-//         if (err) {
-//           console.error(err);
-//           return res.status(400).json({ message: "Register admin failed" });
-//         }
-//         res.json({ message: "Admin created successfully" });
-//       },
-//     );
-//   } catch (err) {
-//     res.status(500).json({ message: "Server error" });
-//   }
-// });
-
 // #TẠO TÀI KHOẢN CHO CUSTOMER
 app.post("/register", async (req, res) => {
   const { username, password, full_name, phone, email } = req.body;
@@ -90,7 +63,7 @@ app.post("/register", async (req, res) => {
   }
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10); // thư viện bcrypt hashhing password
+    const hashedPassword = await bcrypt.hash(password, 10); // thư viện bcrypt hashing password
 
     db.query(
       "SELECT 1 FROM users WHERE username = ?",
