@@ -80,7 +80,7 @@ function FieldList() {
                   src={
                     f.thumbnail
                       ? `${img}/${f.thumbnail}`
-                      : "pexels-pixabay-47730.jpg"
+                      : `${img}/pexels-pixabay-47730.jpg` // Ảnh mặc định nếu không có thumbnail
                   }
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 will-change-transform"
                 />

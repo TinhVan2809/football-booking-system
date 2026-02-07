@@ -232,6 +232,18 @@ try {
                     ]);
                 break;
 
+                case 'get-branch-data':
+                    $branch_id = filter_input(INPUT_POST, 'branch_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'branch_id', FILTER_VALIDATE_INT);
+
+                    $data = $branches->getBranchDataById($branch_id);
+
+                    sendJson([
+                        'success' => true,
+                        'data'=> $data 
+                    ]);
+                    break;
+
+
         default:
             http_response_code(400);
             echo json_encode(['success' => false, 'message' => 'Invalid action']);

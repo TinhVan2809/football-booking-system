@@ -4,6 +4,7 @@ require_once '../connection.php';
 
 class Branch
 {
+    // Lấy danh sách sân và loại sân của một chi nhánh
     public function getBranchById(int $branch_id, int $limit = 10, $offset = 0)
     {
         if (empty($branch_id)) {
@@ -208,6 +209,24 @@ class Branch
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (Exception $e) {
             error_log("Error getting branch by ffft" . $e->getMessage());
+            return [];
+        }
+    }
+
+
+    public function getBranchDataById(int $branch_id) {
+        try{
+             $db = Database::getInstance();
+            $connection = $db->getConnection();
+
+            $sql = "SELECT branch_id, branch_name, address, phone, open_time, close_time, status, thumbnail FROM branches WHERE branch_id = :branch_id";
+            $stmt = $connection->prepare($sql);
+            $stmt->bindValue(':branch_id', $branch_id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch(Exception $e) {
+            error_log("Error geting branch data by id" . $e->getMessage());
             return [];
         }
     }

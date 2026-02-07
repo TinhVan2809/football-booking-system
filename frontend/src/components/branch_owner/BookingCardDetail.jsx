@@ -94,6 +94,10 @@ function BookingCardDetail({ booking_id, onClose }) {
     return `${day}/${month}/${year}`;
   };
 
+  if(error) {
+    return <p>something went wrong {error}</p>
+  }
+
   return (
     <>
       <div className="fixed z-400 top-0 w-full h-screen flex justify-center items-center bg-black/40">

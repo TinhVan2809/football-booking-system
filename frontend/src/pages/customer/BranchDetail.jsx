@@ -10,6 +10,9 @@ function BranchDetail() {
     "http://localhost/football-booking-system/backend-php/reviews/api.php";
   const LIMIT = 10;
 
+  // state lưu dữ liệu chi nhánh
+  const [branch, setBranch] = useState([]);
+
   //state lưu danh sách sân bóng của branch này
   const [fieldByBranch, setFieldByBranch] = useState([]);
 
@@ -73,13 +76,31 @@ function BranchDetail() {
       }
   },[branch_id]);
 
+  //TODO: Lấy dữ liệu chi tiết của một chi nhánh 
+    const fetchBranchData = useCallback( async() => {
+      try{
+        const res = await fetch(`${API_BASE}?action=get-branch-data&branch_id=${branch_id}`);
+        if(!res.ok) {
+          throw new Error(`ERROR HTTP ${res.status}`);
+        }
+
+        const data = await res.json() 
+
+        if(data.success) {
+          setBranch(data.data);
+        }
+      } catch(error) {
+        console.error("Error fetching branch data ", error);
+      }
+    },[branch_id]);
 
   // TODO: fetch data
   useEffect(() => {
     setLoading(true);
     fetchFieldByBranch(currentPage);
     fetchReviewsData(currentReviewPage);
-  }, [currentPage, branch_id, fetchFieldByBranch, fetchReviewsData, currentReviewPage]);
+    fetchBranchData();
+  }, [currentPage, branch_id, fetchFieldByBranch, fetchReviewsData, currentReviewPage, fetchBranchData]);
 
   return(
     <>

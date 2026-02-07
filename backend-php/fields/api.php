@@ -224,6 +224,14 @@ header('Content-Type: application/json');
             sendJson(['success' => false, 'message' => 'Save failed'], 500);
             break;
 
+            case 'get-fields-most-bookings': 
+                $data = $fields->getFieldsMostBookings();
+                sendJson([
+                    'success' => true,
+                    'data' => $data
+                ]);
+                break;
+
         default:
             sendJson(['success' => false, 'message' => 'Invalid action'], 400);
             break;

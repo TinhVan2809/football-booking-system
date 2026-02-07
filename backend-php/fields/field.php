@@ -161,4 +161,28 @@ class Field
         }
     }
 
+    // Lấy danh sách sân bóng có nhiều booking nhất
+    public function getFieldsMostBookings() {
+        try{
+            $db = Database::getInstance();
+            $connection = $db->getConnection();
+            $sql ="SELECT f.field_id,
+                    f.field_name,
+                    COUNT(*) AS booking_count
+                    FROM bookings b
+                    JOIN field_field_types fft ON b.field_field_type_id = fft.field_field_type_id
+                    JOIN fields f ON fft.field_id = f.field_id
+                    WHERE b.booking_status = 'completed'
+                    GROUP BY f.field_id, f.field_name
+                    ORDER BY booking_count DESC
+                    LIMIT 4";
+            
+            $stmt = $connection->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch(Exception $e) {
+            error_log("Error geting field by bookings");
+            return [];
+        }
+    }
 }
