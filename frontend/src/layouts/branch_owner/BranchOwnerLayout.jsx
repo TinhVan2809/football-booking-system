@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
-import Footer from "./Footer";
+import FooterBranches from "./Footer";
 import Notifications from "../../components/branch_owner/Notifications";
 function BranchOwnerLayout() {
     return(
@@ -10,7 +10,7 @@ function BranchOwnerLayout() {
             <main>
                 <Outlet />
             </main>
-            {/* <Footer /> */}
+           <FooterBranches />
 
         </>
     );
