@@ -168,7 +168,7 @@ app.post("/forgot-password", (req, res) => {
     if (users.length === 0)
       return res
         .status(404)
-        .json({ message: "Email không tồn tại trong hệ thống" });
+        .json({ message: "Email không tồn tại. Vui lòng thử lại!" });
 
     const user = users[0];
 
