@@ -126,50 +126,6 @@ function Notifications() {
 
   return (
     <>
-      {/* <div className="fixed top-20 right-4 z-400 w-80">
-        <div className="bg-white/95 backdrop-blur rounded-xl shadow-xl border border-gray-100">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <div className="flex items-center gap-2">
-              <RiNotification3Line size={18} className="text-green-700" />
-              <p className="text-sm font-semibold text-gray-800">
-                Thông báo đặt sân
-              </p>
-            </div>
-            {notifications.length > 0 && (
-              <button
-                className="text-xs text-gray-500 hover:text-gray-800"
-                onClick={() => setNotifications([])}
-              >
-                Xóa
-              </button>
-            )}
-          </div>
-          <div className="max-h-72 overflow-y-auto">
-            {notifications.length === 0 ? (
-              <p className="px-4 py-4 text-sm text-gray-500">
-                Chưa có thông báo mới.
-              </p>
-            ) : (
-              notifications.map((n) => (
-                <div
-                  key={n.id}
-                  className="px-4 py-3 border-b border-gray-100 last:border-b-0"
-                >
-                  <p className="text-sm font-medium text-gray-800">
-                    {n.content ||
-                      n.message ||
-                      `Co khach dat ${n.field_name || "san"} ngay ${n.booking_date || ""}`}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    {formatTime(n.created_at || n.received_at)}
-                  </p>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      </div> */}
-
       {modalNotification && (
       
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-5 fixed z-400 top-0 right-0 mt-10 mr-10">
