@@ -28,7 +28,6 @@ import Branches from "../pages/admin/Branches";
 import Services from "../pages/admin/Services";
 import FieldsBranch from "../pages/admin/FieldsBranch";
 
-
 // *[BRANCH OWNER]
 import BranchOwnerLayout from "../layouts/branch_owner/BranchOwnerLayout";
 import DashbroadBranch from "../pages/branch_owner/Dashbroad";
@@ -36,9 +35,13 @@ import { ServiceProvider } from "../context/ServiceContext";
 import BookingListBranch from "../pages/branch_owner/BookingListBranch";
 import BranchNotifications from "../pages/branch_owner/BranchNotifications";
 
+// *[Not found page]
+import NotFoundPage from "../pages/NotFoundPage";
+
 //------------------ PAGES/LAYOUTD/COMPOENTS...-----------------------//
 
-const AppLayout = () => (  //eslint-disable-line
+const AppLayout = () => (
+  //eslint-disable-line
   <UserProvider>
     <Outlet />
   </UserProvider>
@@ -61,7 +64,8 @@ export const router = createBrowserRouter([
           { path: "search", element: <Search /> },
           { path: "booking/:field_field_type_id", element: <Booking /> },
           { path: "profile/:user_id", element: <Profile /> },
-        ], 
+          { path: "*",element: <NotFoundPage /> },
+        ],
       },
       {
         path: "/login",
@@ -72,12 +76,12 @@ export const router = createBrowserRouter([
         element: <Register />,
       },
       {
-        path: "/forgot-password", 
-        element: <ForgotPassword />
+        path: "/forgot-password",
+        element: <ForgotPassword />,
       },
       {
-        path: "/reset-password/:id/:token", 
-        element: <ResetPassword />
+        path: "/reset-password/:id/:token",
+        element: <ResetPassword />,
       },
       {
         path: "/admin", // Route cha cho khu vực admin
@@ -95,7 +99,8 @@ export const router = createBrowserRouter([
           { path: "users", element: <Users /> }, // route user
           { path: "branches", element: <Branches /> }, // router chủ sân
           {
-            path: 'services/:branch_id', element: (
+            path: "services/:branch_id",
+            element: (
               <ServiceProvider>
                 <Services />
               </ServiceProvider>
@@ -122,7 +127,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "branch_notifications/:branch_id",
-            element: <BranchNotifications />
+            element: <BranchNotifications />,
           },
         ],
       },
