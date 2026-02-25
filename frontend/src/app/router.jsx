@@ -40,8 +40,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 
 //------------------ PAGES/LAYOUTD/COMPOENTS...-----------------------//
 
-const AppLayout = () => (
-  //eslint-disable-line
+const AppLayout = () => ( //eslint-disable-line
   <UserProvider>
     <Outlet />
   </UserProvider>
