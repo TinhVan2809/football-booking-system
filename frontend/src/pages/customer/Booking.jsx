@@ -1,7 +1,7 @@
 // Trang booking chính
 
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { data, useParams } from "react-router-dom";
 import CardSkeleton from "../../components/customer/CardSkeleton";
 import BookingModal from "../../components/customer/BookingModal";
 import { io } from "socket.io-client";
@@ -30,6 +30,17 @@ function Booking() {
   const [selectedRule, setSelectedRule] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const navigate = useNavigate();
+
+  // State lưu trạng thái đặt sân thành công
+  const [successBooking, setSuccessBooking] = useState(false);
+
+  // Tự động ẩn toast sau 2s nếu successBooking = true
+  useEffect(() => {
+    if (successBooking) {
+      const timer = setTimeout(() => setSuccessBooking(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [successBooking]);
 
   // Socket setup
   useEffect(() => {
@@ -209,7 +220,11 @@ function Booking() {
 
       const data = await res.json();
       if (res.ok) {
-        alert("Đặt sân thành công! Mã đơn: " + data.booking_id);
+        // alert("Đặt sân thành công! Mã đơn: " + data.booking_id);
+        setSuccessBooking(true);
+        // setTimeout(() => {
+        //   setSuccessBooking(false);
+        // },2000);
         setIsModalOpen(false);
       } else {
         alert("Lỗi: " + data.message);
@@ -281,6 +296,15 @@ function Booking() {
         onConfirm={handleConfirmBooking}
         services={services}
       />
+
+      {/* Toast thông báo đặt sân thành công */}
+      {successBooking && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-green-500 text-white px-8 py-4 rounded-lg shadow-lg text-lg animate-bounce">
+            Đặt sân thành công!
+          </div>
+        </div>
+      )}
     </>
   );
 }
