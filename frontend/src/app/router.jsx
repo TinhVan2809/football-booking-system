@@ -20,8 +20,7 @@ import Booking from "../pages/customer/Booking";
 import Profile from "../pages/customer/Profile";
 
 // *[ADMIN]
-import Dashbroad from "../pages/admin/Dashbroad";
-import Fields from "../pages/admin/Fields";
+import Dashbroad from "../pages/admin/Dashbroad"; 
 import Users from "../pages/admin/Users";
 import AdminLayout from "../layouts/admin/AdminLayout";
 import Branches from "../pages/admin/Branches";
@@ -94,7 +93,6 @@ export const router = createBrowserRouter([
             index: true,
             element: <Dashbroad />, // Route mặc định cho /admin
           },
-          { path: "fields", element: <Fields /> }, // route sân bóng
           { path: "users", element: <Users /> }, // route user
           { path: "branches", element: <Branches /> }, // router chủ sân
           {
