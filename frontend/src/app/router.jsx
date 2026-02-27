@@ -20,7 +20,7 @@ import Booking from "../pages/customer/Booking";
 import Profile from "../pages/customer/Profile";
 
 // *[ADMIN]
-import Dashbroad from "../pages/admin/Dashbroad"; 
+import Dashbroad from "../pages/admin/Dashbroad";
 import Users from "../pages/admin/Users";
 import AdminLayout from "../layouts/admin/AdminLayout";
 import Branches from "../pages/admin/Branches";
@@ -39,7 +39,8 @@ import NotFoundPage from "../pages/NotFoundPage";
 
 //------------------ PAGES/LAYOUTD/COMPOENTS...-----------------------//
 
-const AppLayout = () => ( //eslint-disable-line
+const AppLayout = () => (
+  //eslint-disable-line
   <UserProvider>
     <Outlet />
   </UserProvider>
@@ -62,7 +63,6 @@ export const router = createBrowserRouter([
           { path: "search", element: <Search /> },
           { path: "booking/:field_field_type_id", element: <Booking /> },
           { path: "profile/:user_id", element: <Profile /> },
-          { path: "*",element: <NotFoundPage /> },
         ],
       },
       {
@@ -128,6 +128,7 @@ export const router = createBrowserRouter([
           },
         ],
       },
+      { path: "*", element: <NotFoundPage /> },
     ],
   },
 ]);

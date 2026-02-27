@@ -28,7 +28,7 @@ function Dashbroad() {
         fetch(`${API_BASE_STATISIC}?action=statistic-ffts`),
       ]);
 
-      if (!usersRes.ok || !branchesRes.ok || fieldFieldTypesRes.ok) {
+      if (!usersRes.ok || !branchesRes.ok || !fieldFieldTypesRes.ok) {
         throw new Error("HTTP ERROR");
       }
 
