@@ -254,7 +254,7 @@ app.post("/reset-password/:id/:token", (req, res) => {
   );
 });
 
-// #MIDDLEWARE AUTH
+// #MIDDLEWARE AUTH Xác thực token xen token có xác định không
 function auth(req, res, next) {
   const token = req.cookies.token;
 

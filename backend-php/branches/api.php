@@ -236,7 +236,10 @@ try {
                     $branch_id = filter_input(INPUT_POST, 'branch_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'branch_id', FILTER_VALIDATE_INT);
 
                     $data = $branches->getBranchDataById($branch_id);
-
+                    // Nếu $data là mảng có 1 phần tử, trả về phần tử đó
+                    if (is_array($data) && count($data) === 1) {
+                        $data = $data[0];
+                    }
                     sendJson([
                         'success' => true,
                         'data'=> $data 

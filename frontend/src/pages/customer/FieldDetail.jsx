@@ -228,9 +228,6 @@ function FieldDetail() {
                 </p>
                 <p
                   className="bg-red-600 text-white w-fit rounded-sm px-4 py-1 cursor-pointer flex gap-1 items-center hover:bg-red-900"
-                  onClick={() =>
-                    navigate(`/branchDetail/${commonInfo.branch_id}`)
-                  }
                 >
                   <RiMapPinFill /> xem vị trí
                 </p>

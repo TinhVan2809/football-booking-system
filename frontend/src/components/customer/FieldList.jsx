@@ -55,6 +55,10 @@ function FieldList() {
     }
   };
 
+  //Compoenent tạm thời cho error và là loaing
+  if(error) return <div>{error}</div>
+  if(loading) return <div>Loading...</div>
+
   return (
     <>
       <section className="w-full mt-20">
