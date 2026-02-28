@@ -247,7 +247,7 @@ router.post("/create", verifyToken, async (req, res) => {
                                 ${servicesHtml}
 
                                 <p style="margin-top: 20px; text-align: center; color: #757575;">Vui lòng đến đúng giờ. Chúc bạn có trận đấu vui vẻ!</p>
-                                <p style="margin-top: 20px; text-align: center; color: #757575;">Mọi thông tin xin vui lòng liên hệ 0818177533/0813502952. Hoặc tinhlu703@gmail.com để được hỗ trợ chi tiết</p>
+                                <p style="margin-top: 20px; text-align: center; color: #757575;">Mọi thông tin xin vui lòng liên hệ 0818177533 - 0813502952. Hoặc tinhlu703@gmail.com để được hỗ trợ chi tiết.</p>
                             </div>
                         `,
                     attachments: [

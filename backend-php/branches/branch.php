@@ -14,50 +14,49 @@ class Branch
             $db = Database::getInstance();
             $connection = $db->getConnection();
 
-            // 1. Fetch fields with pagination
-            $sql = "SELECT f.field_id, f.field_name, f.status, f.thumbnail
-                    FROM fields f
-                    WHERE f.branch_id = :branch_id
-                    LIMIT :limit OFFSET :offset";
-            $stmt = $connection->prepare($sql);
-            $stmt->bindValue(':branch_id', $branch_id, PDO::PARAM_INT);
-            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-            $stmt->execute();
-            $fields = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            if (empty($fields)) {
-                return [];
+            // Lấy đầy đủ thông tin branch
+            $sqlBranch = "SELECT branch_id, branch_name, address, phone, open_time, close_time, status, thumbnail
+                FROM branches WHERE branch_id = :branch_id";
+            $stmtBranch = $connection->prepare($sqlBranch);
+            $stmtBranch->bindValue(':branch_id', $branch_id, PDO::PARAM_INT);
+            $stmtBranch->execute();
+            $branch = $stmtBranch->fetch(PDO::FETCH_ASSOC);
+            if (!$branch) {
+                return null;
             }
 
-            // 2. Fetch field types for these fields
+            // Lấy danh sách fields của branch
+            $sqlFields = "SELECT field_id, field_name, status, thumbnail
+                FROM fields WHERE branch_id = :branch_id LIMIT :limit OFFSET :offset";
+            $stmtFields = $connection->prepare($sqlFields);
+            $stmtFields->bindValue(':branch_id', $branch_id, PDO::PARAM_INT);
+            $stmtFields->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $stmtFields->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $stmtFields->execute();
+            $fields = $stmtFields->fetchAll(PDO::FETCH_ASSOC);
+
+            if (empty($fields)) {
+                $branch['fields'] = [];
+                return (object)$branch;
+            }
+
+            // Lấy field_types cho các field này
             $fieldIds = array_column($fields, 'field_id');
             $placeholders = implode(',', array_fill(0, count($fieldIds), '?'));
-
-            $sqlTypes = "SELECT 
-                            fft.field_id,
-                            fft.field_field_type_id,
-                            ft.field_type_id,
-                            ft.type_name,
-                            ft.players,
-                            fft.price_per_hour,
-                            fft.max_players,
-                            fft.status
-                        FROM field_field_types fft
-                        JOIN field_types ft ON ft.field_type_id = fft.field_type_id
-                        WHERE fft.field_id IN ($placeholders)";
-
+            $sqlTypes = "SELECT fft.field_id, fft.field_field_type_id, ft.field_type_id, ft.type_name, ft.players, fft.price_per_hour, fft.max_players, fft.status
+                FROM field_field_types fft
+                JOIN field_types ft ON ft.field_type_id = fft.field_type_id
+                WHERE fft.field_id IN ($placeholders)";
             $stmtTypes = $connection->prepare($sqlTypes);
             $stmtTypes->execute($fieldIds);
             $types = $stmtTypes->fetchAll(PDO::FETCH_ASSOC);
 
-            // 3. Aggregate types into fields
+            // Gom field_types vào từng field
             $fieldMap = [];
             foreach ($fields as $field) {
                 $field['field_types'] = [];
                 $fieldMap[$field['field_id']] = $field;
             }
-
             foreach ($types as $type) {
                 $fId = $type['field_id'];
                 if (isset($fieldMap[$fId])) {
@@ -72,17 +71,12 @@ class Branch
                     ];
                 }
             }
-
-            // Convert to array of objects
-            $result = [];
-            foreach ($fieldMap as $field) {
-                $result[] = (object)$field;
-            }
-
-            return $result;
+            // Đưa fields vào branch
+            $branch['fields'] = array_values($fieldMap);
+            return (object)$branch;
         } catch (PDOException $e) {
-            error_log("Error getting branches " . $e->getMessage());
-            return [];
+            error_log("Error getting branch by id: " . $e->getMessage());
+            return null;
         }
     }
 
@@ -214,9 +208,10 @@ class Branch
     }
 
 
-    public function getBranchDataById(int $branch_id) {
-        try{
-             $db = Database::getInstance();
+    public function getBranchDataById(int $branch_id)
+    {
+        try {
+            $db = Database::getInstance();
             $connection = $db->getConnection();
 
             $sql = "SELECT branch_id, branch_name, address, phone, open_time, close_time, status, thumbnail FROM branches WHERE branch_id = :branch_id";
@@ -225,7 +220,7 @@ class Branch
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_OBJ);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             error_log("Error geting branch data by id" . $e->getMessage());
             return [];
         }

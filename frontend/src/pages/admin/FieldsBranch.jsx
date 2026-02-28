@@ -100,6 +100,7 @@ function FieldsBranch() {
     fetchFieldsByBranch(currentPage);
   }, [API_BRANCH, LIMIT, branch_id, currentPage, refreshFieldsKey]);
 
+  //todo: Lấy danh sách lại sân
   useEffect(() => {
     const fetchFieldTypes = async () => {
       setLoadingTypes(true);
@@ -331,13 +332,14 @@ function FieldsBranch() {
     }
   };
 
+  
+
   return (
     <div className="">
       <div className="max-w-6xl mx-auto bg-white p-8 rounded-lg shadow-md mt-6 mb-10">
         <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">
-          Quản lý sân bóng - Chi nhánh #{branch_id}
+          Quản lý sân bóng - Chi nhánh {fields.branch_name} #{branch_id} 
         </h2>
-
         {/* Add Field */}
         <div className="mb-10">
           <h3 className="text-lg font-semibold mb-4">Thêm sân bóng mới</h3>
