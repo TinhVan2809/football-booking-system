@@ -228,11 +228,11 @@ router.post("/create", verifyToken, async (req, res) => {
                     html: `
                             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
                                 <div style="display:flex; justify-content:center; align-items:center; width:100%">
-                                  <img src="cid:hasebooking_logo" style="width: 55px; height: auto" alt="Logo" />
+                                  <img src="cid:hasebooking_logo" style="width: 57px; height: auto" alt="Logo" />
                                   <h2 style="color: #166534; text-align: center;">Đặt Sân Thành Công!</h2>
                                 </div>
                                 <img src="cid:field_bg" style="width: 100%; height: auto; display: block; margin: 0 auto;" alt="Logo" />
-                                <p>Xin chào <strong>${req.user.full_name || "Quý khách"}</strong>,</p>
+                                <p>Xin chào <strong>${req.user.full_name || "Quý khách"}</strong></p>
                                 <p>Cảm ơn bạn đã sử dụng dịch vụ. Dưới đây là thông tin đặt sân của bạn:</p>
                                 
                                 <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
@@ -247,6 +247,7 @@ router.post("/create", verifyToken, async (req, res) => {
                                 ${servicesHtml}
 
                                 <p style="margin-top: 20px; text-align: center; color: #757575;">Vui lòng đến đúng giờ. Chúc bạn có trận đấu vui vẻ!</p>
+                                <p style="margin-top: 20px; text-align: center; color: #757575;">Mọi thông tin xin vui lòng liên hệ 0818177533/0813502952. Hoặc tinhlu703@gmail.com để được hỗ trợ chi tiết</p>
                             </div>
                         `,
                     attachments: [
