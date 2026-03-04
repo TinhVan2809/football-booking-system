@@ -107,7 +107,7 @@ try {
             ]);
 
             break;
-            
+
         // bookings
         case 'statistic-bookings':
             $branch_id = filter_input(INPUT_POST, 'branch_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'branch_id', FILTER_VALIDATE_INT);
@@ -121,6 +121,32 @@ try {
 
             break;
 
+        // total price from bookings (Tổng doanh thu);
+        case 'revenue':
+            $branch_id = filter_input(INPUT_POST, 'branch_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'branch_id', FILTER_VALIDATE_INT);
+            $data = $statistic->totalPriceFromBookings($branch_id);
+
+            sendJson([
+                'success' => true,
+                'data' => $data
+            ]);
+
+            break;
+
+        // revenue by month (Doanh thu theo tháng)
+        case 'revenue-by-month':
+            $branch_id = filter_input(INPUT_POST, 'branch_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'branch_id', FILTER_VALIDATE_INT);
+            $months = filter_input(INPUT_POST, 'months', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'months', FILTER_VALIDATE_INT);
+            $months = $months ?: 12;
+
+            $data = $statistic->revenueByMonth($branch_id, $months);
+
+            sendJson([
+                'success' => true,
+                'data' => $data
+            ]);
+
+            break;
 
         default:
             http_response_code(400);

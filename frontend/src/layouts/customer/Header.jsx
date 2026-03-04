@@ -8,7 +8,7 @@ import {RiMapPinTimeLine, RiListCheck, RiCloseLine} from '@remixicon/react';
 
 function Header() {
   const navigate = useNavigate();
-  const { user, logout } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -77,7 +77,7 @@ function Header() {
         {user ? (
           <div className="hidden lg:flex justify-center items-center gap-3">
             <button className="px-5 py-2 rounded-[20px] cursor-pointer bg-[#221f23] text-white text-sm duration-200 hover:opacity-90">Đặt lịch ngay</button>
-            <button className="px-5 py-2 rounded-2xl cursor-pointer border border-gray-200 text-sm duration-200 hover:bg-gray-200" onClick={logout}>Khám phá thêm</button>
+            <button className="px-5 py-2 rounded-2xl cursor-pointer border border-gray-200 text-sm duration-200 hover:bg-gray-200" >Khám phá thêm</button>
           </div>
         ) : (
           <div className="hidden lg:flex justify-center items-center gap-2">
@@ -141,7 +141,7 @@ function Header() {
                     <RiUser3Line /> <span className="font-[450]">{user.username}</span>
                   </div>
                   <button className="w-full px-5 py-2 rounded-lg bg-[#221f23] text-white text-sm hover:opacity-90">Đặt lịch ngay</button>
-                  <button className="w-full px-5 py-2 rounded-lg border border-gray-200 text-sm hover:bg-gray-50" onClick={logout}>Khám phá thêm</button>
+                  <button className="w-full px-5 py-2 rounded-lg border border-gray-200 text-sm hover:bg-gray-50">Khám phá thêm</button>
                 </>
               ) : (
                 <>
