@@ -385,5 +385,5 @@ io.on("connection", (socket) => {
 const PORT = process.env.PORT || 8081; // Fallback port 8081 nếu env lỗi
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  console.log("Network Info:", server.address());
+  console.log("Network Info:", server.address()); // Hiển thị đại chỉ server { address: '::', family: 'IPv6', port: 8081 }
 });

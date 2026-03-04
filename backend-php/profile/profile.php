@@ -9,7 +9,7 @@ class Profile
 {
 
     // Lấy danh sách booking theo user_id
-    public function getBookingsByUser(int $user_id, int $limit = 10, $offset = 0)
+    public function getBookingsByUser(int $user_id, int $limit = 9, $offset = 0)
     {
         if (empty($user_id)) {
             return false;
@@ -19,7 +19,11 @@ class Profile
             $db = Database::getInstance();
             $connection  = $db->getConnection();
 
-            $sql = "SELECT booking_id, booking_date, start_time, end_time, total_price FROM bookings WHERE user_id = :user_id ORDER BY booking_date DESC LIMIT :limit OFFSET :offset";
+            $sql = "SELECT b.booking_id, f.thumbnail 
+                    FROM bookings b 
+                    JOIN field_field_types fft ON b.field_field_type_id = fft.field_field_type_id
+                    JOIN fields f ON fft.field_id = f.field_id
+                    WHERE b.user_id = :user_id ORDER BY booking_date DESC LIMIT :limit OFFSET :offset";
             $stmt = $connection->prepare($sql);
             $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
