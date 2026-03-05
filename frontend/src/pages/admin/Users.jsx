@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import UserModalDetail from "../../components/admin/UserModalDetail";
+
 
 function Users() {
     const API_BASE = "http://localhost/football-booking-system/backend-php/users/api.php";
@@ -8,7 +10,11 @@ function Users() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
 
-    // lấy danh sách tất cả users bao gồm admin và chi nhánh
+     const [userDetail, setUserDetail] = useState(false);
+     const [selectedUserId, setSelecteduserId] = useState(null);
+
+
+    // lấy danh sách tất cả users bao gồm admin và chi nhánh.
     useEffect(() => {
         const fetchUsersData = async (page = 1) => {
             try{
@@ -48,14 +54,37 @@ function Users() {
         return <div>Something went wrong!</div>
       }
 
+     
+      const onOpenUserModalDetail = (user_id) => {
+        setUserDetail(true);
+        setSelecteduserId(user_id);
+      }
+
+      const onCloseUserModalDetail = () => {
+        setUserDetail(false);
+        selectedUserId(null);
+      }
+
     return (
         <>
-           {users.map(u => (
+          <div className="flex flex-col gap-3">
+             {users.map(u => (
             <div className="" key={u.username}>
                 <span>{u.username}</span>
                 <span>{u.full_name}</span>
+                <button className="bg-green-500" onClick={() => onOpenUserModalDetail(u.user_id)}>Xem chi tiết </button>
             </div>
            ))}
+
+
+           {userDetail && (
+            <div>
+              <UserModalDetail user_id ={selectedUserId} close={onCloseUserModalDetail}/>
+            </div>
+           )}
+
+
+          </div>
               <div className="flex justify-center items-center gap-4 mt-6">
                 <button
                   onClick={handlePrevPage}

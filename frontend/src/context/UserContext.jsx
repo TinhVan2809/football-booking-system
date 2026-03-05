@@ -11,6 +11,7 @@ export const UserProvider = ({ children }) => {
 
     const navigate = useNavigate();
 
+    // Hàm đăng xuất
     const logout = async () => {
         try {
             // Gọi API logout để xóa cookie httpOnly

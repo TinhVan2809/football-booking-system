@@ -1,6 +1,6 @@
 <?php
 
-    require_once './user.php';
+require_once './user.php';
 
 
 /**
@@ -47,7 +47,7 @@ header('Content-Type: application/json');
 
 
 
-    try{
+try {
 
     $action = $_REQUEST['action'] ?? null;
     $action = is_string($action) ? trim(filter_var($action, FILTER_SANITIZE_FULL_SPECIAL_CHARS)) : null;
@@ -60,12 +60,12 @@ header('Content-Type: application/json');
 
     $users = new User();
 
-   switch($action) {
-        case 'get': 
-           
+    switch ($action) {
+        case 'get':
+
             $page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT, ['options' => ['default' => 1, 'min_range' => 1]]) ?: 1;
             $limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT, ['options' => ['default' => 10, 'min_range' => 1]]) ?: 10;
-         
+
             $offset = ($page - 1) * $limit;
             $totalItems = $users->coutUsers();
             $totalPages = ceil($totalItems / $limit);
@@ -80,26 +80,43 @@ header('Content-Type: application/json');
                 'limit' => $limit
             ]);
             break;
-        
+
         case 'id':
-           $user_id = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
+            $user_id = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
             $data = $users->getUserId($user_id);
             sendJson([
                 'success' => true,
-                'data' =>$data
+                'data' => $data
             ]);
             break;
 
-            default:
+        case 'getAllBookingsByUser':
+            $page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT, ['options' => ['default' => 1, 'min_range' => 1]]) ?: 1;
+            $limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT, ['options' => ['default' => 10, 'min_range' => 1]]) ?: 10;
+            $user_id = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
+
+            $offset = ($page - 1) * $limit;
+            $totalItems = $users->countAllBookingsByUser($user_id,);
+            $totalPages = ceil($totalItems / $limit);
+            $data = $users->getAllBookingsByUser($user_id, $limit, $offset);
+
+            sendJson([
+                'success' => true,
+                'data' => $data,
+                'total_items' => $totalItems,
+                'total_pages' => $totalPages,
+                'current_page' => $page,
+                'limit' => $limit
+            ]);
+            break;
+
+        default:
             http_response_code(400);
             echo json_encode(['success' => false, 'message' => 'Invalid action']);
             break;
-   }
-
-   }  catch (PDOException $e) {
-        error_log('General Error in Cart_api_endpoint.php: ' . $e->getMessage());
-        http_response_code(500);
-        echo json_encode(['success' => false, 'message' => 'An unexpected error occurred']);
     }
-
-?>
+} catch (PDOException $e) {
+    error_log('General Error in Cart_api_endpoint.php: ' . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'An unexpected error occurred']);
+}
