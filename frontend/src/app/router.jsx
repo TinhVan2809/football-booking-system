@@ -33,14 +33,14 @@ import DashbroadBranch from "../pages/branch_owner/Dashbroad";
 import { ServiceProvider } from "../context/ServiceContext";
 import BookingListBranch from "../pages/branch_owner/BookingListBranch";
 import BranchNotifications from "../pages/branch_owner/BranchNotifications";
+import ProfileManagement from "../pages/branch_owner/ProfileManagemnet";
 
 // *[Not found page]
 import NotFoundPage from "../pages/NotFoundPage";
 
 //------------------ PAGES/LAYOUTD/COMPOENTS...-----------------------//
 
-const AppLayout = () => (
-  //eslint-disable-line
+const AppLayout = () => (  //eslint-disable-line
   <UserProvider>
     <Outlet />
   </UserProvider>
@@ -125,6 +125,10 @@ export const router = createBrowserRouter([
           {
             path: "branch_notifications/:branch_id",
             element: <BranchNotifications />,
+          },
+          {
+            path: "profileBranch/:user_id",
+            element: <ProfileManagement />,
           },
         ],
       },

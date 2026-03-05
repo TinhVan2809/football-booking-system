@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
-import { data, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import useUserData from "../../hooks/usersHook";
 
 import {
   RiArrowLeftSLine,
@@ -18,62 +19,49 @@ function Profile() {
 
   const { user_id } = useParams();
   const [bookings, setBookings] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [bookingsError, setBookingsError] = useState(null);
+  const [bookingsLoading, setBookingsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
-  const {logout} = useContext(UserContext);
+  const { logout } = useContext(UserContext);
 
-  const [user, setUser] = useState([]);
+  //TODO: Lấy dữ liệu user
+  const { user, loading: userLoading, error: userError } = useUserData(
+    user_id ? `${API_USER}?action=id&user_id=${user_id}` : null,
+
+  );
 
   //TODO: lấy danh sách đơn đặt lịch thuê sân của người dùng này
   useEffect(() => {
     const fetchBookingByUserData = async (page = 1) => {
-      setLoading(true);
+      setBookingsLoading(true);
+      setBookingsError(null);
       try {
         const res = await fetch(
           `${API_BASE}?action=get&user_id=${user_id}&limit=${LIMIT}&page=${page}`,
         );
 
         if (!res.ok) {
-          throw new Error("ERROR HTTP", res.status);
+          throw new Error(`ERROR HTTP ${res.status}`);
         }
 
         const data = await res.json();
 
         if (data.success) {
           setBookings(data.data);
-          setLoading(false);
           setTotalPages(data.total_pages || 1);
         }
       } catch (err) {
-        setError(err.message);
+        setBookingsError(err.message);
         console.error("Error fetching booking by user in profile", err);
+      } finally {
+        setBookingsLoading(false);
       }
     };
-    fetchBookingByUserData();
+    fetchBookingByUserData(currentPage);
   }, [user_id, currentPage]);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const res = await fetch(`${API_USER}?action=id&user_id=${user_id}`);
-
-        if (!res.ok) {
-          throw new Error("ERROR HTTP ", res.status);
-        }
-
-        const data = await res.json();
-        if (data.success) {
-          setUser(data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching user data ", error);
-      }
-    };
-    fetchUserData();
-  }, [user_id]);
 
   // Xử lý chuyển trang
   const handlePrevPage = () => {
@@ -87,6 +75,16 @@ function Profile() {
       setCurrentPage(currentPage + 1);
     }
   };
+
+  if (userLoading || bookingsLoading) {
+    return <div>Loading</div>;
+  }
+  if (userError || bookingsError) {
+    return <div>{userError || bookingsError}</div>;
+  }
+  if (!user) {
+    return <div>User not found</div>;
+  }
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { RiAddLargeLine } from "@remixicon/react";
+import { RiAddLargeLine, RiUser2Fill } from "@remixicon/react";
 
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../context/UserContext";
@@ -41,9 +41,10 @@ function Header() {
     }, [user?.branch_id]);
   return (
     <>
-      <header className="sticky top-0 shadow-2xl z-300 rounded-md flex justify-between items-center w-full bg-white">
-        <div className="flex justify-center items-center text-center ml-20">
+      <header className="sticky top-0 shadow-2xl z-300 rounded-md flex justify-between items-center w-full bg-white py-6">
+        <div className="flex justify-center items-center text-center ml-20 gap-3">
           <h2 className="font-bold text-2xl text-green-800">HASEBOOKING</h2>
+          <RiUser2Fill color="green" onClick={() => navigate(`/branch_owner/profileBranch/${user.user_id}`)}/>
         </div>
         <nav className="flex justify-center items-center gap-5">
           <div className="flex justify-center items-center gap-7">
@@ -103,11 +104,6 @@ function Header() {
                 )}
               </span>
             </NavLink>
-          </div>
-          <div className="bg-[#20ad84] text-white">
-            <button className="flex w-full h-full cursor-pointer px-5 py-4" onClick={logout}>
-              <RiAddLargeLine className="font-bold" /> Thêm sân bóng
-            </button>
           </div>
         </nav>
       </header>
