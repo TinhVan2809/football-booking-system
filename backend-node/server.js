@@ -15,6 +15,7 @@ app.use(express.json());
 // Kiểm tra biến môi trường quan trọng
 if (!process.env.JWT_SECRET) {
   console.warn("CẢNH BÁO: JWT_SECRET chưa được cấu hình trong file .env");
+  return res.status(506).json({message: 'Cần cấu hình env'});
 }
 
 // Configure CORS using environment variables (FRONTEND_URL, ADMIN_URL)
@@ -399,6 +400,25 @@ app.post("/confirm-bookings/:booking_id", auth, (req, res) => {
       }
       res.json({ success: true, bookings: rows });
     }
+  );
+});
+
+//# Route Xác nhận hoàn thành đơn (Đã xác nhận => Hoàn thành )
+app.post("completed-bookings/:booking_id", auth, (req,res) => {
+  const {booking_id} = req.params;
+  if(!booking_id) {
+    return res.status(400).json({message: "Thiếu booking_id"});
+  }
+  db.query(
+    "UPDATE bookings SET booking_status = 'completed' WHERE booking_id = ?",
+    [booking_id], 
+    (err, rows) => {
+      if(err) {
+        console.error(err);
+      return res.status(500).json({message: "Lỗi khi update hoàn thành bookings"});
+      }
+      res.json({success: true, bookings: rows});
+    } 
   );
 });
 

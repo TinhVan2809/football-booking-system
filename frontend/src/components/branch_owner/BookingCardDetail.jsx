@@ -18,7 +18,12 @@ function BookingCardDetail({ booking_id, onClose, onFetchBookings }) {
   const [error, setError] = useState(null);
 
   const [seletedBookingId, setSelectedBookingId] = useState(null);
+
+  // state lưu trạng thái popup xác nhận bookings
   const [confirm, setConfirm] = useState(false);
+
+  // state lưu trạng thái popup xác nhận hoàn thành bookings
+  const [completed, setCompleted] = useState(false);
 
   const fetchBookingDetailData = useCallback(async () => {
     try {
@@ -65,7 +70,7 @@ function BookingCardDetail({ booking_id, onClose, onFetchBookings }) {
             <button className="bg-gray-100 py-2 px-3 rounded-md text-sm font-semibold cursor-pointer">
               Thêm giờ
             </button>
-            <button className="bg-gray-100 py-2 px-3 rounded-md text-sm font-semibold cursor-pointer">
+            <button className="bg-gray-100 py-2 px-3 rounded-md text-sm font-semibold cursor-pointer" onClick={() => onIsOpenCompletedPopup(booking.booking_id)}>
               Hoàn thành
             </button>
           </>
@@ -104,11 +109,15 @@ function BookingCardDetail({ booking_id, onClose, onFetchBookings }) {
   // Hàm mở popup xác nhận bookings 
   const onOpenConfirmBookingPopup = (booking_id) => {
     setConfirm(true);
-    console.log(`Popup is opening and booking id = ${seletedBookingId}`)
+    setSelectedBookingId(booking_id);
+  }
+  // Hàm mở popup xác nhận hoàn thành booking 
+  const onIsOpenCompletedPopup = (booking_id) => {
+    setCompleted(true);
     setSelectedBookingId(booking_id);
   }
 
-  // Hàm xác nhận bookings
+  // Hàm xác nhận bookings (Chưa xác nhận => đã xác nhận)
   const handleConfirmBooking = async () => {
     if (!seletedBookingId) return;
     try {
@@ -131,6 +140,31 @@ function BookingCardDetail({ booking_id, onClose, onFetchBookings }) {
       }
     } catch (error) {
       setError(error.message);
+    }
+  }
+
+  // Hàm xác nhận hoàn thành đơn (Đã xác nhận => hoàn thành)
+  const handleCompletedBookings = async () => {
+    try{
+      const res = await fetch(`http://localhost:8081/completed-bookings/${seletedBookingId}`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if(!res.ok) {
+        throw new Error(`ERROR HTTP ${res.status}`);
+      }
+      const data = await res.json();
+      if(data.success) {
+        setCompleted(false);
+        setSelectedBookingId(null);
+        fetchBookingDetailData();
+        if (onFetchBookings) onFetchBookings(); 
+      }
+    } catch(error) {
+        setError(error.message);
     }
   }
 
@@ -230,6 +264,17 @@ function BookingCardDetail({ booking_id, onClose, onFetchBookings }) {
           <p>Bạn có muốn xác nhận đơn đặt lịch này?</p>
           <button onClick={handleConfirmBooking}>Yes</button>
           <button onClick={() => setConfirm(false)} style={{marginLeft: 8}}>No</button>
+        </div>
+      )}
+      
+      {/* Popup xác nhận hoàn thành bookings */}
+      {completed && (
+        <div className="">
+          <div className="fixed w-30 h-30 z-10000 top-0 flex justify-center items-center">
+          <p>Bạn có muốn xác nhận đơn đặt lịch này?</p>
+          <button onClick={handleCompletedBookings}>Yes</button>
+          <button onClick={() => setCompleted(false)} style={{marginLeft: 8}}>No</button>
+        </div>
         </div>
       )}
     </>
