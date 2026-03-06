@@ -12,7 +12,10 @@ node server.js
 5. **Copy mật khẩu (16 ký tự)**
 
 ### Cấu hình JWT_SECRET
-**Mở terminal nhập lệnh: node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"**
+**Mở terminal nhập lệnh:**
+```
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+```
 
 
 ```
