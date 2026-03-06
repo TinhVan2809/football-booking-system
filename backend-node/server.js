@@ -382,6 +382,26 @@ io.on("connection", (socket) => {
   });
 });
 
+
+//# Route xác nhận booking (Chưa xác nhận => Đã xác nhận)
+app.post("/confirm-bookings/:booking_id", auth, (req, res) => {
+  const { booking_id } = req.params;
+  if (!booking_id) {
+    return res.status(400).json({ message: "Thiếu booking_id" });
+  }
+  db.query(
+    "UPDATE bookings SET booking_status = 'confirmed' WHERE booking_id = ?",
+    [booking_id],
+    (err, rows) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Lỗi khi update xác nhận bookings" });
+      }
+      res.json({ success: true, bookings: rows });
+    }
+  );
+});
+
 const PORT = process.env.PORT || 8081; // Fallback port 8081 nếu env lỗi
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

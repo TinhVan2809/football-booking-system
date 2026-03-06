@@ -10,12 +10,15 @@ import {
   RiBaseballLine,
 } from "@remixicon/react";
 
-function BookingCardDetail({ booking_id, onClose }) {
+function BookingCardDetail({ booking_id, onClose, onFetchBookings }) {
   console.log(booking_id);
 
   const [detailBooking, setDetailBooking] = useState([]);
   const [services, setServices] = useState([]);
   const [error, setError] = useState(null);
+
+  const [seletedBookingId, setSelectedBookingId] = useState(null);
+  const [confirm, setConfirm] = useState(false);
 
   const fetchBookingDetailData = useCallback(async () => {
     try {
@@ -37,7 +40,7 @@ function BookingCardDetail({ booking_id, onClose }) {
   }, [booking_id]);
 
   useEffect(() => {
-    fetchBookingDetailData(); //eslint-disable-line
+    fetchBookingDetailData(); 
   }, [booking_id, fetchBookingDetailData]);
 
   const booking = detailBooking[0];
@@ -47,7 +50,7 @@ function BookingCardDetail({ booking_id, onClose }) {
       // Nếu đơn đang chờ xác nhận => xác nhận
       case "pending":
         return (
-          <button className="bg-gray-100 py-2 px-3 rounded-md text-sm font-semibold cursor-pointer">
+          <button className="bg-gray-100 py-2 px-3 rounded-md text-sm font-semibold cursor-pointer" onClick={() =>{ onOpenConfirmBookingPopup(booking.booking_id)}}>
             Xác nhận
           </button>
         );
@@ -96,6 +99,39 @@ function BookingCardDetail({ booking_id, onClose }) {
 
   if(error) {
     return <p>something went wrong {error}</p>
+  }
+
+  // Hàm mở popup xác nhận bookings 
+  const onOpenConfirmBookingPopup = (booking_id) => {
+    setConfirm(true);
+    console.log(`Popup is opening and booking id = ${seletedBookingId}`)
+    setSelectedBookingId(booking_id);
+  }
+
+  // Hàm xác nhận bookings
+  const handleConfirmBooking = async () => {
+    if (!seletedBookingId) return;
+    try {
+      const res = await fetch(`http://localhost:8081/confirm-bookings/${seletedBookingId}`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!res.ok) {
+        throw new Error(`ERROR HTTP ${res.status}`);
+      }
+      const data = await res.json();
+      if (data.success) {
+        setConfirm(false);
+        setSelectedBookingId(null);
+        fetchBookingDetailData();
+        if (onFetchBookings) onFetchBookings(); 
+      }
+    } catch (error) {
+      setError(error.message);
+    }
   }
 
   return (
@@ -186,6 +222,16 @@ function BookingCardDetail({ booking_id, onClose }) {
           </div>
         )}
       </div>
+
+
+      {/* Pupop xác nhận bookings  */}
+      {confirm && (
+        <div className="fixed w-30 h-30 z-10000 top-0 flex justify-center items-center">
+          <p>Bạn có muốn xác nhận đơn đặt lịch này?</p>
+          <button onClick={handleConfirmBooking}>Yes</button>
+          <button onClick={() => setConfirm(false)} style={{marginLeft: 8}}>No</button>
+        </div>
+      )}
     </>
   );
 }

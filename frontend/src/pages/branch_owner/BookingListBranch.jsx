@@ -183,6 +183,7 @@ function BookingListBranch() {
         <>
           <BookingCardDetail
             booking_id={selectedBokingId}
+            onFetchBookings={fetchBookings}
             onClose={() => setBookingCardModal(false)}
           />
         </>
