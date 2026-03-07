@@ -25,6 +25,9 @@ function BookingCardDetail({ booking_id, onClose, onFetchBookings }) {
   // state lưu trạng thái popup xác nhận hoàn thành bookings
   const [completed, setCompleted] = useState(false);
 
+  // state lưu trạng thái popup hủy bookings
+  const [cancelled, setCancelled] = useState(false);
+
   const fetchBookingDetailData = useCallback(async () => {
     try {
       const res = await fetch(
@@ -45,19 +48,32 @@ function BookingCardDetail({ booking_id, onClose, onFetchBookings }) {
   }, [booking_id]);
 
   useEffect(() => {
-    fetchBookingDetailData(); 
+    fetchBookingDetailData();
   }, [booking_id, fetchBookingDetailData]);
 
   const booking = detailBooking[0];
 
   const getStatusBooking = (bookingStatus) => {
     switch (bookingStatus) {
-      // Nếu đơn đang chờ xác nhận => xác nhận
+      // Nếu đơn đang chờ xác nhận => xác nhận || hủy
       case "pending":
         return (
-          <button className="bg-gray-100 py-2 px-3 rounded-md text-sm font-semibold cursor-pointer" onClick={() =>{ onOpenConfirmBookingPopup(booking.booking_id)}}>
-            Xác nhận
-          </button>
+          <>
+            <button
+              className="bg-gray-100 py-2 px-3 rounded-md text-sm font-semibold cursor-pointer"
+              onClick={() => {
+                onOpenConfirmBookingPopup(booking.booking_id);
+              }}
+            >
+              Xác nhận
+            </button>
+            <button
+              className="bg-gray-100 py-2 px-3 rounded-md text-sm font-semibold cursor-pointer"
+              onClick={() => onOpenCancelledPopup(booking.booking_id)}
+            >
+              Hủy
+            </button>
+          </>
         );
 
       // Nếu đơn đã xác nhận => hoàn thành
@@ -70,7 +86,10 @@ function BookingCardDetail({ booking_id, onClose, onFetchBookings }) {
             <button className="bg-gray-100 py-2 px-3 rounded-md text-sm font-semibold cursor-pointer">
               Thêm giờ
             </button>
-            <button className="bg-gray-100 py-2 px-3 rounded-md text-sm font-semibold cursor-pointer" onClick={() => onIsOpenCompletedPopup(booking.booking_id)}>
+            <button
+              className="bg-gray-100 py-2 px-3 rounded-md text-sm font-semibold cursor-pointer"
+              onClick={() => onIsOpenCompletedPopup(booking.booking_id)}
+            >
               Hoàn thành
             </button>
           </>
@@ -102,32 +121,40 @@ function BookingCardDetail({ booking_id, onClose, onFetchBookings }) {
     return `${day}/${month}/${year}`;
   };
 
-  if(error) {
-    return <p>something went wrong {error}</p>
+  if (error) {
+    return <p>something went wrong {error}</p>;
   }
 
-  // Hàm mở popup xác nhận bookings 
+  // Hàm mở popup xác nhận bookings
   const onOpenConfirmBookingPopup = (booking_id) => {
     setConfirm(true);
     setSelectedBookingId(booking_id);
-  }
-  // Hàm mở popup xác nhận hoàn thành booking 
+  };
+  // Hàm mở popup xác nhận hoàn thành booking
   const onIsOpenCompletedPopup = (booking_id) => {
     setCompleted(true);
     setSelectedBookingId(booking_id);
-  }
+  };
+  // Hàm mở popup hủy bookings
+  const onOpenCancelledPopup = (booking_id) => {
+    setCancelled(true);
+    setSelectedBookingId(booking_id);
+  };
 
   // Hàm xác nhận bookings (Chưa xác nhận => đã xác nhận)
   const handleConfirmBooking = async () => {
     if (!seletedBookingId) return;
     try {
-      const res = await fetch(`http://localhost:8081/confirm-bookings/${seletedBookingId}`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
+      const res = await fetch(
+        `http://localhost:8081/confirm-bookings/${seletedBookingId}`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
       if (!res.ok) {
         throw new Error(`ERROR HTTP ${res.status}`);
       }
@@ -136,40 +163,75 @@ function BookingCardDetail({ booking_id, onClose, onFetchBookings }) {
         setConfirm(false);
         setSelectedBookingId(null);
         fetchBookingDetailData();
-        if (onFetchBookings) onFetchBookings(); 
+        if (onFetchBookings) onFetchBookings();
       }
     } catch (error) {
       setError(error.message);
       console.error("Error fetching confirm bookings", error);
     }
-  }
+  };
 
   // Hàm xác nhận hoàn thành đơn (Đã xác nhận => hoàn thành)
   const handleCompletedBookings = async () => {
-    if(!seletedBookingId) return;
-    try{
-      const res = await fetch(`http://localhost:8081/completed-bookings/${seletedBookingId}`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
+    if (!seletedBookingId) return;
+    try {
+      const res = await fetch(
+        `http://localhost:8081/completed-bookings/${seletedBookingId}`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
-      if(!res.ok) {
+      );
+      if (!res.ok) {
         throw new Error(`ERROR HTTP ${res.status}`);
       }
       const data = await res.json();
-      if(data.success) {
+      if (data.success) {
         setCompleted(false);
         setSelectedBookingId(null);
         fetchBookingDetailData();
-        if (onFetchBookings) onFetchBookings(); 
+        if (onFetchBookings) onFetchBookings();
       }
-    } catch(error) {
-        setError(error.message);
-        console.error("Error fetching completed bookings", error);
+    } catch (error) {
+      setError(error.message);
+      console.error("Error fetching completed bookings", error);
     }
-  }
+  };
+
+  // Hàm xác nhận hủy bookings (Chờ xác nhận => Hủy)
+  const handleCancelledBooking = async () => {
+    if (!seletedBookingId) return;
+    try {
+      const res = await fetch(
+        `http://localhost:8081/cancelled-bookings/${seletedBookingId}`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error(`ERROR HTTP ${res.status}`);
+      }
+
+      const data = await res.json();
+      if (data.success) {
+        setCancelled(false);
+        setSelectedBookingId(null);
+        fetchBookingDetailData();
+        if (onFetchBookings) onFetchBookings();
+      }
+    } catch (error) {
+      console.error("Error fetching cancelled bookings", error);
+      setError(error.message);
+    }
+  };
 
   return (
     <>
@@ -260,30 +322,75 @@ function BookingCardDetail({ booking_id, onClose, onFetchBookings }) {
         )}
       </div>
 
-
       {/* Pupop xác nhận bookings  */}
       {confirm && (
         <div className="fixed z-10000 top-0 flex justify-center items-center w-full h-full  bg-black/20">
           <div className="bg-white p-5 rounded-2xl flex flex-col gap-10 border-3 border-orange-500">
             <p>Bạn có muốn xác nhận đơn đặt lịch này?</p>
-          <div className="flex justify-end items-center gap-3">
-            <button className="border border-gray-300 px-4 py-1 rounded-sm cursor-pointer shadow-2xl" onClick={handleConfirmBooking}>Yes</button>
-          <button className="border border-gray-300 px-4 py-1 rounded-sm cursor-pointer shadow-2xl" onClick={() => setConfirm(false)} style={{marginLeft: 8}}>No</button>
-          </div>
+            <div className="flex justify-end items-center gap-3">
+              <button
+                className="border border-gray-300 px-4 py-1 rounded-sm cursor-pointer shadow-2xl"
+                onClick={handleConfirmBooking}
+              >
+                Yes
+              </button>
+              <button
+                className="border border-gray-300 px-4 py-1 rounded-sm cursor-pointer shadow-2xl"
+                onClick={() => setConfirm(false)}
+                style={{ marginLeft: 8 }}
+              >
+                No
+              </button>
+            </div>
           </div>
         </div>
       )}
-      
+
       {/* Popup xác nhận hoàn thành bookings */}
       {completed && (
         <div className="fixed z-10000 top-0 flex justify-center items-center h-full w-full bg-black/20">
           <div className="bg-white p-5 rounded-2xl flex flex-col gap-10 border-3 border-green-500">
             <p>Bạn có muốn xác nhận hoàn thành đơn đặt lịch này?</p>
             <div className="flex justify-end items-center gap-3">
-              <button className="border border-gray-300 px-4 py-1 rounded-sm cursor-pointer shadow-2xl" onClick={handleCompletedBookings}>Yes</button>
-            <button className="border border-gray-300 px-4 py-1 rounded-sm cursor-pointer shadow-2xl" onClick={() => setCompleted(false)} style={{marginLeft: 8}}>No</button>
+              <button
+                className="border border-gray-300 px-4 py-1 rounded-sm cursor-pointer shadow-2xl"
+                onClick={handleCompletedBookings}
+              >
+                Yes
+              </button>
+              <button
+                className="border border-gray-300 px-4 py-1 rounded-sm cursor-pointer shadow-2xl"
+                onClick={() => setCompleted(false)}
+                style={{ marginLeft: 8 }}
+              >
+                No
+              </button>
             </div>
+          </div>
         </div>
+      )}
+
+      {/* Popup xác nhận hủy bookings */}
+      {cancelled && (
+        <div className="fixed z-10000 top-0 flex justify-center items-center h-full w-full bg-black/20">
+          <div className="bg-white p-5 rounded-2xl flex flex-col gap-10 border-3 border-red-500">
+            <p>Bạn có muốn xác nhận hủy đơn đặt lịch này?</p>
+            <div className="flex justify-end items-center gap-3">
+              <button
+                className="border border-gray-300 px-4 py-1 rounded-sm cursor-pointer shadow-2xl"
+                onClick={handleCancelledBooking}
+              >
+                Yes
+              </button>
+              <button
+                className="border border-gray-300 px-4 py-1 rounded-sm cursor-pointer shadow-2xl"
+                onClick={() => setCancelled(false)}
+                style={{ marginLeft: 8 }}
+              >
+                No
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </>

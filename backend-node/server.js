@@ -422,6 +422,25 @@ app.post("/completed-bookings/:booking_id", auth, (req,res) => {
   );
 });
 
+//# Route hủy đơn bookings (Chờ xác nhận => Hủy)
+app.post("/cancelled-bookings/:booking_id", auth, (req, res) => {
+  const {booking_id} = req.params;
+
+  if(!booking_id) return res.status(400).json("Thiếu bookings id");
+
+  db.query(
+    "UPDATE bookings SET booking_status = 'cancelled' WHERE booking_id = ?",
+    [booking_id],
+    (err, rows) => {
+      if(err) {
+        console.error(err);
+        return res.status.json({message: "Lỗi khi update hủy bookings"});
+      }
+      res.json({success: true, bookings: rows});
+    }
+  );
+});
+
 const PORT = process.env.PORT || 8081; // Fallback port 8081 nếu env lỗi
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
