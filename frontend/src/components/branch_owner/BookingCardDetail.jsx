@@ -140,11 +140,13 @@ function BookingCardDetail({ booking_id, onClose, onFetchBookings }) {
       }
     } catch (error) {
       setError(error.message);
+      console.error("Error fetching confirm bookings", error);
     }
   }
 
   // Hàm xác nhận hoàn thành đơn (Đã xác nhận => hoàn thành)
   const handleCompletedBookings = async () => {
+    if(!seletedBookingId) return;
     try{
       const res = await fetch(`http://localhost:8081/completed-bookings/${seletedBookingId}`, {
         method: 'POST',
@@ -165,6 +167,7 @@ function BookingCardDetail({ booking_id, onClose, onFetchBookings }) {
       }
     } catch(error) {
         setError(error.message);
+        console.error("Error fetching completed bookings", error);
     }
   }
 
@@ -260,20 +263,26 @@ function BookingCardDetail({ booking_id, onClose, onFetchBookings }) {
 
       {/* Pupop xác nhận bookings  */}
       {confirm && (
-        <div className="fixed w-30 h-30 z-10000 top-0 flex justify-center items-center">
-          <p>Bạn có muốn xác nhận đơn đặt lịch này?</p>
-          <button onClick={handleConfirmBooking}>Yes</button>
-          <button onClick={() => setConfirm(false)} style={{marginLeft: 8}}>No</button>
+        <div className="fixed z-10000 top-0 flex justify-center items-center w-full h-full  bg-black/20">
+          <div className="bg-white p-5 rounded-2xl flex flex-col gap-10 border-3 border-orange-500">
+            <p>Bạn có muốn xác nhận đơn đặt lịch này?</p>
+          <div className="flex justify-end items-center gap-3">
+            <button className="border border-gray-300 px-4 py-1 rounded-sm cursor-pointer shadow-2xl" onClick={handleConfirmBooking}>Yes</button>
+          <button className="border border-gray-300 px-4 py-1 rounded-sm cursor-pointer shadow-2xl" onClick={() => setConfirm(false)} style={{marginLeft: 8}}>No</button>
+          </div>
+          </div>
         </div>
       )}
       
       {/* Popup xác nhận hoàn thành bookings */}
       {completed && (
-        <div className="">
-          <div className="fixed w-30 h-30 z-10000 top-0 flex justify-center items-center">
-          <p>Bạn có muốn xác nhận đơn đặt lịch này?</p>
-          <button onClick={handleCompletedBookings}>Yes</button>
-          <button onClick={() => setCompleted(false)} style={{marginLeft: 8}}>No</button>
+        <div className="fixed z-10000 top-0 flex justify-center items-center h-full w-full bg-black/20">
+          <div className="bg-white p-5 rounded-2xl flex flex-col gap-10 border-3 border-green-500">
+            <p>Bạn có muốn xác nhận hoàn thành đơn đặt lịch này?</p>
+            <div className="flex justify-end items-center gap-3">
+              <button className="border border-gray-300 px-4 py-1 rounded-sm cursor-pointer shadow-2xl" onClick={handleCompletedBookings}>Yes</button>
+            <button className="border border-gray-300 px-4 py-1 rounded-sm cursor-pointer shadow-2xl" onClick={() => setCompleted(false)} style={{marginLeft: 8}}>No</button>
+            </div>
         </div>
         </div>
       )}

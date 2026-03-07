@@ -404,7 +404,7 @@ app.post("/confirm-bookings/:booking_id", auth, (req, res) => {
 });
 
 //# Route Xác nhận hoàn thành đơn (Đã xác nhận => Hoàn thành )
-app.post("completed-bookings/:booking_id", auth, (req,res) => {
+app.post("/completed-bookings/:booking_id", auth, (req,res) => {
   const {booking_id} = req.params;
   if(!booking_id) {
     return res.status(400).json({message: "Thiếu booking_id"});
