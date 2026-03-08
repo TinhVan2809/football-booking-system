@@ -25,7 +25,8 @@ function useFieldsByBranches({ branch_id }) {
         }
         const data = await res.json();
         if (data.success) {
-          setFieldsByBranch(data.data);
+          // setFieldsByBranch(data.data);
+          setFieldsByBranch(data.data.fields || []);
           setTotalPages(data.total_pages || 1);
         }
       } catch (err) {
