@@ -39,12 +39,12 @@ function Banners() {
         <div className="banner--content__main">
           <div className="text-white w-full flex justify-center items-center flex-col">
             <h1 className="flex justify-center items-center">
-              FOOTBALL BOOK{" "}
+              <span className="text-[20px] md:text-4xl">FOOTBALL BOOK{" "}</span>
               <img
                 src="../../../assets/pngtree-gold-soccer-cup-with-ball-and-flames-png-image_14315011.png"
-                className="w-10"
+                className="w-5 md:w-10 "
               />{" "}
-              NG SYSTEM
+              <span className="text-[20px] md:text-4xl">NG SYSTEM</span>
             </h1>
             <div className="flex justify-center items-center">
               <span className="text-sm">Hệ thống quản lý</span>
@@ -57,26 +57,26 @@ function Banners() {
               </span>
             </div>
           </div>
-          <div className="banner--content__input flex mt-40 rounded-2xl justify-center items-center">
-            <div className="flex items-center gap-4 bg-stone-100 p-2 rounded-xl ">
+          <div className="banner--content__input flex mt-40 rounded-2xl justify-center items-center w-full">
+            <div className="flex flex-col md:flex-row items-center gap-4 bg-stone-100 p-2 rounded-xl w-[90%] md:w-fit">
               <div className="">
                 <RiMapPinRangeFill className="text-green-900 cursor-pointer" />
               </div>
-              <label htmlFor="">
+              <label htmlFor="" className="w-full">
                 <input
                   type="text"
                   placeholder="Nhập tên sân hoặc địa chỉ sân muốn tìm kiếm"
-                  className="w-90 h-11 px-3 outline-0 border border-gray-300 rounded-xl"
+                  className="md:w-90 w-full h-11 px-3 outline-0 border border-gray-300 rounded-xl"
                 />
               </label>
-              <label htmlFor="">
+              <label htmlFor="" className="w-full">
                 <input
                   type="text"
                   placeholder="Nhập chi nhánh/khu vực của bạn"
-                  className="w-90 h-11 px-3 outline-0 border border-gray-300 rounded-2xl"
+                  className="md:w-90 w-full h-11 px-3 outline-0 border border-gray-300 rounded-2xl"
                 />
               </label>
-              <button className="px-4 py-2 bg-[#221f23] text-white rounded-2xl cursor-pointer duration-100 hover:bg-green-800">
+              <button className="w-full px-4 py-2 bg-[#221f23] text-white rounded-2xl cursor-pointer duration-100 hover:bg-green-800">
                 Tìm ngay
               </button>
             </div>

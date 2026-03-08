@@ -16,9 +16,11 @@ function FieldList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
+  // #region fetch fields list
   useEffect(() => {
     setloading(true);
     setError(null);
+    const controller = new AbortController();
     const fetchFildes = async (page = 1) => {
       try {
         const res = await fetch(
@@ -41,7 +43,9 @@ function FieldList() {
       }
     };
     fetchFildes(currentPage);
+    return () => controller.abort();
   }, [currentPage]);
+  // #endregion fetch fields list
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
@@ -66,7 +70,7 @@ function FieldList() {
           <h1 className="text-stone-900 font-bold text-3xl">DÀNH CHO BẠN</h1>
         </div>
         <main className="w-full mt-10">
-          <div className="grid grid-cols-3 gap-y-3 gap-x-2 w-full px-12 justify-center items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-3 gap-x-2 w-full px-12 justify-center items-center">
             {fields.map((f) => (
               <div
                 className="field--cart__container h-80 w-full relative rounded-2xl overflow-hidden group cursor-pointer"

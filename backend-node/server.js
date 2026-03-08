@@ -18,7 +18,7 @@ if (!process.env.JWT_SECRET) {
   return res.status(506).json({message: 'Cần cấu hình env'});
 }
 
-// Configure CORS using environment variables (FRONTEND_URL, ADMIN_URL)
+// #region Configure CORS using environment variables (FRONTEND_URL, ADMIN_URL)
 // Fall back to common localhost origins for development
 const allowedOrigins = [
   process.env.FRONTEND_URL,
@@ -49,6 +49,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+// #endregion Configure CORS using environment variables (FRONTEND_URL, ADMIN_URL)
 
 // Cấu hình Socket.io
 const io = new Server(server, { cors: corsOptions });
@@ -365,7 +366,7 @@ app.get("/api/booking/branch/:booking_id", auth, (req, res) => {
   });
 });
 
-// #Socket connection event
+// #region Socket connection event
 io.on("connection", (socket) => {
   console.log("A user connected: " + socket.id);
 
@@ -382,6 +383,7 @@ io.on("connection", (socket) => {
     console.log("A user disconnected: " + socket.id);
   });
 });
+// #endregion Socket connection event
 
 
 //# Route xác nhận booking (Chưa xác nhận => Đã xác nhận)
