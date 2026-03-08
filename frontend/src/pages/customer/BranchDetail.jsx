@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { data, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import useFieldsByBranches from "../../hooks/useFieldsByBranhesHook";
 
 function BranchDetail() {
   const { branch_id } = useParams();
@@ -13,15 +14,19 @@ function BranchDetail() {
   // state lưu dữ liệu chi nhánh
   const [branch, setBranch] = useState([]);
 
-  //state lưu danh sách sân bóng của branch này
-  const [fieldByBranch, setFieldByBranch] = useState([]);
+
+  // Lấy danh sách sân bóng của branch này bằng custom hook
+  const {
+    fieldsByBranch,
+    loading: loadingFields,
+    error: errorFields,
+    currentPage: currentFieldPage,
+    totalPages: totalFieldPages,
+    setCurrentPage: setCurrentFieldPage,
+  } = useFieldsByBranches({ branch_id });
 
   //state lưu danh sách reviews
   const [reviews, setReviews] = useState([]);
-
-  //state phân trang cho danh sách sân bóng
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
 
   //state phân trang cho reviews
   const [currentReviewPage, setCurrentReviewPage] = useState(1);
@@ -31,30 +36,7 @@ function BranchDetail() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // TODO: lấy danh sách sân bóng của chi nhánh này
-  const fetchFieldByBranch = useCallback(
-    async (page = 1) => {
-      try {
-        const res = await fetch(
-          `${API_BASE}?action=getById&branch_id=${branch_id}&limit=${LIMIT}&page=${page}`,
-        );
-        if (!res.ok) {
-          throw new Error("ERROR HTTP ", res.status);
-        }
 
-        const data = await res.json();
-        if (data.success) {
-          setFieldByBranch(data.data);
-          setTotalPages(data.total_pages || 1);
-          setLoading(false);
-        }
-      } catch (err) {
-        setError(err.message);
-        console.error("Error fetching field by branch ", err);
-      }
-    },
-    [branch_id],
-  );
 
   //TODO: Fetch reviews
   const fetchReviewsData = useCallback(
@@ -101,16 +83,15 @@ function BranchDetail() {
     }
   }, [branch_id]);
 
+
   // TODO: fetch data
   useEffect(() => {
     setLoading(true);
-    fetchFieldByBranch(currentPage);
     fetchReviewsData(currentReviewPage);
     fetchBranchData();
+    setLoading(false);
   }, [
-    currentPage,
     branch_id,
-    fetchFieldByBranch,
     fetchReviewsData,
     currentReviewPage,
     fetchBranchData,
@@ -119,7 +100,7 @@ function BranchDetail() {
   return (
     <>
       {error && <div>{error}</div>}
-      {loading ? (
+      {loading || loadingFields ? (
         <div>Loading</div>
       ) : (
         <div className="">
@@ -130,6 +111,19 @@ function BranchDetail() {
               {branch.open_time} - {branch.close_time}
             </p>
             <p>{branch.address}</p>
+          </div>
+          <div>
+            <h3>Danh sách sân bóng</h3>
+            {errorFields && <div>{errorFields}</div>}
+            <ul>
+              {fieldsByBranch && fieldsByBranch.length > 0 ? (
+                fieldsByBranch.map((field) => (
+                  <li key={field.field_id}>{field.field_name}</li>
+                ))
+              ) : (
+                <li>Không có sân bóng nào</li>
+              )}
+            </ul>
           </div>
         </div>
       )}
