@@ -8,10 +8,9 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8081";
 
 function Header() {
 
-    const {user, logout} = useContext(UserContext);
+    const {user} = useContext(UserContext);
     const navigate = useNavigate();
     const [unreadCount, setUnreadCount] = useState(0);
-    console.log("user.branch_id:", user?.branch_id);
 
     useEffect(() => {
       if (!user?.branch_id) return;
@@ -66,7 +65,7 @@ function Header() {
               Bookings
             </NavLink>
             <NavLink
-            to='/fields-branch_owner'
+            to={`/branch_owner/fieldsBranch/${user?.branch_id}`}
               className={({ isActive }) =>
                 `font-bold text-[#20ad84] text-sm px-4 py-0.5 rounded-2xl cursor-pointer hover:bg-[#28ad84] hover:text-white ${isActive ? "bg-[#20ad84] text-white" : ""}`
               }

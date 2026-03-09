@@ -186,7 +186,7 @@ function BookingListBranch() {
             onFetchBookings={fetchBookings}
             onClose={() => setBookingCardModal(false)}
           />
-        </>
+        </> 
       )}
     </>
   );

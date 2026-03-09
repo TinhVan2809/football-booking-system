@@ -100,7 +100,7 @@ function FieldsBranch() {
     fetchFieldsByBranch(currentPage);
   }, [API_BRANCH, LIMIT, branch_id, currentPage, refreshFieldsKey]);
 
-  //todo: Lấy danh sách lại sân
+  //todo: Lấy danh sách loại sân
   useEffect(() => {
     const fetchFieldTypes = async () => {
       setLoadingTypes(true);

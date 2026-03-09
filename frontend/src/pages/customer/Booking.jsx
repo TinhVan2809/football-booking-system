@@ -1,7 +1,7 @@
 // Trang booking chính
 
 import { useState, useEffect } from "react";
-import { data, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import CardSkeleton from "../../components/customer/CardSkeleton";
 import BookingModal from "../../components/customer/BookingModal";
 import { io } from "socket.io-client";

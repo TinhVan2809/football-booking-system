@@ -33,7 +33,8 @@ import DashbroadBranch from "../pages/branch_owner/Dashbroad";
 import { ServiceProvider } from "../context/ServiceContext";
 import BookingListBranch from "../pages/branch_owner/BookingListBranch";
 import BranchNotifications from "../pages/branch_owner/BranchNotifications";
-import ProfileManagement from "../pages/branch_owner/ProfileManagemnet";
+import ProfileManagement from "../pages/branch_owner/ProfileManagement";
+import FieldsManagement from "../pages/branch_owner/FieldsManagement";
 
 // *[Not found page]
 import NotFoundPage from "../pages/NotFoundPage";
@@ -129,6 +130,10 @@ export const router = createBrowserRouter([
           {
             path: "profileBranch/:user_id",
             element: <ProfileManagement />,
+          },
+          {
+            path: "fieldsBranch/:branch_id",
+            element: <FieldsManagement />
           },
         ],
       },

@@ -1,3 +1,5 @@
+// component card loading 
+
 function CardSkeleton() {
   return (
     <>
