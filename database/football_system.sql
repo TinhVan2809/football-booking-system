@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th2 06, 2026 lúc 12:59 PM
+-- Thời gian đã tạo: Th3 10, 2026 lúc 08:11 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
--- Phiên bản PHP: 8.0.30
+-- Phiên bản PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -63,17 +63,34 @@ INSERT INTO `bookings` (`booking_id`, `field_field_type_id`, `booking_date`, `st
 (20, 1, '2026-02-04', '06:00:00', '16:00:00', 22, 600, 180000.00, 1800000.00, 1800000.00, 'completed', '2026-02-01 03:28:55'),
 (21, 1, '2026-02-04', '16:00:00', '22:00:00', 22, 360, 270000.00, 1620000.00, 1620000.00, 'completed', '2026-02-01 03:29:34'),
 (22, 1, '2026-02-01', '16:00:00', '22:00:00', 22, 360, 250000.00, 1500000.00, 1500000.00, 'completed', '2026-02-01 03:30:50'),
-(23, 1, '2026-02-01', '06:00:00', '16:00:00', 23, 600, 180000.00, 1800000.00, 1800000.00, 'pending', '2026-02-01 03:46:01'),
-(24, 1, '2026-02-05', '16:00:00', '22:00:00', 23, 360, 300000.00, 1800000.00, 1800000.00, 'confirmed', '2026-02-01 03:53:37'),
-(25, 1, '2026-02-02', '06:00:00', '16:00:00', 20, 600, 180000.00, 1800000.00, 2400000.00, 'pending', '2026-02-01 18:43:16'),
-(26, 1, '2026-02-05', '06:00:00', '16:00:00', 20, 600, 200000.00, 2000000.00, 2500000.00, 'pending', '2026-02-03 01:46:04'),
+(23, 1, '2026-02-01', '06:00:00', '16:00:00', 23, 600, 180000.00, 1800000.00, 1800000.00, 'completed', '2026-02-01 03:46:01'),
+(24, 1, '2026-02-05', '16:00:00', '22:00:00', 23, 360, 300000.00, 1800000.00, 1800000.00, 'completed', '2026-02-01 03:53:37'),
+(25, 1, '2026-02-02', '06:00:00', '16:00:00', 20, 600, 180000.00, 1800000.00, 2400000.00, 'completed', '2026-02-01 18:43:16'),
+(26, 1, '2026-02-05', '06:00:00', '16:00:00', 20, 600, 200000.00, 2000000.00, 2500000.00, 'completed', '2026-02-03 01:46:04'),
 (27, 1, '2026-02-01', '06:00:00', '16:00:00', 23, 600, 180000.00, 1800000.00, 1800000.00, 'cancelled', '2026-02-01 03:46:01'),
 (28, 1, '2026-02-06', '06:00:00', '16:00:00', 17, 600, 200000.00, 2000000.00, 2000000.00, 'completed', '2026-02-03 21:11:30'),
-(29, 1, '2026-02-04', '06:00:00', '15:03:00', 20, 543, 180000.00, 1629000.00, 1629000.00, 'pending', '2026-02-03 21:29:28'),
+(29, 1, '2026-02-04', '06:00:00', '15:03:00', 20, 543, 180000.00, 1629000.00, 1629000.00, 'completed', '2026-02-03 21:29:28'),
 (30, 1, '2026-02-06', '16:00:00', '22:00:00', 17, 360, 300000.00, 1800000.00, 1800000.00, 'completed', '2026-02-03 21:34:55'),
 (31, 1, '2026-02-08', '06:00:00', '22:00:00', 17, 960, 350000.00, 5600000.00, 5600000.00, 'completed', '2026-02-03 21:36:32'),
-(32, 1, '2026-02-04', '16:00:00', '22:00:00', 17, 360, 250000.00, 1500000.00, 1500000.00, 'pending', '2026-02-03 21:37:02'),
-(33, 1, '2026-02-07', '18:00:00', '21:00:00', 24, 180, 500000.00, 1500000.00, 1500000.00, 'pending', '2026-02-04 16:03:40');
+(32, 1, '2026-02-04', '16:00:00', '22:00:00', 17, 360, 250000.00, 1500000.00, 1500000.00, 'completed', '2026-02-03 21:37:02'),
+(33, 1, '2026-02-07', '18:00:00', '21:00:00', 24, 180, 500000.00, 1500000.00, 1500000.00, 'cancelled', '2026-02-04 16:03:40'),
+(34, 6, '2026-02-09', '06:00:00', '16:00:00', 20, 600, 180000.00, 1800000.00, 1800000.00, 'completed', '2026-02-07 20:52:56'),
+(35, 13, '2026-02-11', '06:00:00', '16:00:00', 20, 600, 300000.00, 3000000.00, 3000000.00, 'completed', '2026-02-07 20:53:55'),
+(36, 11, '2026-02-10', '06:00:00', '16:00:00', 20, 600, 180000.00, 1800000.00, 1800000.00, 'completed', '2026-02-07 20:54:24'),
+(37, 11, '2026-02-12', '06:00:00', '16:00:00', 20, 600, 180000.00, 1800000.00, 1800000.00, 'completed', '2026-02-07 20:55:06'),
+(38, 4, '2026-02-26', '16:00:00', '22:00:00', 26, 360, 270000.00, 1620000.00, 1620000.00, 'pending', '2026-02-24 21:32:52'),
+(39, 10, '2026-03-04', '16:00:00', '22:00:00', 20, 360, 170000.00, 1020000.00, 1020000.00, 'pending', '2026-02-26 21:42:52'),
+(40, 2, '2026-02-28', '18:00:00', '21:00:00', 20, 180, 750000.00, 2250000.00, 2250000.00, 'completed', '2026-02-26 21:52:09'),
+(41, 2, '2026-03-04', '16:00:00', '22:00:00', 20, 360, 375000.00, 2250000.00, 2250000.00, 'completed', '2026-02-26 21:52:27'),
+(42, 2, '2026-03-03', '16:00:00', '22:00:00', 20, 360, 375000.00, 2250000.00, 2250000.00, 'completed', '2026-02-26 21:53:02'),
+(43, 2, '2026-03-02', '06:00:00', '16:00:00', 20, 600, 270000.00, 2700000.00, 2700000.00, 'completed', '2026-02-26 21:53:34'),
+(44, 2, '2026-03-02', '16:00:00', '22:00:00', 20, 360, 375000.00, 2250000.00, 2250000.00, 'completed', '2026-02-26 21:54:30'),
+(45, 11, '2026-02-27', '16:00:00', '22:00:00', 20, 360, 300000.00, 1800000.00, 1800000.00, 'pending', '2026-02-26 21:58:57'),
+(46, 5, '2026-03-04', '16:00:00', '22:00:00', 20, 360, 170000.00, 1020000.00, 1020000.00, 'pending', '2026-02-28 23:16:24'),
+(47, 4, '2026-03-02', '16:00:00', '22:00:00', 20, 360, 250000.00, 1500000.00, 1500000.00, 'pending', '2026-02-28 23:19:50'),
+(48, 1, '2026-03-08', '06:00:00', '22:00:00', 20, 960, 350000.00, 5600000.00, 5600000.00, 'completed', '2026-03-04 23:17:25'),
+(49, 1, '2026-03-11', '16:00:00', '22:00:00', 27, 360, 250000.00, 1500000.00, 1500000.00, 'completed', '2026-03-05 13:02:07'),
+(50, 1, '2026-03-14', '06:00:00', '22:00:00', 20, 960, 350000.00, 5600000.00, 5600000.00, 'pending', '2026-03-11 00:27:37');
 
 -- --------------------------------------------------------
 
@@ -113,18 +130,19 @@ CREATE TABLE `branches` (
   `open_time` time DEFAULT NULL,
   `close_time` time DEFAULT NULL,
   `status` tinyint(4) DEFAULT 1,
-  `created_at` datetime DEFAULT current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `thumbnail` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Chi nhánh mỗi chi nhánh có thể có nhiều sân, mỗi sân 1 chi nhánh';
 
 --
 -- Đang đổ dữ liệu cho bảng `branches`
 --
 
-INSERT INTO `branches` (`branch_id`, `branch_name`, `address`, `phone`, `open_time`, `close_time`, `status`, `created_at`) VALUES
-(1, 'Sân bóng Cái Răng Central', 'Đường Võ Nguyên Giáp, P. Phú Thứ, Q. Cái Răng, TP. Cần Thơ', '02923 888 111', '06:00:00', '22:00:00', 1, '2026-01-18 17:40:28'),
-(2, 'Sân bóng Phú Thứ', 'KDC Phú An, P. Phú Thứ, Q. Cái Răng, TP. Cần Thơ', '02923 888 222', '05:30:00', '23:00:00', 1, '2026-01-18 17:40:28'),
-(3, 'Sân bóng Hưng Phú', 'Đường Nguyễn Văn Linh, P. Hưng Phú, Q. Cái Răng, TP. Cần Thơ', '02923 888 333', '06:00:00', '22:30:00', 1, '2026-01-18 17:40:28'),
-(4, 'Sân bóng Trần Hoàng Na', 'Đường Trần Hoàng Na, P. Hưng Thạnh, Q. Cái Răng, TP. Cần Thơ', '02923 888 444', '06:00:00', '21:30:00', 1, '2026-01-18 17:40:28');
+INSERT INTO `branches` (`branch_id`, `branch_name`, `address`, `phone`, `open_time`, `close_time`, `status`, `created_at`, `thumbnail`) VALUES
+(1, 'Sân bóng Cái Răng Central', 'Đường Võ Nguyên Giáp, P. Phú Thứ, Q. Cái Răng, TP. Cần Thơ', '02923 888 111', '06:00:00', '22:00:00', 1, '2026-01-18 17:40:28', NULL),
+(2, 'Sân bóng Phú Thứ', 'KDC Phú An, P. Phú Thứ, Q. Cái Răng, TP. Cần Thơ', '02923 888 222', '05:30:00', '23:00:00', 1, '2026-01-18 17:40:28', NULL),
+(3, 'Sân bóng Hưng Phú', 'Đường Nguyễn Văn Linh, P. Hưng Phú, Q. Cái Răng, TP. Cần Thơ', '02923 888 333', '06:00:00', '22:30:00', 1, '2026-01-18 17:40:28', NULL),
+(4, 'Sân bóng Trần Hoàng Na', 'Đường Trần Hoàng Na, P. Hưng Thạnh, Q. Cái Răng, TP. Cần Thơ', '02923 888 444', '06:00:00', '21:30:00', 1, '2026-01-18 17:40:28', NULL);
 
 -- --------------------------------------------------------
 
@@ -146,7 +164,18 @@ CREATE TABLE `branch_notifications` (
 --
 
 INSERT INTO `branch_notifications` (`branch_notification_id`, `branch_id`, `booking_id`, `content`, `created_at`, `is_read`) VALUES
-(5, 3, 33, 'Co khach dat Sân 1A - Sân 5 người ngay 2026-02-07 luc 18:00', '2026-02-04 09:03:40', 0);
+(6, 2, 34, 'Co khach dat Sân 2A - Sân 11 người ngay 2026-02-09 luc 06:00', '2026-02-07 13:52:56', 0),
+(7, 1, 35, 'Co khach dat Sân 3C - Sân 7 người ngay 2026-02-11 luc 06:00', '2026-02-07 13:53:55', 0),
+(8, 1, 36, 'Co khach dat VIP2 - Sân 11 người ngay 2026-02-10 luc 06:00', '2026-02-07 13:54:24', 0),
+(9, 1, 37, 'Co khach dat VIP2 - Sân 11 người ngay 2026-02-12 luc 06:00', '2026-02-07 13:55:06', 0),
+(10, 1, 38, 'Co khach dat Sân 1B - Sân 5 người ngay 2026-02-26 luc 16:00', '2026-02-24 14:32:52', 0),
+(11, 1, 39, 'Co khach dat VIP2 - Sân 7 người ngay 2026-03-04 luc 16:00', '2026-02-26 14:42:52', 0),
+(17, 1, 45, 'Co khach dat VIP2 - Sân 11 người ngay 2026-02-27 luc 16:00', '2026-02-26 14:58:57', 0),
+(18, 1, 46, 'Co khach dat Sân 1B - Sân 7 người ngay 2026-03-04 luc 16:00', '2026-02-28 16:16:24', 0),
+(19, 1, 47, 'Co khach dat Sân 1B - Sân 5 người ngay 2026-03-02 luc 16:00', '2026-02-28 16:19:50', 0),
+(20, 3, 48, 'Co khach dat Sân 1A - Sân 5 người ngay 2026-03-08 luc 06:00', '2026-03-04 16:17:25', 0),
+(21, 3, 49, 'Co khach dat Sân 1A - Sân 5 người ngay 2026-03-11 luc 16:00', '2026-03-05 06:02:07', 0),
+(22, 3, 50, 'Co khach dat Sân 1A - Sân 5 người ngay 2026-03-14 luc 06:00', '2026-03-10 17:27:37', 0);
 
 -- --------------------------------------------------------
 
@@ -213,8 +242,8 @@ INSERT INTO `fields` (`field_id`, `branch_id`, `field_name`, `thumbnail`, `statu
 (4, 2, 'Sân 2B', 'pexels-pixabay-47730.jpg', 'maintenance', 'Sân 7 người đang bảo trì', '2026-01-19 04:57:41'),
 (5, 4, 'VIP1', 'pexels-pixabay-47730.jpg', 'available', 'Sân 11 người VIP, cỏ cao cấp', '2026-01-19 04:57:41'),
 (6, 1, 'VIP2', 'pexels-pixabay-47730.jpg', 'available', 'Sân 11 người VIP, có đèn ban đêm', '2026-01-19 04:57:41'),
-(7, 1, 'Sân 3C', NULL, 'available', '', '2026-02-05 19:13:09'),
-(8, 1, 'Sân 3D', NULL, 'available', '', '2026-02-05 19:19:25');
+(7, 1, 'Sân 3C', 'pexels-pixabay-47730.jpg', 'available', '', '2026-02-05 19:13:09'),
+(8, 1, 'Sân 3D', 'pexels-pixabay-47730.jpg', 'available', '', '2026-02-05 19:19:25');
 
 -- --------------------------------------------------------
 
@@ -524,7 +553,24 @@ INSERT INTO `notifications` (`notification_id`, `user_id`, `content`, `create_at
 (21, 17, 'Bạn đã đặt sân thành công (ID: 30) vào ngày 2026-02-06 lúc 16:00', '2026-02-03 14:34:55'),
 (22, 17, 'Bạn đã đặt sân thành công (ID: 31) vào ngày 2026-02-08 lúc 06:00', '2026-02-03 14:36:32'),
 (23, 17, 'Bạn đã đặt sân thành công (ID: 32) vào ngày 2026-02-04 lúc 16:00', '2026-02-03 14:37:02'),
-(24, 24, 'Bạn đã đặt sân thành công (ID: 33) vào ngày 2026-02-07 lúc 18:00', '2026-02-04 09:03:40');
+(24, 24, 'Bạn đã đặt sân thành công (ID: 33) vào ngày 2026-02-07 lúc 18:00', '2026-02-04 09:03:40'),
+(25, 20, 'Bạn đã đặt sân thành công (ID: 34) vào ngày 2026-02-09 lúc 06:00', '2026-02-07 13:52:56'),
+(26, 20, 'Bạn đã đặt sân thành công (ID: 35) vào ngày 2026-02-11 lúc 06:00', '2026-02-07 13:53:55'),
+(27, 20, 'Bạn đã đặt sân thành công (ID: 36) vào ngày 2026-02-10 lúc 06:00', '2026-02-07 13:54:24'),
+(28, 20, 'Bạn đã đặt sân thành công (ID: 37) vào ngày 2026-02-12 lúc 06:00', '2026-02-07 13:55:06'),
+(29, 26, 'Bạn đã đặt sân thành công (ID: 38) vào ngày 2026-02-26 lúc 16:00', '2026-02-24 14:32:52'),
+(30, 20, 'Bạn đã đặt sân thành công (ID: 39) vào ngày 2026-03-04 lúc 16:00', '2026-02-26 14:42:52'),
+(31, 20, 'Bạn đã đặt sân thành công (ID: 40) vào ngày 2026-02-28 lúc 18:00', '2026-02-26 14:52:09'),
+(32, 20, 'Bạn đã đặt sân thành công (ID: 41) vào ngày 2026-03-04 lúc 16:00', '2026-02-26 14:52:27'),
+(33, 20, 'Bạn đã đặt sân thành công (ID: 42) vào ngày 2026-03-03 lúc 16:00', '2026-02-26 14:53:02'),
+(34, 20, 'Bạn đã đặt sân thành công (ID: 43) vào ngày 2026-03-02 lúc 06:00', '2026-02-26 14:53:34'),
+(35, 20, 'Bạn đã đặt sân thành công (ID: 44) vào ngày 2026-03-02 lúc 16:00', '2026-02-26 14:54:30'),
+(36, 20, 'Bạn đã đặt sân thành công (ID: 45) vào ngày 2026-02-27 lúc 16:00', '2026-02-26 14:58:57'),
+(37, 20, 'Bạn đã đặt sân thành công (ID: 46) vào ngày 2026-03-04 lúc 16:00', '2026-02-28 16:16:24'),
+(38, 20, 'Bạn đã đặt sân thành công (ID: 47) vào ngày 2026-03-02 lúc 16:00', '2026-02-28 16:19:50'),
+(39, 20, 'Bạn đã đặt sân thành công (ID: 48) vào ngày 2026-03-08 lúc 06:00', '2026-03-04 16:17:25'),
+(40, 27, 'Bạn đã đặt sân thành công (ID: 49) vào ngày 2026-03-11 lúc 16:00', '2026-03-05 06:02:07'),
+(41, 20, 'Bạn đã đặt sân thành công (ID: 50) vào ngày 2026-03-14 lúc 06:00', '2026-03-10 17:27:37');
 
 -- --------------------------------------------------------
 
@@ -574,7 +620,24 @@ INSERT INTO `payments` (`payment_id`, `booking_id`, `amount`, `payment_method`, 
 (27, 30, 1800000.00, 'cash', 'unpaid', '2026-02-03 14:34:55', 'Chờ thanh toán', 17),
 (28, 31, 5600000.00, 'cash', 'unpaid', '2026-02-03 14:36:32', 'Chờ thanh toán', 17),
 (29, 32, 1500000.00, 'cash', 'unpaid', '2026-02-03 14:37:02', 'Chờ thanh toán', 17),
-(30, 33, 1500000.00, 'cash', 'unpaid', '2026-02-04 09:03:40', 'Chờ thanh toán', 24);
+(30, 33, 1500000.00, 'cash', 'unpaid', '2026-02-04 09:03:40', 'Chờ thanh toán', 24),
+(31, 34, 1800000.00, 'cash', 'unpaid', '2026-02-07 13:52:56', 'Chờ thanh toán', 20),
+(32, 35, 3000000.00, 'cash', 'unpaid', '2026-02-07 13:53:55', 'Chờ thanh toán', 20),
+(33, 36, 1800000.00, 'cash', 'unpaid', '2026-02-07 13:54:24', 'Chờ thanh toán', 20),
+(34, 37, 1800000.00, 'cash', 'unpaid', '2026-02-07 13:55:06', 'Chờ thanh toán', 20),
+(35, 38, 1620000.00, 'cash', 'unpaid', '2026-02-24 14:32:52', 'Chờ thanh toán', 26),
+(36, 39, 1020000.00, 'cash', 'unpaid', '2026-02-26 14:42:52', 'Chờ thanh toán', 20),
+(37, 40, 2250000.00, 'cash', 'unpaid', '2026-02-26 14:52:09', 'Chờ thanh toán', 20),
+(38, 41, 2250000.00, 'cash', 'unpaid', '2026-02-26 14:52:27', 'Chờ thanh toán', 20),
+(39, 42, 2250000.00, 'cash', 'unpaid', '2026-02-26 14:53:02', 'Chờ thanh toán', 20),
+(40, 43, 2700000.00, 'cash', 'unpaid', '2026-02-26 14:53:34', 'Chờ thanh toán', 20),
+(41, 44, 2250000.00, 'cash', 'unpaid', '2026-02-26 14:54:30', 'Chờ thanh toán', 20),
+(42, 45, 1800000.00, 'cash', 'unpaid', '2026-02-26 14:58:57', 'Chờ thanh toán', 20),
+(43, 46, 1020000.00, 'cash', 'unpaid', '2026-02-28 16:16:24', 'Chờ thanh toán', 20),
+(44, 47, 1500000.00, 'cash', 'unpaid', '2026-02-28 16:19:50', 'Chờ thanh toán', 20),
+(45, 48, 5600000.00, 'cash', 'unpaid', '2026-03-04 16:17:25', 'Chờ thanh toán', 20),
+(46, 49, 1500000.00, 'cash', 'unpaid', '2026-03-05 06:02:07', 'Chờ thanh toán', 27),
+(47, 50, 5600000.00, 'cash', 'unpaid', '2026-03-10 17:27:37', 'Chờ thanh toán', 20);
 
 -- --------------------------------------------------------
 
@@ -646,16 +709,18 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `password`, `full_name`, `phone`, `avata`, `email`, `role`, `status`, `created_at`, `branch_id`) VALUES
-(15, 'admin1', '$2b$10$ZLJd3EiPZ1pjINpmSFVILOXxo4R6MuguMDlVNL89vj6NgBQc5y8Zy', 'Lữ Văn Tính', '0818177533', NULL, 'tinhlu703@gmail.com', 'admin', 1, '2026-01-18 19:37:52', NULL),
-(16, 'Tính Văn', '$2b$10$0kmys1ZlRkPp2rHHWGKy6.O3e1ERQoYzAiKX3B27Fvd1AeE69bkBW', 'Lữ Văn Tính', '0818177533', NULL, 'tinhlu703@gmail.com', 'customer', 1, '2026-01-18 20:15:18', NULL),
-(17, 'tinh@gmail.com', '$2b$10$YmL9GOMpJRRKH/wU8Ipbwe92790N.0fG3cBoLtsZfTcaWYTv0aY6S', 'Lữ Văn Tính', '0818177533', NULL, 'tinhlu703@gmail.com', 'branch_owner', 1, '2026-01-19 10:50:23', 3),
-(18, 'Hasekimagru', '$2b$10$0VOpSkDgZUI.EFMafg/DRODntwxtVg2DAw2UVJyqhDew6hUhOQsie', 'tinh van', '0818177533', NULL, 'tinhlu703@gmail.com', 'customer', 1, '2026-01-20 12:08:09', NULL),
-(19, 'Admin', '$2b$10$BDppk9El5d5ejJb1D.RP3.IHaebU2MFs5fo3SOsFuP0OQ/UqSRjH2', 'tinh van', '0818177533', NULL, 'tinhlu703@gmail.com', 'customer', 1, '2026-01-20 15:02:06', NULL),
-(20, 'tinhvan', '$2b$10$ZeK2WulmDmzvHYLndT9za.VxX2P8UAcU6Ph/TQ69nBVAO5jzW3lPK', 'Tính Văn ', '0813502953', NULL, 'tinhlu703@gmail.com', 'customer', 1, '2026-01-20 15:25:35', NULL),
-(21, 'vantinh', '$2b$10$GPPR8TtQVDGCN/YtOXR5GOi0diZCY4YrIYakDozf54n/gZkiTngf2', 'tinh van', '0818177533', NULL, 'tinhlu703@gmail.com', 'customer', 1, '2026-01-21 11:21:26', NULL),
-(22, 'tinhlu703@gmail.com', '$2b$10$Wx0kw3NrKUzxhg1Mpy4IieJqCnyffjVBdfQ2RE8ePhIPsos6iLO82', 'Lữ Văn Tính', '0818177533', NULL, 'tinhlu703@gmail.com', 'customer', 1, '2026-02-01 02:16:24', NULL),
-(23, 'tinhvanlu', '$2b$10$X70e60AfY6mlBtFE3tqAQ.s5rVGrVeP1CejUQ5y5i8EE8YcT0QXum', 'tinhvanlu', '0818177533', NULL, 'tinhlu263@gmail.com', 'customer', 1, '2026-02-01 03:45:28', NULL),
-(24, 'huygia', '$2b$10$t5gb0FIolLObFHXG37Q0K.0mpmDodrfaz3Bqpxus1oZH89Vbu2UGm', 'huy huy', '0818177533', NULL, 'huymoba27@gmail.com', 'customer', 1, '2026-02-04 16:02:16', NULL);
+(15, 'admin1', '$2b$10$ZLJd3EiPZ1pjINpmSFVILOXxo4R6MuguMDlVNL89vj6NgBQc5y8Zy', 'Lữ Văn Tính', '0818177533', '491510680_18002017331672055_5308144228321480053_n.jpg', 'tinhlu703@gmail.com', 'admin', 1, '2026-01-18 19:37:52', NULL),
+(16, 'Tính Văn', '$2b$10$0kmys1ZlRkPp2rHHWGKy6.O3e1ERQoYzAiKX3B27Fvd1AeE69bkBW', 'Lữ Văn Tính', '0818177533', '491510680_18002017331672055_5308144228321480053_n.jpg', 'tinhlu703@gmail.com', 'customer', 1, '2026-01-18 20:15:18', NULL),
+(17, 'tinh@gmail.com', '$2b$10$YmL9GOMpJRRKH/wU8Ipbwe92790N.0fG3cBoLtsZfTcaWYTv0aY6S', 'Lữ Văn Tính', '0818177533', '491510680_18002017331672055_5308144228321480053_n.jpg', 'tinhlu703@gmail.com', 'branch_owner', 1, '2026-01-19 10:50:23', 3),
+(18, 'Hasekimagru', '$2b$10$0VOpSkDgZUI.EFMafg/DRODntwxtVg2DAw2UVJyqhDew6hUhOQsie', 'tinh van', '0818177533', '491510680_18002017331672055_5308144228321480053_n.jpg', 'tinhlu703@gmail.com', 'customer', 1, '2026-01-20 12:08:09', NULL),
+(19, 'Admin', '$2b$10$BDppk9El5d5ejJb1D.RP3.IHaebU2MFs5fo3SOsFuP0OQ/UqSRjH2', 'tinh van', '0818177533', '491510680_18002017331672055_5308144228321480053_n.jpg', 'tinhlu703@gmail.com', 'customer', 1, '2026-01-20 15:02:06', NULL),
+(20, 'tinhvan', '$2b$10$ZeK2WulmDmzvHYLndT9za.VxX2P8UAcU6Ph/TQ69nBVAO5jzW3lPK', 'Tính Văn ', '0813502953', '491510680_18002017331672055_5308144228321480053_n.jpg', 'tinhlu703@gmail.com', 'customer', 1, '2026-01-20 15:25:35', NULL),
+(21, 'vantinh', '$2b$10$GPPR8TtQVDGCN/YtOXR5GOi0diZCY4YrIYakDozf54n/gZkiTngf2', 'tinh van', '0818177533', '491510680_18002017331672055_5308144228321480053_n.jpg', 'tinhlu703@gmail.com', 'customer', 1, '2026-01-21 11:21:26', NULL),
+(22, 'tinhlu703@gmail.com', '$2b$10$Wx0kw3NrKUzxhg1Mpy4IieJqCnyffjVBdfQ2RE8ePhIPsos6iLO82', 'Lữ Văn Tính', '0818177533', '491510680_18002017331672055_5308144228321480053_n.jpg', 'tinhlu703@gmail.com', 'customer', 1, '2026-02-01 02:16:24', NULL),
+(23, 'tinhvanlu', '$2b$10$X70e60AfY6mlBtFE3tqAQ.s5rVGrVeP1CejUQ5y5i8EE8YcT0QXum', 'tinhvanlu', '0818177533', '491510680_18002017331672055_5308144228321480053_n.jpg', 'tinhlu263@gmail.com', 'customer', 1, '2026-02-01 03:45:28', NULL),
+(24, 'huygia', '$2b$10$t5gb0FIolLObFHXG37Q0K.0mpmDodrfaz3Bqpxus1oZH89Vbu2UGm', 'huy huy', '0818177533', '491510680_18002017331672055_5308144228321480053_n.jpg', 'huymoba27@gmail.com', 'customer', 1, '2026-02-04 16:02:16', NULL),
+(26, 'huylu', '$2b$10$lSKD//e7vhBgwAN1ZttMl.6rwX1ZUN5.Iwib6m1wSYDEwmrn/iBLW', 'Nguyen', '0818177533', '491510680_18002017331672055_5308144228321480053_n.jpg', 'ttnguyen-cntt17@tdu.edu.vn', 'customer', 1, '2026-02-24 21:32:06', NULL),
+(27, 'tinh', '$2b$10$AQ95fyiPQdIHRpbMajlR/ezPFPs9QsqBS8KzH5Tgf/1HGJwp7PHoq', 'Tính Văn', '08181177533', '491510680_18002017331672055_5308144228321480053_n.jpg', 'tathainguyen68@gmail.com', 'customer', 1, '2026-03-05 13:01:18', NULL);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -668,7 +733,8 @@ ALTER TABLE `bookings`
   ADD PRIMARY KEY (`booking_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `idx_booking_time` (`booking_date`,`start_time`,`end_time`),
-  ADD KEY `FK_Booking_FieldFieldType` (`field_field_type_id`);
+  ADD KEY `FK_Booking_FieldFieldType` (`field_field_type_id`),
+  ADD KEY `idx_revenueBookings` (`final_price`);
 
 --
 -- Chỉ mục cho bảng `booking_services`
@@ -785,7 +851,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT cho bảng `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT cho bảng `booking_services`
@@ -803,7 +869,7 @@ ALTER TABLE `branches`
 -- AUTO_INCREMENT cho bảng `branch_notifications`
 --
 ALTER TABLE `branch_notifications`
-  MODIFY `branch_notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `branch_notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT cho bảng `branch_services`
@@ -845,13 +911,13 @@ ALTER TABLE `field_types`
 -- AUTO_INCREMENT cho bảng `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT cho bảng `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT cho bảng `reviews`
@@ -869,7 +935,7 @@ ALTER TABLE `services`
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
