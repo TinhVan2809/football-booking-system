@@ -1,4 +1,4 @@
-## MYSQL 8.0.30
+## MYSQL php version 8.2.12
 1.  **Tạo DB** 
 ```
 CREATE DATABASE football_system;
