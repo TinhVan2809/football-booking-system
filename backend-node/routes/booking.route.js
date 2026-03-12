@@ -244,6 +244,16 @@ router.post("/create", verifyToken, async (req, res) => {
                                     <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Tổng tiền:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd; color: #d32f2f; font-weight: bold;">${new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(final_price)}</td></tr>
                                 </table>
 
+                                <div style="widthL 100%; margin-top: 2rem; display: flex; justify-content: center; alight-items: center; gap: 5px">
+                                  <img src="cid:qrcode" style="width: 100%; height: auto; display: block; margin: 0 auto;" />
+                                  
+                                  <div style="display: flex; justify-content: center; flex-direction: column alight-items: center; gap: 3px">
+                                    <p>Bạn vui lòng đặt cọc để được giữ sân nhé</p>
+                                    <p>Nội dung chuyển khoản:</p>
+                                     <strong style="font-size: 2rem">[Tên_của_bạn]_${newBookingId}_${new Intl.NumberFormat("vi-VN").format(final_price * (50/100))}</strong>
+                                  </div>
+                                </div>
+
                                 ${servicesHtml}
 
                                 <p style="margin-top: 20px; text-align: center; color: #757575;">Vui lòng đến đúng giờ. Chúc bạn có trận đấu vui vẻ!</p>
@@ -266,6 +276,14 @@ router.post("/create", verifyToken, async (req, res) => {
                           "../../frontend/assets/pexels-anaussieinvietnam-33370012.jpg",
                         ), // Đường dẫn tuyệt đối tới file ảnh
                         cid: "field_bg", // Content-ID để tham chiếu trong thẻ img src="cid:..."
+                      },
+                      {
+                        filename: "z6585034699868_cf9fa8ade72b0fcc7bf6755cb3a180d8.jpg",
+                        path: path.join(
+                          __dirname,
+                          "../../frontend/assets/z6585034699868_cf9fa8ade72b0fcc7bf6755cb3a180d8.jpg",
+                        ),
+                        cid: "qrcode",
                       },
                     ],
                   };

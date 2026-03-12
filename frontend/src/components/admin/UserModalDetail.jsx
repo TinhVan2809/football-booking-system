@@ -69,6 +69,9 @@ function UserModalDetail({ user_id, close }) {
   if (!user) {
     return null;
   }
+  if(loadingBooking) {
+    return <p>Loading</p>
+  }
 
   return (
     <>
