@@ -34,13 +34,6 @@ function Booking() {
   // State lưu trạng thái đặt sân thành công
   const [successBooking, setSuccessBooking] = useState(false);
 
-  // Tự động ẩn toast sau 2s nếu successBooking = true
-  useEffect(() => {
-    if (successBooking) {
-      const timer = setTimeout(() => setSuccessBooking(false), 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [successBooking]);
 
   // Socket setup
   useEffect(() => {
@@ -219,12 +212,8 @@ function Booking() {
       });
 
       const data = await res.json();
-      if (res.ok) {
-        // alert("Đặt sân thành công! Mã đơn: " + data.booking_id);
+      if (res.ok) { 
         setSuccessBooking(true);
-        // setTimeout(() => {
-        //   setSuccessBooking(false);
-        // },2000);
         setIsModalOpen(false);
       } else {
         alert("Lỗi: " + data.message);
@@ -238,17 +227,6 @@ function Booking() {
   return (
     <>
       <div className="container mx-auto md:p-8">
-        <div className="bg-black/70 w-fit p-4 rounded-2xl flex flex-col gap-3 justify-center items-center">
-          <h1 className="text-white">Bảng giá & Khung giờ</h1>
-          <div className="rounded-2xl text-white flex gap-2">
-            <span className="bg-green-600 rounded-2xl px-3 py-1">
-              {fieldInfo?.field_name}
-            </span>
-            <span className="bg-red-700 rounded-2xl px-3 py-1">
-              Loại {fieldInfo?.type_name}
-            </span>
-          </div>
-        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading
             ? Array.from({ length: 3 }).map((_, index) => (
@@ -300,8 +278,9 @@ function Booking() {
       {/* Toast thông báo đặt sân thành công */}
       {successBooking && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-green-500 text-white px-8 py-4 rounded-lg shadow-lg text-lg animate-bounce">
-            Đặt sân thành công!
+          <div className="bg-green-500 text-white px-8 py-4 rounded-lg shadow-lg text-lg flex flex-col gap-5 ">
+            <p>Vui lòng kiểm tra mail để dặt cọc giữ sân nha 😁😁</p>
+            <button onClick={() => setSuccessBooking(false)} className="bg-white text-black px-1.5 rounded-sm cursor-pointer w-fit">OK</button>
           </div>
         </div>
       )}

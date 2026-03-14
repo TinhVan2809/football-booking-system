@@ -18,6 +18,7 @@ import BranchDetail from "../pages/customer/BranchDetail";
 import Search from "../pages/customer/Search";
 import Booking from "../pages/customer/Booking";
 import Profile from "../pages/customer/Profile";
+import NotificationsUsers from "../components/customer/NotificationsUsers";
 
 // *[ADMIN]
 import Dashbroad from "../pages/admin/Dashbroad";
@@ -38,6 +39,7 @@ import FieldsManagement from "../pages/branch_owner/FieldsManagement";
 
 // *[Not found page]
 import NotFoundPage from "../pages/NotFoundPage";
+
 
 //------------------ PAGES/LAYOUTD/COMPOENTS...-----------------------//
 
@@ -64,6 +66,7 @@ export const router = createBrowserRouter([
           { path: "search", element: <Search /> },
           { path: "booking/:field_field_type_id", element: <Booking /> },
           { path: "profile/:user_id", element: <Profile /> },
+          { path: "notifications/:user_id", element: <NotificationsUsers /> },
         ],
       },
       {

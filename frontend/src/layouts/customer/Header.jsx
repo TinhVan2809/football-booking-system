@@ -53,7 +53,7 @@ function Header() {
 
         {user ? (
           <div className="hidden lg:flex justify-center items-center gap-4">
-            <div className="relative py-1 px-1 cursor-pointer">
+            <div className="relative py-1 px-1 cursor-pointer" onClick={() => navigate(`/notifications/${user.user_id}`)}>
               <RiNotification2Line color="#272727" />
               <sup className="absolute top-0 right-0 bg-red-500 w-4 h-3.5 rounded-2xl flex justify-center items-center text-white">
                 1

@@ -436,12 +436,30 @@ app.post("/cancelled-bookings/:booking_id", auth, (req, res) => {
     (err, rows) => {
       if(err) {
         console.error(err);
-        return res.status.json({message: "Lỗi khi update hủy bookings"});
+        return res.status(500).json({message: "Lỗi khi update hủy bookings"});
       }
       res.json({success: true, bookings: rows});
     }
   );
 });
+
+//# Route lấy danh sách thông báo của users
+app.post("/notifications/:user_id", auth, (req,res) => {
+  const {user_id} = req.params;
+  if(!user_id) return res.status(400).json("Thiếu user_id");
+
+  db.query(
+    "SELECT notification_id, content, create_at FROM notifications WHERE user_id = ?", 
+    [user_id],
+    (err, rows) => {
+      if(err) {
+        console.error(err);
+        return res.status(500).json({message: "Lỗi khi lấy danh sách thông báo của khách hàng."});
+      }
+      res.json({success: true, notifications: rows});
+    }
+  )
+})
 
 const PORT = process.env.PORT || 8081; // Fallback port 8081 nếu env lỗi
 server.listen(PORT, () => {
