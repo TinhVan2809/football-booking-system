@@ -49,7 +49,7 @@ header('Content-Type: application/json');
 
 try {
 
-$action = $_REQUEST['action'] ?? null;
+    $action = $_REQUEST['action'] ?? null;
     $action = is_string($action) ? trim(filter_var($action, FILTER_SANITIZE_FULL_SPECIAL_CHARS)) : null;
 
     if (!$action) {
@@ -60,17 +60,17 @@ $action = $_REQUEST['action'] ?? null;
 
     $profile = new Profile();
 
-switch ($action) {
+    switch ($action) {
 
-        case "get" :
+        case "get":
             $page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT, ['options' => ['default' => 1, 'min_range' => 1]]) ?: 1;
             $limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT, ['options' => ['default' => 20, 'min_range' => 1]]) ?: 20;
             $user_id = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
 
             $offset = ($page - 1) * $limit;
-            $totalItems =$profile->coutBookingByUser($user_id);
+            $totalItems = $profile->coutBookingByUser($user_id);
             $totalPages = ceil($totalItems / $limit);
-            $data =$profile->getBookingsByUser($user_id, $limit, $offset);
+            $data = $profile->getBookingsByUser($user_id, $limit, $offset);
 
             sendJson([
                 'success' => true,
@@ -81,15 +81,41 @@ switch ($action) {
                 'limit' => $limit
             ]);
             break;
-    
 
-            default: 
+        case "detail":
+            $user_id = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
+            $booking_id = filter_input(INPUT_POST, 'booking_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'booking_id', FILTER_VALIDATE_INT);
+
+            $data = $profile->getDetaiBookingByUserAndBooking($user_id, $booking_id);
+            // Nếu $data là mảng có 1 phần tử, trả về phần tử đó
+            if (is_array($data) && count($data) === 1) {
+                $data = $data[0];
+            }
+            sendJson([
+                'success' => true,
+                'data' => $data
+            ]);
+            break;
+
+        case "services":
+            $booking_id = filter_input(INPUT_POST, 'booking_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'booking_id', FILTER_VALIDATE_INT);
+            $user_id = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
+
+            $data = $profile->getServiceByBooking($booking_id, $user_id);
+           
+            sendJson([
+                'success' => true,
+                'data' => $data
+            ]);
+            break;
+
+        default:
             http_response_code(400);
-                        echo json_encode(['success' => false, 'message' => 'Invalid action']);
-                        break;
-            }
-            } catch (PDOException $e) {
-                error_log('General Error in Cart_api_endpoint.php: ' . $e->getMessage());
-                http_response_code(500);
-                echo json_encode(['success' => false, 'message' => 'An unexpected error occurred']);
-            }
+            echo json_encode(['success' => false, 'message' => 'Invalid action']);
+            break;
+    }
+} catch (PDOException $e) {
+    error_log('General Error in Cart_api_endpoint.php: ' . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'An unexpected error occurred']);
+}

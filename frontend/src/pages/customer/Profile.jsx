@@ -10,6 +10,8 @@ import {
 } from "@remixicon/react";
 import UserContext from "../../context/UserContext";
 
+import DetailBooking from "../../components/customer/DetailBooking";
+
 function Profile() {
   const API_BASE =
     "http://localhost/football-booking-system/backend-php/profile/api.php";
@@ -24,13 +26,20 @@ function Profile() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
+  // state  lưu trạng thái chi tiết bookings
+  const [isOpenDetail, setIsOpenDetail] = useState(false);
+
+  // state lưu giá trị user_id và booking_id
+  const [selectedBookingId, setSelectedBookingId] = useState(null);
+
   const { logout } = useContext(UserContext);
 
   //TODO: Lấy dữ liệu user
-  const { user, loading: userLoading, error: userError } = useUserData(
-    user_id ? `${API_USER}?action=id&user_id=${user_id}` : null,
-
-  );
+  const {
+    user,
+    loading: userLoading,
+    error: userError,
+  } = useUserData(user_id ? `${API_USER}?action=id&user_id=${user_id}` : null);
 
   //TODO: lấy danh sách đơn đặt lịch thuê sân của người dùng này
   useEffect(() => {
@@ -62,7 +71,6 @@ function Profile() {
     fetchBookingByUserData(currentPage);
   }, [user_id, currentPage]);
 
-
   // Xử lý chuyển trang
   const handlePrevPage = () => {
     if (currentPage > 1) {
@@ -84,6 +92,17 @@ function Profile() {
   }
   if (!user) {
     return <div>User not found</div>;
+  }
+
+  // hàm mở xem chi tiết booking
+  const onOpentDetaiBooking = (booking_id) => {
+    setIsOpenDetail(true);
+    setSelectedBookingId(booking_id);
+  };
+  // Hàm đóng chi tiết booking 
+  const onCloseDetaiBooking = () => {
+    setIsOpenDetail(false);
+    setSelectedBookingId(null);
   }
 
   return (
@@ -125,7 +144,12 @@ function Profile() {
           <hr className="border border-gray-200" />
           <div className="flex mt-5 mb-5 justify-between items-center flex-col gap-3">
             <button className="border border-gray-300 w-full py-1">Edit</button>
-            <button className="border border-red-300 w-full py-1 text-red-300 cursor-pointer hover:bg-red-500 hover:text-white duration-200" onClick={logout}>Log out</button>
+            <button
+              className="border border-red-300 w-full py-1 text-red-300 cursor-pointer hover:bg-red-500 hover:text-white duration-200"
+              onClick={logout}
+            >
+              Log out
+            </button>
           </div>
         </div>
 
@@ -139,7 +163,12 @@ function Profile() {
                 />
                 <div className="absolute bottom-0 p-2 flex right-0 items-center justify-between w-full px-5">
                   <p className="text-white md:text-2xl">#{b.booking_id}</p>
-                  <button className="text-white bg-black/50 cursor-pointer rounded-2xl py-2 text-sm w-[40%]">Chi tiết</button>
+                  <button
+                    className="text-white bg-black/50 cursor-pointer rounded-2xl py-2 text-sm w-[40%]"
+                    onClick={() => onOpentDetaiBooking(b.booking_id)}
+                  >
+                    Chi tiết
+                  </button>
                 </div>
               </div>
             ))}
@@ -166,6 +195,10 @@ function Profile() {
           </div>
         </div>
       </div>
+
+      {isOpenDetail && (
+        <DetailBooking booking_id={selectedBookingId} user_id={user_id} close={onCloseDetaiBooking} />
+      )}
     </>
   );
 }
