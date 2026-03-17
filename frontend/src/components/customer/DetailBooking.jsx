@@ -35,6 +35,7 @@ function DetailBooking({ booking_id, user_id, close }) {
   }, [user_id, booking_id]);
 
   // TODO: fetch danh sách dịch vụ đi kèm theo booking
+  // ? Có thể Cần thêm phân trang
   const fetchServicesByBooking = useCallback(async () => {
     try {
       const res = await fetch(
@@ -58,6 +59,13 @@ function DetailBooking({ booking_id, user_id, close }) {
     fetchDetailBooking();
     fetchServicesByBooking();
   }, [user_id, booking_id, fetchDetailBooking, fetchServicesByBooking]);
+
+  if(loading) {
+    return <p>Loading...</p>
+  }
+  if(error) {
+    return <p>Faile to fetch: {error}</p>
+  }
 
   return (
     <>
