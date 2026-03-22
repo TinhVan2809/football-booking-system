@@ -244,10 +244,10 @@ router.post("/create", verifyToken, async (req, res) => {
                                     <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Tổng tiền:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd; color: #d32f2f; font-weight: bold;">${new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(final_price)}</td></tr>
                                 </table>
 
-                                <div style="width: 100%; margin-top: 2rem; display: flex; justify-content: center; alight-items: center; gap: 5px">
+                                <div>
                                   <img src="cid:qrcode" style="width: 100%; height: auto; display: block; margin: 0 auto;" />
                                   
-                                  <div style="display: flex; justify-content: center; flex-direction: column alight-items: center; gap: 3px; width: 100%">
+                                  <div>
                                     <p>Bạn vui lòng đặt cọc để được giữ sân nhé</p>
                                     <p>Nội dung chuyển khoản:</p>
                                      <strong style="font-size: 2rem">[Tên_của_bạn]_${newBookingId}_${new Intl.NumberFormat("vi-VN").format(final_price * (50/100))}</strong>
