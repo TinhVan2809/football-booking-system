@@ -60,7 +60,7 @@ class Profile
         try {
             $db = Database::getInstance();
             $connection  = $db->getConnection();
-            $sql = "SELECT b.booking_id, b.start_time, b.end_time, b.price_per_hour, final_price, b.booking_status, b.created_at, f.field_name, ft.type_name, br.branch_name 
+            $sql = "SELECT b.booking_id, b.start_time, b.end_time, b.price_per_hour, b.final_price, b.booking_status, b.created_at, f.field_name, ft.type_name, br.branch_name, br.address, br.phone
                     FROM bookings b 
                     JOIN field_field_types fft ON b.field_field_type_id = fft.field_field_type_id 
                     JOIN fields f ON fft.field_id = f.field_id 

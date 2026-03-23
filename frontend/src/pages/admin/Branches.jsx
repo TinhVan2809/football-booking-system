@@ -117,6 +117,10 @@ function Branches() {
     }
   }
 
+  if(error) return <p>Fail to fetch : {error}</p>
+
+  if(loading) return <p>Loading...</p>
+
 
   return (
     <>
