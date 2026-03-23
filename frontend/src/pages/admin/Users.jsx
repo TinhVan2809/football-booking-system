@@ -68,13 +68,25 @@ function Users() {
     return (
         <>
           <div className="flex flex-col gap-3">
-             {users.map(u => (
-            <div className="" key={u.username}>
-                <span>{u.username}</span>
-                <span>{u.full_name}</span>
-                <button className="bg-green-500" onClick={() => onOpenUserModalDetail(u.user_id)}>Xem chi tiết </button>
-            </div>
-           ))}
+            
+            <table className="border-collapse border border-gray-400">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="border border-gray-300 p-4 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">Username</th>
+                  <th className="border border-gray-300 p-4 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">Nick Name</th>
+                  <th className="border border-gray-300 p-4 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+              {users.map(u => (
+                <tr key={u.user_id}>
+                  <td className="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">{u.full_name}</td>
+                  <td className="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">{u.username}</td>
+                  <td className="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400 cursor-pointer hover:underline" onClick={() => onOpenUserModalDetail(u.user_id)}>Xem chi tiết</td>
+                </tr>
+              ))}
+              </tbody>
+            </table>
 
 
            {userDetail && (
