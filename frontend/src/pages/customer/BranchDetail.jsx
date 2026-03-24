@@ -88,6 +88,32 @@ function BranchDetail() {
     setLoading(false);
   }, [branch_id, fetchReviewsData, currentReviewPage, fetchBranchData]);
 
+  // Phân trang cho reviews
+  const handlePrevPage = () => {
+    if (currentReviewPage > 1) {
+      setCurrentReviewPage(currentReviewPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentReviewPage < totalReviewPages) {
+      setCurrentReviewPage(currentReviewPage + 1);
+    }
+  };
+
+  // Phân trang cho danh sách sân bóng của branch này
+  const handlePrevFieldPage = () => {
+    if (currentFieldPage > 1) {
+      setCurrentFieldPage(currentFieldPage - 1);
+    }
+  };
+
+  const handleNextFieldPage = () => {
+    if (currentFieldPage < totalFieldPages) {
+      setCurrentFieldPage(currentFieldPage + 1);
+    }
+  };
+
   return (
     <>
       {error && <div className="text-red-500">{error}</div>}
@@ -95,8 +121,11 @@ function BranchDetail() {
         <div>Loading</div>
       ) : (
         <div className="mt-5 w-full">
-          <div className="relative w-full h-100 bg-amber-300">   
-              <img src="../../../assets/pexels-anaussieinvietnam-33370012.jpg" className="h-full w-full object-cover object-center"/>
+          <div className="relative w-full h-100 bg-amber-300">
+            <img
+              src="../../../assets/pexels-anaussieinvietnam-33370012.jpg"
+              className="h-full w-full object-cover object-center"
+            />
             <div className="absolute z-10 bottom-5 left-5 bg-black/50 p-5 rounded-xl text-white">
               <p>{branch.branch_name}</p>
               <p>
@@ -177,6 +206,26 @@ function BranchDetail() {
                 </div>
               )}
             </div>
+          </div>
+
+          <div className="flex justify-center items-center gap-4 mt-6">
+            <button
+              onClick={handlePrevFieldPage}
+              disabled={currentFieldPage === 1}
+              className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300 transition"
+            >
+              Previous
+            </button>
+            <span>
+              Page {currentFieldPage} of {totalFieldPages}
+            </span>
+            <button
+              onClick={handleNextFieldPage}
+              disabled={currentFieldPage === totalFieldPages}
+              className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300 transition"
+            >
+              Next
+            </button>
           </div>
         </div>
       )}
@@ -267,6 +316,26 @@ function BranchDetail() {
               </button>
             </div>
           </form>
+        </div>
+
+        <div className="flex justify-center items-center gap-4 mt-6">
+          <button
+            onClick={handlePrevPage}
+            disabled={currentReviewPage === 1}
+            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300 transition"
+          >
+            Previous
+          </button>
+          <span>
+            Page {currentReviewPage} of {totalReviewPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={currentReviewPage === totalReviewPages}
+            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300 transition"
+          >
+            Next
+          </button>
         </div>
       </div>
     </>
