@@ -15,3 +15,5 @@ admin
 tinh@gmail.com
 1
 ```
+
+Lưu ý: Đây là đồ án không mang tính chất thương mại.
