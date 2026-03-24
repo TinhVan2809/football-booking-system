@@ -22,7 +22,7 @@ Hệ thống đặt sân bóng đá trực tuyến hiện đại, kết nối kh
 - **Frontend**: ReactJS, Tailwind CSS, Vite.
 - **Backend Core**: Node.js (Express) xử lý Booking logic, Authentication (JWT), Realtime (Socket.io), Email Service.
 - **Backend Management**: PHP (Native API) xử lý CRUD dữ liệu nền tảng (Chi nhánh, Dịch vụ).
-- **Database**: MySQL 8.0.30.
+- **Database**: MySQL 8.2.12.
 
 ## Tính năng nổi bật
 

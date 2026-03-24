@@ -1,19 +1,19 @@
 ### Customer
 ```
-tinhvan
-1
+username: tinhvan
+pass: 1
 ```
 
 ### Admin
 ```
-admin
-1
+username: admin1
+pass: 1
 ```
 
-### Branh owner
+### Branch_owner
 ```
-tinh@gmail.com
-1
+username: tinh@gmail.com
+pass: 1
 ```
 
-Lưu ý: Đây là đồ án không mang tính chất thương mại.
+Lưu ý: Đây là đồ án không mang tính chất thương mại. Độ hoàn thiện 95%
