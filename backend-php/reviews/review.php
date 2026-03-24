@@ -10,7 +10,7 @@ class Review
             $db = Database::getInstance();
             $connection = $db->getConnection();
 
-            $sql = "SELECT r.review_id, r.rating, r.comment, u.user_id, u.full_name, u.avata 
+            $sql = "SELECT r.review_id, r.rating, r.comment, r.created_at ,u.user_id, u.full_name, u.avata 
                         FROM reviews r 
                         JOIN users u ON u.user_id = r.user_id 
                         WHERE r.branch_id = :branch_id ORDER BY r.created_at DESC LIMIT :limit OFFSET :offset";
