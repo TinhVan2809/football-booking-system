@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 
-import Card from "../../components/admin/Card";
 import TopFields from "../../components/admin/TopFields";
 import {
   RiUserCommunityLine,
@@ -68,7 +67,7 @@ function Dashbroad() {
         <section className="xl:col-span-8 bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-5">
             <div>
-              <h3 className="text-lg font-semibold">Thống kê hôm nay</h3>
+              <h3 className="text-lg font-semibold">Thống kê</h3>
               <span className="text-gray-500 text-sm">Sales Summary</span>
             </div>
           </div>
@@ -102,10 +101,6 @@ function Dashbroad() {
           </div>
         </section>
 
-        <div className="xl:col-span-4 flex justify-center xl:justify-end">
-          <Card />
-        </div>
-
         <section className="xl:col-span-8 bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
           <div className="flex items-center justify-between">
             <p className="text-base font-semibold">Top Fields</p>
@@ -115,9 +110,6 @@ function Dashbroad() {
           </div>
         </section>
 
-        <div className="xl:col-span-4 flex justify-center xl:justify-end">
-          <Card />
-        </div>
       </div>
     </>
   );

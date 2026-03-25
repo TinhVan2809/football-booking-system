@@ -136,7 +136,7 @@ function Branches() {
                 value={formData.branch_name} 
                 name="branch_name" 
                 onChange={handleChange} 
-                placeholder="Ví dụ: Sân bóng A"
+                placeholder="Ví dụ: Sân bóng Cái Răng"
                 className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${validationErrors.branch_name ? 'border-red-500' : 'border-gray-300'}`}
               />
               {validationErrors.branch_name && <p className="text-red-500 text-sm mt-1">{validationErrors.branch_name}</p>}

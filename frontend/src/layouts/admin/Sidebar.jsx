@@ -28,12 +28,9 @@ function Sidebar({ isOpen, onClose }) {
                     <nav>
                         <ul className="flex flex-col gap-7.5">
                             <li className="flex text-md items-center gap-2.5 cursor-pointer" onClick={() => navigate('/admin')}><RiBookmarkLine /> Bảng điều khiển</li>
-                            <li className="flex text-md items-center gap-2.5 cursor-pointer"><RiColorFilterAiLine /> Dịch vụ</li>
                             <li className="flex text-md items-center gap-2.5 cursor-pointer"><RiMegaphoneLine /> Thông báo</li>
-                            <li className="flex text-md items-center gap-2.5 cursor-pointer" onClick={() => navigate('/admin/fields')}><RiEditBoxLine /> Sân bóng</li>
                             <li className="flex text-md items-center gap-2.5 cursor-pointer" onClick={() => navigate('/admin/users')}><RiUserLine /> Khách hàng</li>
                             <li className="flex text-md items-center gap-2.5 cursor-pointer" onClick={() => navigate('/admin/branches')}><RiUserLine/> Chủ sân</li>
-                            <li className="flex text-md items-center gap-2.5 cursor-pointer"><RiUser2Line /> Admin</li>
                             <li className="flex text-md items-center gap-2.5 cursor-pointer"><RiSettings2Line /> Cài đặt</li>
                             <li className="flex text-md items-center gap-2.5 cursor-pointer"  onClick={logout} ><RiLogoutBoxLine color="red"/> Đăng xuất</li>
                         </ul>
