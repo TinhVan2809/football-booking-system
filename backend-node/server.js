@@ -10,6 +10,7 @@ const db = require("./db");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const server = http.createServer(app); // Tạo server http từ express app
+const rateLimit = require("express-rate-limit");
 app.use(express.json());
 
 // Kiểm tra biến môi trường quan trọng
@@ -56,8 +57,17 @@ const io = new Server(server, { cors: corsOptions });
 
 app.use(cookieParser());
 
+
+const loginRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1500, // 15'
+  max: 10, // tối đa 10 requests
+  message: "Too many login attempts, please try again later"
+});
+
+app.use(loginRateLimit);
+
 // #TẠO TÀI KHOẢN CHO CUSTOMER
-app.post("/register", async (req, res) => {
+app.post("/register", loginRateLimit, async (req, res) => {
   const { username, password, full_name, phone, email } = req.body;
 
   if (!username || !password) {
@@ -98,7 +108,7 @@ app.post("/register", async (req, res) => {
 });
 
 // #LOGIN
-app.post("/login", (req, res) => {
+app.post("/login", loginRateLimit, (req, res) => {
   const { username, password } = req.body;
 
   db.query(
