@@ -145,7 +145,8 @@ router.post("/create", verifyToken, async (req, res) => {
             const notiContent = `Bạn đã đặt sân thành công (ID: ${newBookingId}) vào ngày ${booking_date} lúc ${start_time}`;
             const insertNotiQuery = `INSERT INTO notifications (user_id, content) VALUES (?, ?)`;
             db.query(insertNotiQuery, [user_id, notiContent]);
-
+            
+            // #region CREATE EMAIL
             // --- 5. GỬI EMAIL XÁC NHẬN ---
             // Lấy thông tin chi tiết sân và chi nhánh để gửi mail
             const detailQuery = `
@@ -296,6 +297,7 @@ router.post("/create", verifyToken, async (req, res) => {
                 }
               },
             );
+            // #endregion CREATE EMAIL
 
             // 5. Gửi Socket IO thông báo realtime
             // Gửi cho tất cả client để cập nhật lại giao diện (nếu đang xem cùng sân)

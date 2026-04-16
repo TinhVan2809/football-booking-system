@@ -40,18 +40,16 @@ import FieldsManagement from "../pages/branch_owner/FieldsManagement";
 // *[Not found page]
 import NotFoundPage from "../pages/NotFoundPage";
 
-
 //------------------ PAGES/LAYOUTD/COMPOENTS...-----------------------//
-
-const AppLayout = () => (  //eslint-disable-line
-  <UserProvider>
-    <Outlet />
-  </UserProvider>
-);
 
 export const router = createBrowserRouter([
   {
-    element: <AppLayout />,
+    element: (
+      // Bỏ tất cả vào UserProvider để mang dữ liệu người dùng (user/jwt) sang khắp components cần
+      <UserProvider>
+        <Outlet />
+      </UserProvider>
+    ),
     children: [
       {
         path: "/",
@@ -59,7 +57,7 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Home />, //Route mặc định cho trang customer (Đang có banner và Field List)
+            element: <Home />, //Route mặc định là trang customer 
           },
           { path: "detail/:field_id", element: <FieldDetail /> },
           { path: "branchDetail/:branch_id", element: <BranchDetail /> },
@@ -68,22 +66,6 @@ export const router = createBrowserRouter([
           { path: "profile/:user_id", element: <Profile /> },
           { path: "notifications/:user_id", element: <NotificationsUsers /> },
         ],
-      },
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/register",
-        element: <Register />,
-      },
-      {
-        path: "/forgot-password",
-        element: <ForgotPassword />,
-      },
-      {
-        path: "/reset-password/:id/:token",
-        element: <ResetPassword />,
       },
       {
         path: "/admin", // Route cha cho khu vực admin
@@ -136,9 +118,25 @@ export const router = createBrowserRouter([
           },
           {
             path: "fieldsBranch/:branch_id",
-            element: <FieldsManagement />
+            element: <FieldsManagement />,
           },
         ],
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+      {
+        path: "/forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "/reset-password/:id/:token",
+        element: <ResetPassword />,
       },
       { path: "*", element: <NotFoundPage /> },
     ],

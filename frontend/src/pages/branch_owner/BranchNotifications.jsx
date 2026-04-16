@@ -116,7 +116,7 @@ function BranchNotifications() {
       const res = await fetch(
         `${API_BASE_URL}/api/bookings/branch/${branch_id}/notifications/read`,
         {
-          method: "PATCH",
+          method: "PATCH", //Cập nhật một phần nên không cần dùng UPDATE
           headers: { "Content-Type": "application/json" },
           credentials: "include",
           body: JSON.stringify({ all: true, is_read: 1 }),

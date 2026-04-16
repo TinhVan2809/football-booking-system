@@ -6,10 +6,7 @@ const db = require("../db");
 
 router.get("/available-fields", async (req, res) => {
   try {
-    const {
-      branch_id,
-    //   field_type_id,
-    } = req.query;
+    const { branch_id } = req.query;
 
     if (!branch_id) {
       return res.status(400).json({ message: "Thiếu tham số" });
@@ -31,10 +28,7 @@ router.get("/available-fields", async (req, res) => {
           AND f.status = 'available'
     `;
 
-    const [rows] = await db.promise().execute(sql, [
-      branch_id,
-    //   field_type_id,
-    ]);
+    const [rows] = await db.promise().execute(sql, [branch_id]);
 
     res.json({
       total: rows.length,

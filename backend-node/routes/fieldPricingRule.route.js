@@ -47,7 +47,7 @@ router.get("/:field_field_type_id", async (req, res) => {
       });
     }
 
-    const { field_name, type_name, field_id, field_type_id } = rows[0];
+    const { field_name, type_name, field_id, field_type_id } = rows[0]; //[Oject] trả về một phần tử
 
     const dayMap = {
       2: "Thứ 2",
